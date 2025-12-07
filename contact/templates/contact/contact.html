@@ -1,0 +1,375 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>FitTrack</title>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- Core styles: Bootstrap, animations, icon library, and main stylesheet -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/aos.css' %}">
+    <link rel="stylesheet" href="{% static 'css/swiper-bundle.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+    <body>
+
+        <!-- NAVBAR SECTION AND FUNCTIONALITY -->
+        <nav class="navbar navbar-expand-lg fixed-top">
+            <div class="container-fluid justify-content-between d-flex align-items-center">
+
+                <!-- Brand logo + name -->
+                <a class="navbar-brand d-flex align-items-center me-auto" href="{% url 'home' %}">
+                    <img src="{% static 'images/logo.png' %}"
+                        alt="FitTrack Logo"
+                        style="margin-right:10px; width:60px; height:auto;">
+                    <h3 class="mb-0">FitTrack</h3>
+                </a>
+
+                <!-- Mobile toggler -->
+                <button class="navbar-toggler" type="button"
+                        data-toggle="collapse" data-target="#navbarNav"
+                        aria-controls="navbarNav" aria-expanded="false"
+                        aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Navigation links and navigation menu -->
+                <div class="collapse navbar-collapse" id="navbarNav">
+
+                    <ul class="navbar-nav mx-auto">
+                        <li class="nav-item mx-2"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+                        <li class="nav-item mx-2"><a class="nav-link" href="{% url 'home' %}#programs">Programs</a></li>
+                        <li class="nav-item mx-2"><a class="nav-link" href="{% url 'home' %}#bmi">My BMI</a></li>
+                        <li class="nav-item mx-2"><a class="nav-link" href="{% url 'mycals' %}#bmi">My CALS</a></li>
+                        <li class="nav-item mx-2"><a class="nav-link" href="{% url 'aboutus' %}">About Us</a></li>
+                        <li class="nav-item mx-2"><a class="nav-link active" href="{% url 'contact' %}">Contact</a></li>
+                        <li class="nav-item mx-2"><a class="nav-link" href="{% url 'fitshop' %}">FitShop</a></li>
+                    </ul>
+
+                    <!-- Search bar handled by a custom javascript file -->
+                    <div class="search-container ms-auto">
+                        <input type="text" id="navSearch" placeholder="Search..." />
+                        <button id="searchBtn" type="button">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <!-- ADMIN BUTTON ONLY FOR STAFF MEMBERS -->
+                    {% if user.is_authenticated and user.is_staff %}
+                        <a href="{% url 'dashboard-home' %}" class="admin-btn me-4">
+                            Admin Page
+                        </a>
+                    {% endif %}
+
+                    <!-- User controls, profile icon, cart icon -->
+                    <div class="user-controls d-flex align-items-center">
+
+                        {% if user.is_authenticated %}
+
+                            {% if not user.is_staff %}
+                                <!-- Profile dropdown only for users that are authenticated -->
+                                <div class="profile-dropdown">
+
+                                    <button class="nav-icon profile-toggle" id="profileToggle" title="Profile">
+                                        <i class="fa fa-user" style="font-size: 18px;"></i>
+                                    </button>
+
+                                    <div class="dropdown-menu" id="profileMenu">
+                                        <a href="{% url 'profile' %}" class="dropdown-item">View Profile</a>
+
+                                        <!-- Show become member option only to authenticated users and non member users -->
+                                        {% if not user.profile.is_member %}
+                                            <div class="upgrade-badge">
+                                                <a href="{% url 'membership_upgrade' %}"
+                                                class="dropdown-item">Upgrade to Premium Member</a>
+                                            </div>
+                                        {% endif %}
+
+                                        <a href="{% url 'logout' %}" class="dropdown-item">Logout</a>
+                                    </div>
+                                </div>
+
+                                <!-- Cart icon for fitshop that dynamically updates based on the number of items inside it-->
+                                <a href="{% url 'view_cart' %}" class="cart-icon-wrapper">
+                                    <i class="fa fa-shopping-cart nav-icon"></i>
+
+                                    {% if cart_count > 0 %}
+                                        <sup class="cart-superscript">{{ cart_count }}</sup>
+                                    {% endif %}
+                                </a>
+                                
+                            {% endif %}
+
+                        {% else %}
+
+                            <!-- Log in icon for the visitors -->
+                            <a href="#" class="nav-icon" id="openLogin" title="Login">
+                                <i class="fa fa-sign-in"></i>
+                            </a>
+
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- CONTACT SECTION AND CAROUSEL FUNCTIONALITY -->
+        <!-- Full-width carousel with soft overlay + captions -->
+        <section class="contact-carousel-section">
+            <div id="contactCarousel" class="carousel slide carousel-fade"
+                data-bs-ride="carousel" data-bs-interval="3500" data-bs-pause="false">
+
+                <div class="carousel-inner">
+
+                    <!-- Slide 1 -->
+                    <div class="carousel-item active position-relative">
+                        <img src="{% static 'images/contact/contact1.jpg' %}"
+                            class="d-block w-100"
+                            alt="FitTrack Office">
+
+                        <div class="overlay"></div>
+
+                        <div class="carousel-caption text-start">
+                            <h5>We’re here to help</h5>
+                            <p>Reach out anytime — our team is ready to assist you.</p>
+                        </div>
+                    </div>
+
+                    <!-- Slide 2 -->
+                    <div class="carousel-item position-relative">
+                        <img src="{% static 'images/contact/contact2.jpg' %}"
+                            class="d-block w-100"
+                            alt="Customer Support">
+
+                        <div class="overlay"></div>
+
+                        <div class="carousel-caption text-start">
+                            <h5>Stay connected</h5>
+                            <p>Your questions matter — let’s build something stronger together.</p>
+                        </div>
+                    </div>
+
+                    <!-- Slide 3 -->
+                    <div class="carousel-item position-relative">
+                        <img src="{% static 'images/contact/contact3.jpg' %}"
+                            class="d-block w-100"
+                            alt="Training Studio">
+
+                        <div class="overlay"></div>
+
+                        <div class="carousel-caption text-start">
+                            <h5>Always by your side</h5>
+                            <p>From fitness to support — we’re part of your journey.</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT FORM SECTION -->
+        <section class="contact section m-0 p-0" id="contact">
+            <div class="container mt-5">
+                <div class="row">
+
+                    <!-- Left column: contact form -->
+                    <div class="col-lg-6 col-md-12 mb-4"
+                        data-aos="fade-up" data-aos-delay="450">
+
+                        <h2 class="mb-4 text-center">Feel free to ask anything</h2>
+
+                        <!-- Form handled via emailsend.js -->
+                        <form id="contactForm" method="post"
+                            class="contact-form webform" role="form">
+                            {% csrf_token %}
+
+                            <input type="text" name="cf-name"
+                                class="form-control"
+                                placeholder="Name" required>
+
+                            <input type="email" name="cf-email"
+                                class="form-control"
+                                placeholder="Email" required>
+
+                            <textarea name="cf-message" rows="5"
+                                    class="form-control"
+                                    placeholder="Message" required></textarea>
+
+                            <button type="submit" id="submit-button"
+                                    class="form-control">
+                                Send Message
+                            </button>
+                        </form>
+
+                    </div>
+
+                    <!-- Right column: social + email info -->
+                    <div class="col-lg-6 col-md-12 flex-column align-items-center justify-content-center">
+
+                        <div class="text-center ms-auto">
+
+                            <h2 class="mb-5 fw-bold text-center"
+                                data-aos="fade-up" data-aos-delay="550">
+                                Where you can find us
+                            </h2>
+
+                            <div class="footer-contact text-center"
+                                data-aos="fade-up" data-aos-delay="550">
+
+                                <!-- Social Links -->
+                                <h5 class="footer-subtitle mb-3 fw-bold">
+                                    Through Our Social Platforms
+                                </h5>
+
+                                <div class="social-icons mb-4">
+                                    <a href="https://instagram.com" target="_blank">
+                                        <i class="fa-brands fa-instagram"></i>
+                                    </a>
+                                    <a href="https://facebook.com" target="_blank">
+                                        <i class="fa-brands fa-facebook-f"></i>
+                                    </a>
+                                    <a href="https://twitter.com" target="_blank">
+                                        <i class="fa-brands fa-x-twitter"></i>
+                                    </a>
+                                </div>
+
+                                <!-- Contact Email -->
+                                <h5 class="footer-subtitle mb-2 fw-bold">
+                                    Through Our Email
+                                </h5>
+
+                                <div class="email-line">
+                                    <i class="fa fa-envelope me-2"></i>
+                                    fittrack.services@gmail.com
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <br /><br /><br /><br />
+
+        <!-- FOOTER SECTION AND FUNCTIONALITY -->
+        <footer class="site-footer">
+            <div class="container">
+                <div class="row">
+
+                    <!-- About text -->
+                    <div class="col-lg-3 col-md-6 footer-about">
+
+                        <h3 class="footer-text">FitTrack</h3>
+
+                        <p class="text-light small lh-base mb-0">
+                            FitTrack is dedicated to helping you stay motivated and consistent
+                            on your fitness journey. Whether you train at home or in the gym,
+                            we’re here to keep you on track every step of the way.
+                        </p>
+
+                        <br />
+                    </div>
+
+                    <!-- Our Blogs dynamically loaded -->
+                    <div class="col-lg-3 col-md-6 footer-blog">
+                        <h5 class="footer-title">Our Blogs</h5>
+                        <ul>
+
+                        <!-- Loads the recent blogs created from the admin -->
+                        {% if recent_blogs %}
+                            {% for blog in recent_blogs %}
+                            <li>
+                                <a class="text-light small lh-base mb-0" 
+                                href="{% url 'blog_detail' blog.id %}">
+                                    <!-- The first letter of the blog name is capitalized -->
+                                    {{ blog.title|lower|capfirst }} 
+                                </a>
+                                
+                                <!-- Show whne blog was created-->
+                                <span>{{ blog.created_at|date:"M d, Y" }}</span>
+                            </li>
+                            {% endfor %}
+
+                        <!-- If no blogs exist, goes to this block -->
+                        {% else %}
+                            <li>
+                                <span class="text-muted small">No blogs available</span>
+                            </li>
+                        {% endif %}
+                    </div>
+
+                    <!-- Contact info -->
+                    <div class="col-lg-2 col-md-6 footer-info">
+
+                        <h5 class="footer-title">Get Info</h5>
+
+                        <p class="text-light small lh-base mb-2">
+                            <i class="fa fa-phone"></i> (+30) 210 4567890
+                        </p>
+
+                        <p class="text-light small lh-base mb-2">
+                            <i class="fa fa-envelope"></i> info@fittrack.com
+                        </p>
+
+                        <p class="text-light small lh-base mb-2">
+                            <i class="fa fa-map-marker"></i>
+                            28 Ermou Street, Athens, Greece
+                        </p>
+
+                        <br />
+                    </div>
+
+                    <!-- Social links -->
+                    <div class="col-lg-2 col-md-6 footer-social text-center">
+
+                        <h5 class="footer-title">Follow&nbsp;Us&nbsp;On</h5>
+
+                        <div class="footer-social">
+
+                            <a href="https://www.facebook.com/" class="me-3">
+                                <i class="fa-brands fa-facebook-f"></i>
+                            </a>
+
+                            <a href="https://x.com/" class="me-3">
+                                <i class="fa-brands fa-x-twitter"></i>
+                            </a>
+
+                            <a href="https://www.instagram.com/" class="me-3">
+                                <i class="fa-brands fa-instagram"></i>
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </footer>
+
+        <!-- External js scripts for functionality -->
+        <script src="{% static 'js/jquery.min.js' %}"></script>
+        <script src="{% static 'js/bootstrap.min.js' %}"></script>
+        <script src="{% static 'js/aos.js' %}"></script>
+        <script src="{% static 'js/smoothscroll.js' %}"></script>
+        <script src="{% static 'js/custom.js' %}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="{% static 'js/searchbar.js' %}"></script>
+        <script src="{% static 'js/profiledropdown.js' %}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="{% static 'js/emailsend.js' %}"></script>
+        <script src="{% static 'js/chatbot.js' %}"></script>
+
+        <!-- Include login modal, signup modal and the chatbot -->
+        {% include 'accounts/login.html' %}
+        {% include 'chatbot.html' %}
+        
+    </body>
+</html>

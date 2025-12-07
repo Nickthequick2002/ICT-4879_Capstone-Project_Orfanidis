@@ -1,0 +1,79 @@
+{% load static %}
+
+ <!-- FOOTER SECTION AND FUNCTIONALITY-->
+        <footer class="site-footer">
+            <div class="container">
+                <div class="row">
+
+                    <!-- About text -->
+                    <div class="col-lg-3 col-md-6 footer-about">
+                        <h3 class="footer-text">FitTrack</h3>
+                        <p class="text-light small lh-base mb-0">
+                            FitTrack is dedicated to helping you stay motivated and consistent on your fitness journey.
+                            Whether you train at home or in the gym, we’re here to keep you on track every step of the way.
+                        </p>
+                        <br />
+                    </div>
+
+                    <!-- Our Blogs dynamically loaded -->
+                    <div class="col-lg-3 col-md-6 footer-blog">
+                        <h5 class="footer-title">Our Blogs</h5>
+                        <ul>
+
+                            {% for blog in recent_blogs %}
+                            <li>
+                                <a class="text-light small lh-base mb-0" 
+                                href="{% url 'blog_detail' blog.id %}">
+                                    {{ blog.title|lower|capfirst }}
+                                </a>
+                                <span>{{ blog.created_at|date:"M d, Y" }}</span>
+                            </li>
+                            {% endfor %}
+
+                            {% if footer_blogs|length == 0 %}
+                            <li>
+                                <span class="text-muted small">No blogs available</span>
+                            </li>
+                            {% endif %}
+
+                        </ul>
+                    </div>
+
+                    <!-- Contact info (phone number, email and address)-->
+                    <div class="col-lg-2 col-md-6 footer-info">
+                        <h5 class="footer-title">Get Info</h5>
+                        <p class="text-light small lh-base mb-2">
+                            <i class="fa fa-phone"></i> (+30) 210 4567890
+                        </p>
+                        <p class="text-light small lh-base mb-2">
+                            <i class="fa fa-envelope"></i> info@fittrack.com
+                        </p>
+                        <p class="text-light small lh-base mb-2">
+                            <i class="fa fa-map-marker"></i> 28 Ermou Street, Athens, Greece
+                        </p>
+                        <br />
+                    </div>
+
+                    <!-- Social links (instagram, facebook and twitter)-->
+                    <div class="col-lg-2 col-md-6 footer-social text-center">
+                        <h5 class="footer-title">Follow&nbsp;Us&nbsp;On</h5>
+
+                        <div class="footer-social">
+                            <a href="https://www.facebook.com/" class="me-3">
+                                <i class="fa-brands fa-facebook-f"></i>
+                            </a>
+
+                            <a href="https://x.com/" class="me-3">
+                                <i class="fa-brands fa-x-twitter"></i>
+                            </a>
+
+                            <a href="https://www.instagram.com/" class="me-3">
+                                <i class="fa-brands fa-instagram"></i>
+                            </a>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </footer>

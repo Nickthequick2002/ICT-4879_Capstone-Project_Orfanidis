@@ -1,0 +1,97 @@
+{% load static %}
+
+<div id="signupModal" class="modal-overlay">
+    <div class="modal-card">
+
+        <span id="closeSignup" class="close">&times;</span>
+
+        <h2 class="login-title">Sign Up</h2>
+
+        <form id="signupForm" method="POST">
+            {% csrf_token %}
+
+            <!-- Username -->
+            <div class="form-field">
+                <input type="text" name="username" required>
+                <label>Username</label>
+            </div>
+
+            <!-- Email -->
+            <div class="form-field">
+                <input type="email" name="email" required>
+                <label>Email</label>
+            </div>
+
+            <!-- Password -->
+            <div class="form-field password-field">
+                <input type="password" name="password1" id="passwordInput1" required>
+                <label>Password</label>
+
+                <span class="toggle-password">
+                    <i class="fa fa-eye-slash" id="togglePassword1"></i>
+                </span>
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="form-field password-field">
+                <input type="password" name="password2" id="passwordInput2" required>
+                <label>Confirm Password</label>
+
+                <span class="toggle-password">
+                    <i class="fa fa-eye-slash" id="togglePassword2"></i>
+                </span>
+            </div>
+
+            <!-- Focus Body Part -->
+            <div class="form-select">
+                <label>Focus Body Part</label>
+                <select name="focus_body_part" required>
+                    <option value="">Select...</option>
+                    <option value="arms">Arms</option>
+                    <option value="legs">Legs</option>
+                    <option value="chest">Chest</option>
+                    <option value="back">Back</option>
+                    <option value="abs">Abs</option>
+                    <option value="full">Full Body</option>
+                </select>
+            </div>
+
+            <!-- Goal -->
+            <div class="form-select">
+                <label>Goal</label>
+                <select name="goal" required>
+                    <option value="">Select...</option>
+                    <option value="strength">Build Strength</option>
+                    <option value="weight_loss">Lose Weight</option>
+                    <option value="endurance">Improve Endurance</option>
+                    <option value="flexibility">Increase Flexibility</option>
+                </select>
+            </div>
+
+            <!-- Exercise Type -->
+            <div class="form-select">
+                <label>Exercise Type</label>
+                <select name="exercise_type" required>
+                    <option value="">Select...</option>
+                    <option value="cardio">Cardio</option>
+                    <option value="weights">Weights</option>
+                    <option value="yoga">Yoga</option>
+                    <option value="hiit">High Intensity Interval Training</option>
+                    <option value="calisthenics">Calisthenics</option>
+                </select>
+            </div>
+
+            <!-- Submit -->
+            <button type="submit" class="login-btn mt-4">
+                Sign Up For Free
+            </button>
+
+            <!-- Error Message -->
+            <p id="signupError" class="error-msg"></p>
+
+        </form>
+    </div>
+</div>
+
+<link rel="stylesheet" href="{% static 'css/signup.css' %}">
+<script src="{% static 'js/signup.js' %}"></script>

@@ -1,0 +1,101 @@
+{% load static %}
+
+<!-- NAVBAR SECTION AND FUNCTIONALITY -->
+
+        <nav class="navbar navbar-expand-lg fixed-top">
+            <div class="container-fluid justify-content-between d-flex align-items-center">
+
+                <!-- Brand logo + name -->
+                <a class="navbar-brand d-flex align-items-center me-auto" href="{% url 'home' %}">
+                    <img src="{% static 'images/logo.png' %}" alt="FitTrack Logo"
+                        style="margin-right:10px; width:60px; height:auto;">
+                    <h3 class="mb-0">FitTrack</h3>
+                </a>
+
+                <!-- Mobile toggler -->
+                <button class="navbar-toggler" type="button"
+                        data-toggle="collapse" data-target="#navbarNav"
+                        aria-controls="navbarNav" aria-expanded="false"
+                        aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Navigation links and navigation menu -->
+                <div class="collapse navbar-collapse" id="navbarNav">
+
+                    <ul class="navbar-nav mx-auto">
+                        <li class="nav-item mx-2"><a class="nav-link" href="#home">Home</a></li>
+                        <li class="nav-item mx-2"><a class="nav-link" href="#programs">Programs</a></li>
+                        <li class="nav-item mx-2"><a class="nav-link" href="#bmi">My BMI</a></li>
+                        <li class="nav-item mx-2"><a class="nav-link" href="{% url 'mycals' %}">My CALS</a></li>
+                        <li class="nav-item mx-2"><a class="nav-link" href="{% url 'aboutus' %}">About Us</a></li>
+                        <li class="nav-item mx-2"><a class="nav-link" href="{% url 'contact' %}">Contact</a></li>
+                        <li class="nav-item mx-2"><a class="nav-link" href="{% url 'fitshop' %}">FitShop</a></li>
+                    </ul>
+
+                    <!-- Search bar handled by a custom javascript file -->
+                    <div class="search-container ms-auto me-4">
+                        <input type="text" id="navSearch" placeholder="Search..." />
+                        <button id="searchBtn" type="button">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <!-- ADMIN BUTTON ONLY FOR STAFF MEMBERS -->
+                    {% if user.is_authenticated and user.is_staff %}
+                        <a href="{% url 'dashboard-home' %}" class="admin-btn me-4">
+                            Admin Page
+                        </a>
+                    {% endif %}
+
+                    <!-- User controls, profile icon, cart icon -->
+                    <div class="user-controls d-flex align-items-center">
+
+                        {% if user.is_authenticated %}
+
+                            {% if not user.is_staff %}
+                                <!-- Profile dropdown only for users that are authenticated -->
+                                <div class="profile-dropdown">
+
+                                    <button class="nav-icon profile-toggle" id="profileToggle" title="Profile">
+                                        <i class="fa fa-user" style="font-size: 18px;"></i>
+                                    </button>
+
+                                    <div class="dropdown-menu" id="profileMenu">
+                                        <a href="{% url 'profile' %}" class="dropdown-item">View Profile</a>
+
+                                        <!-- Show become member option only to authenticated users and non member users -->
+                                        {% if not user.profile.is_member %}
+                                            <div class="upgrade-badge">
+                                                <a href="{% url 'membership_upgrade' %}"
+                                                class="dropdown-item">Upgrade to Premium Member</a>
+                                            </div>
+                                        {% endif %}
+
+                                        <a href="{% url 'logout' %}" class="dropdown-item">Logout</a>
+                                    </div>
+                                </div>
+
+                                <!-- Cart icon for fitshop that dynamically updates based on the number of items inside it-->
+                                <a href="{% url 'view_cart' %}" class="cart-icon-wrapper">
+                                    <i class="fa fa-shopping-cart nav-icon"></i>
+
+                                    {% if cart_count > 0 %}
+                                        <sup class="cart-superscript">{{ cart_count }}</sup>
+                                    {% endif %}
+                                </a>
+                                
+                            {% endif %}
+
+                        {% else %}
+
+                            <!-- Log in icon for the visitors -->
+                            <a href="#" class="nav-icon" id="openLogin" title="Login">
+                                <i class="fa fa-sign-in"></i>
+                            </a>
+
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </nav>

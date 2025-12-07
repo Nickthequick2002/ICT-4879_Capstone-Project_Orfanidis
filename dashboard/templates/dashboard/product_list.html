@@ -1,0 +1,196 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>FitTrack Product List</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Admin uses Bootstrap + and the main style for fonts/colors -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+    <body style="background-color:#f5f5f5;">
+
+        <!-- ADMIN TOP BAR-->
+            <div class="d-flex justify-content-between align-items-center px-4 py-3"
+                style="background-color:#111; color:#fff;">
+
+                <!-- Left side is the Admin title -->
+                <div class="d-flex align-items-center">
+                    <img src="{% static 'images/logo.png' %}" alt="FitTrack Logo"
+                        style="margin-right:10px; width:40px;">
+                    <h4 class="mb-0">FitTrack Admin</h4>
+                </div>
+
+                <div class="d-flex align-items-center" style="gap: 20px;">
+
+                    <!-- User Info -->
+                    <div class="d-flex align-items-center" style="gap: 8px;">
+                        <i class="fa fa-user-circle text-light" style="font-size: 22px;"></i>
+                        <span style="color:#e5e7eb; font-weight:500; font-size:15px;">
+                            {{ request.user.username }}
+                        </span>
+                    </div>
+
+                    <!-- View Site button -->
+                    <a href="{% url 'home' %}" 
+                    class="ft-btn-outline" 
+                    style="padding:6px 16px; white-space: nowrap;">
+                    View Site
+                    </a>
+
+                    <!-- Logout button -->
+                    <a href="{% url 'logout' %}" 
+                    class="ft-btn-outline" 
+                    style="padding:6px 16px; white-space: nowrap;">
+                    Logout
+                    </a>
+
+                </div>
+            </div>
+
+            <div class="container-fluid">
+                <div class="row">
+
+                    <!-- LEFT SIDEBAR THAT SHOWS ADMIN NAVIGATION -->
+                    <aside class="col-md-3 col-lg-2 p-3"
+                        style="background-color:#111; min-height:100vh;">
+
+                        <ul class="nav flex-column">
+
+                            <!-- Dashboard link -->
+                            <li class="nav-item mb-4">
+                                <a class="nav-link text-light fw-bold" href="{% url 'dashboard-home' %}">
+                                    <i class="fa fa-chart-line me-2"></i>
+                                    Dashboard
+                                </a>
+                            </li>
+
+                            <!-- Products -->
+                            <li class="nav-item mb-4">
+                                <a class="nav-link text-light" href="#">
+                                    <i class="fa fa-dumbbell me-2"></i>
+                                    Products
+                                </a>
+                            </li>
+
+                            <!-- Blogs -->
+                            <li class="nav-item mb-4">
+                                <a class="nav-link text-light" href="{% url 'blog_list' %}">
+                                    <i class="fa fa-pen-nib me-2"></i>
+                                    Blogs
+                                </a>
+                            </li>
+
+                            <!-- Programs -->
+                            <li class="nav-item mb-4">
+                                <a class="nav-link text-light" href="#">
+                                    <i class="fas fa-running me-2"></i>
+                                    Programs
+                                </a>
+                            </li>
+
+                            <!-- Users -->
+                            <li class="nav-item mb-4">
+                                <a class="nav-link text-light" href="{% url 'user_list' %}">
+                                    <i class="fa fa-users me-2"></i>
+                                    Users
+                                </a>
+                            </li>
+
+                        </ul>
+                    </aside>
+
+                <!-- MAIN CONTENT -->
+                <main class="col-md-9 col-lg-10 p-4">
+
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2 class="fw-bold mb-0">Manage Products</h2>
+
+                        <a href="{% url 'dashboard-add-product' %}" 
+                        class="ft-btn ft-btn-outline" 
+                        style="padding:8px 20px; width:auto; display:inline-block;">
+                            + Add New Product
+                        </a>
+                    </div>
+
+                    <!-- TABLE CARD -->
+                    <div class="card shadow-sm border-0">
+                        <div class="card-body">
+
+                            <!-- Table card titles -->
+                            <table class="table align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th style="width:80px;">Image</th>
+                                        <th>Name</th>
+                                        <th style="width:120px;">Price</th>
+                                        <th style="width:150px;">Actions</th>
+                                    </tr>
+                                </thead>
+
+                                <!-- Image handler to show or not the image, if it exists.  -->
+                                <tbody>
+                                    {% for product in products %}
+                                    <tr>
+                                        <td>
+                                            {% if product.image %}
+                                                <img src="{{ product.image.url }}" width="60" style="border-radius:6px;">
+                                            {% else %}
+                                                <span class="text-muted small">No image</span>
+                                            {% endif %}
+                                        </td>
+
+                                        <td>
+                                            <strong>{{ product.name }}</strong><br>
+                                            <small class="text-muted">{{ product.description|truncatechars:80 }}</small>
+                                        </td>
+
+                                        <td>€{{ product.price }}</td>
+
+                                        <!-- EDIT AND DELETE OPTION FOR THE PRODUCT -->
+                                        <td>
+                                            <div class="d-flex flex-column">
+
+                                                <a href="{% url 'dashboard-edit-product' product.id %}"
+                                                class="ft-btn-outline text-center mb-3">
+                                                    Edit
+                                                </a>
+
+                                                <a href="{% url 'dashboard-delete-product' product.id %}"
+                                                class="ft-btn-outline  text-center">
+                                                    Delete
+                                                </a>
+
+                                            </div>
+                                        </td>
+
+                                    </tr>
+
+                                    <!-- If products are empty, ggoes here -->
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="4" class="text-center text-muted py-4">
+                                            No products found.
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+
+                </main>
+            </div>
+        </div>
+
+        <!-- Minimal JS script. We do not anything else, the views and models handles functionality -->
+        <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    
+    </body>
+</html>

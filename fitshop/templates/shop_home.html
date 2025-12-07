@@ -1,0 +1,276 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>FitTrack</title>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- Core styles: Bootstrap, animations, icon library, and main stylesheet -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/aos.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+    <body>
+
+        <!-- NAVBAR SECTION AND FUNCTIONALITY -->
+        <nav class="navbar navbar-expand-lg fixed-top">
+            <div class="container-fluid justify-content-between d-flex align-items-center">
+
+                <!-- Brand logo + name -->
+                <a class="navbar-brand d-flex align-items-center me-auto" href="{% url 'home' %}">
+                    <img src="{% static 'images/logo.png' %}" alt="FitTrack Logo"
+                        style="margin-right:10px; width:60px; height:auto;">
+                    <h3 class="mb-0">FitTrack</h3>
+                </a>
+
+                <!-- Mobile toggler -->
+                <button class="navbar-toggler" type="button" data-toggle="collapse"
+                        data-target="#navbarNav" aria-controls="navbarNav"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Navigation links and navigation menu -->
+                <div class="collapse navbar-collapse" id="navbarNav">
+
+                    <ul class="navbar-nav mx-auto">
+                        <li class="nav-item mx-2"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+                        <li class="nav-item mx-2"><a class="nav-link" href="{% url 'home' %}#programs">Programs</a></li>
+                        <li class="nav-item mx-2"><a class="nav-link" href="{% url 'home' %}#bmi">My BMI</a></li>
+                        <li class="nav-item mx-2"><a class="nav-link" href="{% url 'mycals' %}">My CALS</a></li>
+                        <li class="nav-item mx-2"><a class="nav-link" href="{% url 'aboutus' %}">About Us</a></li>
+                        <li class="nav-item mx-2"><a class="nav-link" href="{% url 'contact' %}">Contact</a></li>
+                        <li class="nav-item mx-2"><a class="nav-link" href="{% url 'fitshop' %}">FitShop</a></li>
+                    </ul>
+
+                    <!-- Search bar handled by a custom javascript file -->
+                    <div class="search-container ms-auto">
+                        <input type="text" id="navSearch" placeholder="Search..." />
+                        <button id="searchBtn" type="button"><i class="fa fa-search"></i></button>
+                    </div>
+
+                    <!-- ADMIN BUTTON ONLY FOR STAFF MEMBERS -->
+                    {% if user.is_authenticated and user.is_staff %}
+                        <a href="{% url 'dashboard-home' %}" class="admin-btn me-4">
+                            Admin Page
+                        </a>
+                    {% endif %}
+
+                    <!-- User controls, profile icon, cart icon -->
+                    <div class="user-controls d-flex align-items-center">
+
+                       {% if user.is_authenticated %}
+
+                            {% if not user.is_staff %}
+                                <!-- Profile dropdown only for users that are authenticated -->
+                                <div class="profile-dropdown">
+
+                                    <button class="nav-icon profile-toggle" id="profileToggle" title="Profile">
+                                        <i class="fa fa-user" style="font-size: 18px;"></i>
+                                    </button>
+
+                                    <div class="dropdown-menu" id="profileMenu">
+                                        <a href="{% url 'profile' %}" class="dropdown-item">View Profile</a>
+
+                                        <!-- Show become member option only to authenticated users and non member users -->
+                                        {% if not user.profile.is_member %}
+                                            <div class="upgrade-badge">
+                                                <a href="{% url 'membership_upgrade' %}"
+                                                class="dropdown-item">Upgrade to Premium Member</a>
+                                            </div>
+                                        {% endif %}
+
+                                        <a href="{% url 'logout' %}" class="dropdown-item">Logout</a>
+                                    </div>
+                                </div>
+
+                                <!-- Cart icon for fitshop that dynamically updates based on the number of items inside it-->
+                                <a href="{% url 'view_cart' %}" class="cart-icon-wrapper">
+                                    <i class="fa fa-shopping-cart nav-icon"></i>
+
+                                    {% if cart_count > 0 %}
+                                        <sup class="cart-superscript">{{ cart_count }}</sup>
+                                    {% endif %}
+                                </a>
+                            {% endif %}
+
+                        {% else %}
+
+                            <!-- Log in icon for the visitors -->
+                            <a href="#" class="nav-icon" id="openLogin" title="Login">
+                                <i class="fa fa-sign-in"></i>
+                            </a>
+
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- FITSHOP PRODUCT LIST -->
+        <section class="fitshop-section container" data-aos="fade-up">
+
+            <!-- Section title + subtitle -->
+            <h2 class="text-center fw-bold mb-4">Fuel Your Fitness. Power Your Progress.</h2>
+
+            <p class="text-center text-muted mb-5">
+                Discover premium products that help you train harder, recover faster,
+                and stay consistent on your journey to peak performance.
+            </p>
+
+            <!-- Dynamic Product Grid -->
+            <div class="row justify-content-start g-4">
+
+                {% for p in products %}
+                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:1 }}00">
+                    <div class="shop-thumb card h-100">
+                        <img src="{{ p.image.url }}" class="img-fluid" alt="{{ p.name }}">
+
+                        <div class="shop-info text-center p-3">
+                            <h3>{{ p.name }}</h3>
+                            <p class="price">€{{ p.price }}</p>
+                            <span>{{ p.short_description }}</span>
+
+                            <a href="{% url 'product_detail' p.id %}" class="btn shop-btn mt-3">
+                                Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <p class="text-center text-muted">No products available yet.</p>
+                {% endfor %}
+
+            </div>
+
+            <!-- THIS IS THE PAGINATOR. THE USER CAN CHANGE PAGE TO VIEW MORE PRODUCTS -->
+            {% if page_obj.has_other_pages %}
+            <nav aria-label="Product pagination">
+                <ul class="pagination justify-content-center mt-4">
+
+                    <!-- Next and previous buttons -->
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">Previous</span>
+                    </li>
+                    {% endif %}
+
+                    <!-- Numbered pages -->
+                    {% for num in page_obj.paginator.page_range %}
+                    <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                    </li>
+                    {% endfor %}
+
+                    <!-- Next button -->
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">Next</span>
+                    </li>
+                    {% endif %}
+
+                </ul>
+            </nav>
+            {% endif %}
+
+        </section>
+
+        <br><br>
+
+        <!-- FOOTER SECTION AND FUNCTIONALITY -->
+        <footer class="site-footer">
+            <div class="container">
+                <div class="row">
+
+                    <!-- About text -->
+                    <div class="col-lg-3 col-md-6 footer-about">
+                        <h3 class="footer-text">FitTrack</h3>
+                        <p class="text-light small lh-base mb-0">
+                            FitTrack is dedicated to helping you stay motivated and consistent on your fitness journey.
+                            Whether you train at home or in the gym, we’re here to keep you on track every step of the way.
+                        </p>
+                        <br>
+                    </div>
+
+                    <!-- Our Blogs dynamically loaded -->
+                    <div class="col-lg-3 col-md-6 footer-blog">
+                        <h5 class="footer-title">Our Blogs</h5>
+                        <ul>
+
+                        <!-- Loads the recent blogs created from the admin -->
+                        {% if recent_blogs %}
+                            {% for blog in recent_blogs %}
+                            <li>
+                                <a class="text-light small lh-base mb-0" 
+                                href="{% url 'blog_detail' blog.id %}">
+                                    <!-- The first letter of the blog name is capitalized -->
+                                    {{ blog.title|lower|capfirst }} 
+                                </a>
+                                
+                                <!-- Show whne blog was created-->
+                                <span>{{ blog.created_at|date:"M d, Y" }}</span>
+                            </li>
+                            {% endfor %}
+
+                        <!-- If no blogs exist, goes to this block -->
+                        {% else %}
+                            <li>
+                                <span class="text-muted small">No blogs available</span>
+                            </li>
+                        {% endif %}
+                    </div>
+
+                    <!-- Contact info -->
+                    <div class="col-lg-2 col-md-6 footer-info">
+                        <h5 class="footer-title">Get Info</h5>
+                        <p class="text-light small lh-base mb-2"><i class="fa fa-phone"></i> (+30) 210 4567890</p>
+                        <p class="text-light small lh-base mb-2"><i class="fa fa-envelope"></i> info@fittrack.com</p>
+                        <p class="text-light small lh-base mb-2"><i class="fa fa-map-marker"></i> 28 Ermou Street, Athens, Greece</p>
+                        <br>
+                    </div>
+
+                    <!-- Social links -->
+                    <div class="col-lg-2 col-md-6 footer-social text-center">
+                        <h5 class="footer-title">Follow&nbsp;Us&nbsp;On</h5>
+                        <div class="footer-social">
+                            <a href="https://www.facebook.com/" class="me-3"><i class="fa-brands fa-facebook-f"></i></a>
+                            <a href="https://x.com/" class="me-3"><i class="fa-brands fa-x-twitter"></i></a>
+                            <a href="https://www.instagram.com/" class="me-3"><i class="fa-brands fa-instagram"></i></a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </footer>
+
+        <!-- External js scripts for functionality -->
+        <script src="{% static 'js/jquery.min.js' %}"></script>
+        <script src="{% static 'js/bootstrap.min.js' %}"></script>
+        <script src="{% static 'js/aos.js' %}"></script>
+        <script src="{% static 'js/smoothscroll.js' %}"></script>
+        <script src="{% static 'js/custom.js' %}"></script>
+        <script src="{% static 'js/activelink.js' %}"></script>
+        <script src="{% static 'js/searchbar.js' %}"></script>
+        <script src="{% static 'js/profiledropdown.js' %}"></script>
+        <script src="{% static 'js/chatbot.js' %}"></script>
+
+        <!-- Include login modal and the chatbot -->
+        {% include 'accounts/login.html' %}
+        {% include 'chatbot.html' %}
+
+    </body>
+</html>

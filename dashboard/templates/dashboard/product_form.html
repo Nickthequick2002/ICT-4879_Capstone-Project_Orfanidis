@@ -1,0 +1,122 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>FitTrack Add Product</title>
+
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+    <body style="background-color:#f3f4f6;">
+
+        <!-- ADMIN TOP BAR-->
+        <div class="d-flex justify-content-between align-items-center px-4 py-3"
+            style="background-color:#111; color:#fff;">
+
+            <!-- Left side is the Admin title -->
+            <div class="d-flex align-items-center">
+                <img src="{% static 'images/logo.png' %}" alt="FitTrack Logo"
+                    style="margin-right:10px; width:40px;">
+                <h4 class="mb-0">FitTrack Admin</h4>
+            </div>
+
+            <div class="d-flex align-items-center" style="gap: 20px;">
+
+                <!-- User Info -->
+                <div class="d-flex align-items-center" style="gap: 8px;">
+                    <i class="fa fa-user-circle text-light" style="font-size: 22px;"></i>
+                    <span style="color:#e5e7eb; font-weight:500; font-size:15px;">
+                        {{ request.user.username }}
+                    </span>
+                </div>
+
+                <!-- View Site button -->
+                <a href="{% url 'home' %}" 
+                class="ft-btn-outline" 
+                style="padding:6px 16px; white-space: nowrap;">
+                View Site
+                </a>
+
+                <!-- Logout button -->
+                <a href="{% url 'logout' %}" 
+                class="ft-btn-outline" 
+                style="padding:6px 16px; white-space: nowrap;">
+                Logout
+                </a>
+
+            </div>
+        </div>
+
+
+        <!-- PRODUCT FORM CREATION -->
+        <div class="container py-5">
+
+            <!-- Title centered -->
+            <h2 class="fw-bold text-center mb-4">{{ title }}</h2>
+
+            <!-- Centered card -->
+            <div class="form-card">
+
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <!-- Name label-->
+                    <div class="mb-4">
+                        <label class="form-label">Product Name</label>
+                        {{ form.name }}
+                    </div>
+
+                    <!-- Short description label -->
+                    <div class="mb-4">
+                        <label class="form-label">Short Description  
+                            <small class="text-muted">(Shown on main FitShop page)</small>
+                        </label>
+                        {{ form.short_description }}
+                    </div>
+
+                    <!-- Long description label -->
+                    <div class="mb-4">
+                        <label class="form-label">Long Description  
+                            <small class="text-muted">(Shown on product details page)</small>
+                        </label>
+                        {{ form.long_description }}
+                    </div>
+
+                    <!-- Price label -->
+                    <div class="mb-4">
+                        <label class="form-label">Price (€)</label>
+                        {{ form.price }}
+                    </div>
+
+                    <!-- Image Label -->
+                    <div class="mb-4">
+                        <label class="form-label">Product Image</label>
+                        {{ form.image }}
+                    </div>
+
+                    <!-- Buttons label -->
+                    <div class="d-flex justify-content-center mt-4" style="gap: 15px;">
+                        <button type="submit" class="ft-btn ft-btn-outline" 
+                                style="padding:8px 20px; width:auto; display:inline-block;">
+                            Save
+                        </button>
+
+                        <a href="{% url 'dashboard-products' %}" 
+                        class="ft-btn ft-btn-outline"
+                        style="padding:8px 20px; width:auto; display:inline-block;">
+                            Cancel
+                        </a>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+
+        <!-- Minimal JS script. We do not anything else, the views and models handles functionality -->
+        <script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+    </body>
+</html>

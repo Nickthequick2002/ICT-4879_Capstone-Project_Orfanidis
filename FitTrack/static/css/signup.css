@@ -1,0 +1,62 @@
+.form-select {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.form-select label {
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 6px;
+}
+
+.form-select select {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  font-size: 15px;
+  appearance: none;
+  outline: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.form-select select::-ms-expand {
+  display: none;
+}
+
+.form-select select:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.form-select select:focus {
+  border-color: #ff8c42;
+  box-shadow: 0 0 8px rgba(241, 58, 17, 0.5);
+}
+
+
+.form-select select option {
+  background-color: #2a2a2a;
+  color: #fff;
+  padding: 10px;
+}
+
+.modal-card {
+    max-height: 80vh;      /* Reduce form height */
+    overflow-y: auto;      /* Scroll inside the form */
+    padding-bottom: 20px;  
+}
+
+.modal-overlay {
+    display: none;
+    align-items: center;    /* Centers the form */
+    justify-content: center;
+}
+
+
+
+

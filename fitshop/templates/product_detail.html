@@ -1,0 +1,297 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>FitTrack</title>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- Core styles: Bootstrap, animations, icon library, and main stylesheet -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/aos.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+    <body>
+
+        <!-- NAVBAR SECTION AND FUNCTIONALITY -->
+        <nav class="navbar navbar-expand-lg fixed-top">
+            <div class="container-fluid justify-content-between d-flex align-items-center">
+
+                <!-- Brand logo + name -->
+                <a class="navbar-brand d-flex align-items-center me-auto" href="{% url 'home' %}">
+                    <img src="{% static 'images/logo.png' %}" alt="FitTrack Logo"
+                        style="margin-right:10px; width:60px; height:auto;">
+                    <h3 class="mb-0">FitTrack</h3>
+                </a>
+
+                <!-- Mobile toggler -->
+                <button class="navbar-toggler" type="button" data-toggle="collapse"
+                        data-target="#navbarNav" aria-controls="navbarNav"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Navigation links and navigation menu -->
+                <div class="collapse navbar-collapse" id="navbarNav">
+
+                    <ul class="navbar-nav mx-auto">
+                        <li class="nav-item mx-2"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+                        <li class="nav-item mx-2"><a class="nav-link" href="{% url 'home' %}#programs">Programs</a></li>
+                        <li class="nav-item mx-2"><a class="nav-link" href="{% url 'home' %}#bmi">My BMI</a></li>
+                        <li class="nav-item mx-2"><a class="nav-link" href="{% url 'mycals' %}">My CALS</a></li>
+                        <li class="nav-item mx-2"><a class="nav-link" href="{% url 'aboutus' %}">About Us</a></li>
+                        <li class="nav-item mx-2"><a class="nav-link" href="{% url 'contact' %}">Contact</a></li>
+                        <li class="nav-item mx-2"><a class="nav-link" href="{% url 'fitshop' %}">FitShop</a></li>
+                    </ul>
+
+                    <!-- Search bar handled by a custom javascript file -->
+                    <div class="search-container ms-auto">
+                        <input type="text" id="navSearch" placeholder="Search..." />
+                        <button id="searchBtn" type="button"><i class="fa fa-search"></i></button>
+                    </div>
+
+                    <!-- ADMIN BUTTON ONLY FOR STAFF MEMBERS -->
+                    {% if user.is_authenticated and user.is_staff %}
+                        <a href="{% url 'dashboard-home' %}" class="admin-btn me-4">
+                            Admin Page
+                        </a>
+                    {% endif %}
+
+                    <!-- User controls, profile icon, cart icon -->
+                    <div class="user-controls d-flex align-items-center">
+
+                        {% if user.is_authenticated %}
+
+                            {% if not user.is_staff %}
+                                <!-- Profile dropdown only for users that are authenticated -->
+                                <div class="profile-dropdown">
+
+                                    <button class="nav-icon profile-toggle" id="profileToggle" title="Profile">
+                                        <i class="fa fa-user" style="font-size: 18px;"></i>
+                                    </button>
+
+                                    <div class="dropdown-menu" id="profileMenu">
+                                        <a href="{% url 'profile' %}" class="dropdown-item">View Profile</a>
+
+                                        <!-- Show become member option only to authenticated users and non member users -->
+                                        {% if not user.profile.is_member %}
+                                            <div class="upgrade-badge">
+                                                <a href="{% url 'membership_upgrade' %}"
+                                                class="dropdown-item">Upgrade to Premium Member</a>
+                                            </div>
+                                        {% endif %}
+
+                                        <a href="{% url 'logout' %}" class="dropdown-item">Logout</a>
+                                    </div>
+                                </div>
+
+                                <!-- Cart icon for fitshop that dynamically updates based on the number of items inside it-->
+                                <a href="{% url 'view_cart' %}" class="cart-icon-wrapper">
+                                    <i class="fa fa-shopping-cart nav-icon"></i>
+
+                                    {% if cart_count > 0 %}
+                                        <sup class="cart-superscript">{{ cart_count }}</sup>
+                                    {% endif %}
+                                </a>
+                                
+                            {% endif %}
+
+                        {% else %}
+
+                            <!-- Log in icon for the visitors -->
+                            <a href="#" class="nav-icon" id="openLogin" title="Login">
+                                <i class="fa fa-sign-in"></i>
+                            </a>
+
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container product-container" style="margin-top: 40px;">
+
+            <div class="row g-5">
+
+                <!-- LEFT: IMAGE -->
+                <div class="col-md-5" style="margin-top: 40px;" >
+                    <div class="product-image-box">
+                        <img src="{{ product.image.url }}" class="img-fluid" alt="{{ product.name }}">
+                    </div>
+                </div>
+
+                <!-- RIGHT: DETAILS -->
+                <div class="col-md-7" style="margin-top: 10px;">
+
+                    <h1 class="fw-bold mb-3" style="font-size:2.4rem;">{{ product.name }}</h1>
+
+                    <h4 class="fw-bold mb-4" style="color:#ff8c42;">€{{ product.price }}</h4>
+
+                    <p style="font-size:1.05rem; line-height:1.7; color:#555;">
+                        {{ product.long_description }}
+                    </p>
+
+                    <hr class="my-4">
+                
+                </div>
+
+                <!-- CHANGED THE QUANTITY AND THE ADD TO CART BUTTON INTO A FORM TO MAKE THE QUANTITY FUNCTION WORK -->
+                <div style="display:flex; justify-content:center; width:100%;">
+
+                    <form action="{% url 'add_to_cart' product.id %}" method="POST" style="margin-top:20px;">
+                        {% csrf_token %}
+
+                        <!-- Entire row has the quantity selecter and the add to car button -->
+                        <div style="display:flex; align-items:center; gap:20px;">
+
+                            <!-- Quantity Selector -->
+                            <div class="d-flex align-items-center gap-2">
+                                <button type="button" class="qty-btn minus" onclick="changeQty(-1)">−</button>
+                                <span id="qtyValue" class="qty-display">1</span>
+                                <button type="button" class="qty-btn plus" onclick="changeQty(1)">+</button>
+                            </div>
+
+                            <!-- Hidden quantity -->
+                            <input type="hidden" id="qtyInput" name="quantity" value="1">
+
+                            <!-- Add to Cart button -->
+                            {% if user.is_authenticated %}
+                                <button type="submit" class="btn add-to-cart-btn">Add to Cart</button>
+                            {% else %}
+                                <button type="button" class="btn add-to-cart-btn get-full-access">
+                                    Add to Cart
+                                </button>
+                            {% endif %}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- FOOTER SECTION AND FUNCTIONALITY -->
+        <footer class="site-footer">
+            <div class="container">
+                <div class="row">
+
+                    <!-- About text -->
+                    <div class="col-lg-3 col-md-6 footer-about">
+                        <h3 class="footer-text">FitTrack</h3>
+                        <p class="text-light small lh-base mb-0">
+                            FitTrack is dedicated to helping you stay motivated and consistent on your fitness journey.
+                            Whether you train at home or in the gym, we’re here to keep you on track every step of the way.
+                        </p>
+                        <br>
+                    </div>
+
+                    <!-- Our Blogs dynamically loaded -->
+                    <div class="col-lg-3 col-md-6 footer-blog">
+                        <h5 class="footer-title">Our Blogs</h5>
+                        <ul>
+
+                        <!-- Loads the recent blogs created from the admin -->
+                        {% if recent_blogs %}
+                            {% for blog in recent_blogs %}
+                            <li>
+                                <a class="text-light small lh-base mb-0" 
+                                href="{% url 'blog_detail' blog.id %}">
+                                    <!-- The first letter of the blog name is capitalized -->
+                                    {{ blog.title|lower|capfirst }} 
+                                </a>
+                                
+                                <!-- Show whne blog was created-->
+                                <span>{{ blog.created_at|date:"M d, Y" }}</span>
+                            </li>
+                            {% endfor %}
+
+                        <!-- If no blogs exist, goes to this block -->
+                        {% else %}
+                            <li>
+                                <span class="text-muted small">No blogs available</span>
+                            </li>
+                        {% endif %}
+                    </div>
+
+                    <!-- Contact info -->
+                    <div class="col-lg-2 col-md-6 footer-info">
+                        <h5 class="footer-title">Get Info</h5>
+                        <p class="text-light small lh-base mb-2"><i class="fa fa-phone"></i> (+30) 210 4567890</p>
+                        <p class="text-light small lh-base mb-2"><i class="fa fa-envelope"></i> info@fittrack.com</p>
+                        <p class="text-light small lh-base mb-2"><i class="fa fa-map-marker"></i> 28 Ermou Street, Athens, Greece</p>
+                        <br>
+                    </div>
+
+                    <!-- Social links -->
+                    <div class="col-lg-2 col-md-6 footer-social text-center">
+                        <h5 class="footer-title">Follow&nbsp;Us&nbsp;On</h5>
+                        <div class="footer-social">
+                            <a href="https://www.facebook.com/" class="me-3"><i class="fa-brands fa-facebook-f"></i></a>
+                            <a href="https://x.com/" class="me-3"><i class="fa-brands fa-x-twitter"></i></a>
+                            <a href="https://www.instagram.com/" class="me-3"><i class="fa-brands fa-instagram"></i></a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </footer>
+
+        <!-- External js scripts for functionality -->
+        <script src="{% static 'js/jquery.min.js' %}"></script>
+        <script src="{% static 'js/bootstrap.min.js' %}"></script>
+        <script src="{% static 'js/aos.js' %}"></script>
+        <script src="{% static 'js/smoothscroll.js' %}"></script>
+        <script src="{% static 'js/custom.js' %}"></script>
+        <script src="{% static 'js/activelink.js' %}"></script>
+        <script src="{% static 'js/searchbar.js' %}"></script>
+        <script src="{% static 'js/profiledropdown.js' %}"></script>
+        <script src="{% static 'js/chatbot.js' %}"></script>
+        <script src="{% static 'js/authmodal.js' %}"></script>
+
+
+        <!-- Script that handles the quantity functionality -->
+        <script>
+            function changeQty(amount) {
+                const qtySpan = document.getElementById("qtyValue");
+                const qtyInput = document.getElementById("qtyInput");
+
+                let current = parseInt(qtySpan.textContent);
+                let updated = current + amount;
+
+                if (updated < 1) updated = 1;
+
+                qtySpan.textContent = updated;
+                qtyInput.value = updated;
+            }
+        </script>
+
+        <!-- Include login modal and the chatbot -->
+        {% include 'accounts/login.html' %}
+        {% include 'accounts/signup.html' %}
+        {% include 'chatbot.html' %}
+
+        <!-- AUTH REQUIRED MODAL (FOR NON-LOGGED-IN USERS) -->
+        <div id="authRequiredModal" class="auth-modal">
+
+            <!-- The upgrade modal works only for users that are not loged in or they do not have created an account-->
+            <div class="auth-modal-content" onclick="event.stopPropagation()">
+
+                <h3> Log In or Create an Account </h3>
+                <br>
+                <p>You need to log in or create an account, to add products in your cart</p>
+                <p> Do not waste your time. Sign up or login to buy your favorite products</p>
+
+                <div class="auth-buttons-group" style="display:flex; justify-content:center; gap:40px; margin-top:20px;">
+                    <button id="authSignupBtn" class="btn-upgrade-modal">Sign Up</button>
+                    <button id="authLoginBtn" class="btn-upgrade-modal">Log In</button>
+                </div>
+
+            </div>
+        </div>
+
+    </body>
+</html>

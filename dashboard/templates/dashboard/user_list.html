@@ -1,0 +1,108 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>FitTrack User List</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Admin uses Bootstrap + and the main style for fonts/colors -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+    <body style="background-color:#f5f5f5;">
+
+        <!-- ADMIN TOP BAR (Not the main site navbar)-->
+        <div class="d-flex justify-content-between align-items-center px-4 py-3"
+            style="background-color:#111; color:#fff;">
+
+            <!-- Left side: Admin title -->
+            <div class="d-flex align-items-center">
+                <img src="{% static 'images/logo.png' %}" alt="FitTrack Logo"
+                    style="margin-right:10px; width:40px;">
+                <h4 class="mb-0">FitTrack Admin</h4>
+            </div>
+
+            <div class="d-flex align-items-center" style="gap: 20px;">
+
+                <!-- User Info -->
+                <div class="d-flex align-items-center" style="gap: 8px;">
+                    <i class="fa fa-user-circle text-light" style="font-size: 22px;"></i>
+                    <span style="color:#e5e7eb; font-weight:500; font-size:15px;">
+                        {{ request.user.username }}
+                    </span>
+                </div>
+
+                <!-- View Site button -->
+                <a href="{% url 'home' %}" 
+                class="ft-btn-outline" 
+                style="padding:6px 16px; white-space: nowrap;">
+                View Site
+                </a>
+
+                <!-- Logout button -->
+                <a href="{% url 'logout' %}" 
+                class="ft-btn-outline" 
+                style="padding:6px 16px; white-space: nowrap;">
+                Logout
+                </a>
+
+            </div>
+        </div>
+        
+        <!-- THIS SECTION GIVES THE ABILITY TO ADMIN TO VIEW THE ACCOUNTS CREATED -->
+        <div class="container mt-5">
+            <h2 class="mb-4 fw-bold text-center">Registered Users</h2>
+
+            <!-- The table that the user list uses -->
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Date Joined</th>
+                        <th>Membership</th>
+                    </tr>
+                </thead>
+
+                <!-- Gives to the admin the ability see registered username, email and when the user joined -->
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.date_joined }}</td>
+
+                        <!-- Gives the ability to the admin to see if the user is premium member or just free member -->
+                        <td>
+                            {% if user.profile.is_member %}
+                                <span class="badge-member">Premium Member</span>
+                            {% else %}
+                                <span class="badge-free">Free User</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- Back to dashboard button -->
+            <div class="text-center mt-4">
+                <a href="{% url 'dashboard-home' %}" class="btn ft-btn-outline px-4 py-2" 
+                style="font-weight: 600; border-radius: 10px; margin-bottom: 20px;">
+                    Back to Dashboard
+                </a>
+            </div>
+
+        </div>
+
+        <!-- Minimal JS script. We do not anything else, the views and models handles functionality -->
+        <script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+    </body>
+</html>

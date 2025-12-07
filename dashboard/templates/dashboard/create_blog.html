@@ -1,0 +1,107 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>FitTrack Add Blog</title>
+
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+    <body style="background-color:#f3f4f6;">
+
+        <!-- ADMIN TOP BAR-->
+        <div class="d-flex justify-content-between align-items-center px-4 py-3"
+            style="background-color:#111; color:#fff;">
+
+            <!-- Left side is the Admin title -->
+            <div class="d-flex align-items-center">
+                <img src="{% static 'images/logo.png' %}" alt="FitTrack Logo"
+                    style="margin-right:10px; width:40px;">
+                <h4 class="mb-0">FitTrack Admin</h4>
+            </div>
+
+            <div class="d-flex align-items-center" style="gap: 20px;">
+
+                <!-- User Info -->
+                <div class="d-flex align-items-center" style="gap: 8px;">
+                    <i class="fa fa-user-circle text-light" style="font-size: 22px;"></i>
+                    <span style="color:#e5e7eb; font-weight:500; font-size:15px;">
+                        {{ request.user.username }}
+                    </span>
+                </div>
+
+                <!-- View Site button -->
+                <a href="{% url 'home' %}" 
+                class="ft-btn-outline" 
+                style="padding:6px 16px; white-space: nowrap;">
+                View Site
+                </a>
+
+                <!-- Logout button -->
+                <a href="{% url 'logout' %}" 
+                class="ft-btn-outline" 
+                style="padding:6px 16px; white-space: nowrap;">
+                Logout
+                </a>
+
+            </div>
+        </div>
+
+        <!-- CREATE BLOG FORM --> 
+        <div class="container py-5">
+
+            <h2 class="fw-bold text-center mb-4">{{ title }}</h2>
+
+            <!-- Form card tha handles the blog creation -->
+            <div class="form-card">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <!-- Title label for the blog -->
+                    <label class="form-label">Title</label>
+                    <input type="text" name="title" class="form-control"
+                        value="{{ blog.title|default:'' }}">
+
+                    <!-- Optional subtitle for the blog -->
+                    <label class="form-label mt-3">Subtitle</label>
+                    <input type="text" name="subtitle" class="form-control"
+                        value="{{ blog.subtitle|default:'' }}">
+
+                    <!-- Blog's content -->
+                    <label class="form-label mt-3">Content</label>
+                    <textarea name="content" rows="10" class="form-control">{{ blog.content|default:'' }}</textarea>
+
+                    <!-- Blog's image -->
+                    <label class="form-label mt-3">Image</label><br>
+                    {% if blog.image %}
+                        <img src="{{ blog.image.url }}" width="120" class="mb-2"><br>
+                    {% endif %}
+                    <input type="file" name="image" class="form-control">
+
+                    <!-- SAVE BUTTON AND CANCEL BUTTON -->
+                    <div class="d-flex justify-content-center mt-4" style="gap: 15px;">
+                        <button type="submit" class="ft-btn ft-btn-outline" 
+                                style="padding:8px 20px; width:auto; display:inline-block;">
+                            Save
+                        </button>
+
+                        <a href="{% url 'blog_list' %}" 
+                        class="ft-btn ft-btn-outline"
+                        style="padding:8px 20px; width:auto; display:inline-block;">
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+        <!-- Minimal JS script. We do not anything else, the views and models handles functionality -->
+        <script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+    </body>
+</html>
+
+

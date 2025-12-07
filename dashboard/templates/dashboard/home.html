@@ -1,0 +1,179 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>FitTrack Admin Dashboard</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Admin uses Bootstrap + and the main style for fonts/colors -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+    <body style="background-color:#f5f5f5;">
+
+        <!-- ADMIN TOP BAR (Not the main site navbar)-->
+        <div class="d-flex justify-content-between align-items-center px-4 py-3"
+            style="background-color:#111; color:#fff;">
+
+            <!-- Left side: Admin title -->
+            <div class="d-flex align-items-center">
+                <img src="{% static 'images/logo.png' %}" alt="FitTrack Logo"
+                    style="margin-right:10px; width:40px;">
+                <h4 class="mb-0">FitTrack Admin</h4>
+            </div>
+
+            <div class="d-flex align-items-center" style="gap: 20px;">
+
+                <!-- User Info -->
+                <div class="d-flex align-items-center" style="gap: 8px;">
+                    <i class="fa fa-user-circle text-light" style="font-size: 22px;"></i>
+                    <span style="color:#e5e7eb; font-weight:500; font-size:15px;">
+                        {{ request.user.username }}
+                    </span>
+                </div>
+
+                <!-- View Site button -->
+                <a href="{% url 'home' %}" 
+                class="ft-btn-outline" 
+                style="padding:6px 16px; white-space: nowrap;">
+                View Site
+                </a>
+
+                <!-- Logout button -->
+                <a href="{% url 'logout' %}" 
+                class="ft-btn-outline" 
+                style="padding:6px 16px; white-space: nowrap;">
+                Logout
+                </a>
+
+            </div>
+        </div>
+
+        <div class="container-fluid">
+            <div class="row">
+
+                <!-- LEFT SIDEBAR THAT SHOWS ADMIN NAVIGATION -->
+                <aside class="col-md-3 col-lg-2 p-3"
+                    style="background-color:#111; min-height:100vh;">
+
+                    <ul class="nav flex-column">
+
+                        <!-- Dashboard link -->
+                        <li class="nav-item mb-4">
+                            <a class="nav-link text-light fw-bold" href="{% url 'dashboard-home' %}">
+                                <i class="fa fa-chart-line me-2"></i>
+                                Dashboard
+                            </a>
+                        </li>
+
+                        <!-- Products -->
+                        <li class="nav-item mb-4">
+                            <a class="nav-link text-light" href="{% url 'dashboard-products' %}">
+                                <i class="fa fa-dumbbell me-2"></i>
+                                Products
+                            </a>
+                        </li>
+
+                        <!-- Blogs -->
+                        <li class="nav-item mb-4">
+                            <a class="nav-link text-light" href="{% url 'blog_list' %}">
+                                <i class="fa fa-pen-nib me-2"></i>
+                                Blogs
+                            </a>
+                        </li>
+
+                        <!-- Programs -->
+                        <li class="nav-item mb-4">
+                            <a class="nav-link text-light" href="#">
+                                <i class="fas fa-running me-2"></i>
+                                Programs
+                            </a>
+                        </li>
+
+                        <!-- Users -->
+                        <li class="nav-item mb-4">
+                            <a class="nav-link text-light" href="{% url 'user_list' %}">
+                                <i class="fa fa-users me-2"></i>
+                                Users
+                            </a>
+                        </li>
+
+                    </ul>
+                </aside>
+
+
+                <!-- MAIN DASHBOARD CONTENT -->
+                <main class="col-md-9 col-lg-10 p-4">
+
+                    <h2 class="fw-bold mb-4">Dashboard Overview</h2>
+
+                    <div class="row g-4">
+
+                        <!-- Total Products -->
+                        <div class="col-md-4">
+                            <div class="card shadow-sm border-0 h-100">
+                                <div class="card-body">
+                                    <h5 class="fw-bold">Total Products</h5>
+                                    <p class="display-6">{{ products_count }}</p>
+                                    <p class="text-muted small">Items in FitShop</p>
+
+                                    <!-- Will link to products manager soon -->
+                                    <a href="{% url 'dashboard-products' %}" class="btn w-100 ft-btn-outline mt-3">
+                                        Manage Products
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Total Users -->
+                        <div class="col-md-4">
+                            <div class="card shadow-sm border-0 h-100">
+                                <div class="card-body">
+                                    <h5 class="fw-bold">Total Users</h5>
+                                    <p class="display-6">{{ users_count }}</p>
+                                    <p class="text-muted small">Registered Users</p>
+
+                                    <a href="{% url 'user_list' %}" class="btn w-100 ft-btn-outline mt-3">
+                                        View Users
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Quick Actions -->
+                        <div class="col-md-4">
+                            <div class="card shadow-sm border-0 h-100">
+                                <div class="card-body">
+                                    <h5 class="fw-bold">Quick Actions</h5>
+
+                                    <a href="{% url 'dashboard-products' %}" class="btn w-100 ft-btn-outline mb-3">
+                                        + Add New Product
+                                    </a>
+
+                                    <a href="{% url 'blog_list' %}" class="btn w-100 ft-btn-outline mb-3">
+                                        + Add New Blog
+                                    </a>
+
+                                    <br/>
+                                    <a href="#" class="btn w-100 ft-btn-outline">
+                                        + Add New Program
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </main>
+
+            </div>
+        </div>
+
+
+        <!-- Minimal JS script. We do not anything else, the views and models handles functionality -->
+        <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    </body>
+</html>

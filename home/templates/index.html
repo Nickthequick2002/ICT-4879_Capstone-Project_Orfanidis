@@ -1,0 +1,563 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>FitTrack</title>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- Core styles: Bootstrap, animations, icon library, and main stylesheet -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/aos.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+    <!-- Pass authentication state to JS (used for popups & locked content logic) -->
+    <body data-authenticated="{{ user.is_authenticated }}">
+
+        {% include 'includes/navbar.html' %}
+
+        <!-- HERO SECTION AND FUNCTIONALITY -->
+        <section class="hero d-flex flex-column justify-content-center align-items-center" id="home">
+
+            <div class="bg-overlay"></div>
+
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-md-10 mx-auto col-12">
+
+                        <div class="hero-text mt-5 text-center">
+
+                            <!-- Premade AOS animation handles the fade delays -->
+                            <h6 data-aos="fade-up" data-aos-delay="300">
+                                A new way to build a healthy lifestyle!
+                            </h6>
+
+                            <h1 class="text-white" data-aos="fade-up" data-aos-delay="500">
+                                Your Fitness Journey Begins Here
+                            </h1>
+
+                            <a href="#feature"
+                            class="btn custom-btn mt-3"
+                            data-aos="fade-up"
+                            data-aos-delay="600">
+                                Get started
+                            </a>
+
+                            <a href="{% url 'aboutus' %}"
+                            class="btn custom-btn bordered mt-3"
+                            data-aos="fade-up"
+                            data-aos-delay="700"
+                            style="#FAAD9E">
+                                learn more
+                            </a>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- FEATURE SECTION AND FUNCTIONALITY -->
+        <section class="feature" id="feature">
+
+            <div class="container">
+                <div class="row feature-wrapper">
+
+                    <!-- Left columns for new users, introduces the sign up method -->
+                    <div class="d-flex flex-column justify-content-center ml-lg-auto mr-lg-5
+                                col-lg-5 col-md-6 col-12 feature-box">
+
+                        <h2 class="mb-3 text-white" data-aos="fade-up">
+                            First time using FitTrack?
+                        </h2>
+
+                        <h6 class="mb-4 text-white" data-aos="fade-up">
+                            Push your limits. Build your strength. Own your journey.
+                        </h6>
+
+                        <p class="para" data-aos="fade-up" data-aos-delay="200">
+                            Create a free FitTrack account to access basic workouts, and nutrition tools.
+                        </p>
+
+                        <a href="#" id="openSignup"
+                        class="btn custom-btn bg-color mt-3 member-btn"
+                        data-aos="fade-up" data-aos-delay="300">
+                            Sign Up for Free
+                        </a>
+                    </div>
+
+                    <!-- Divider standing between the two cards to separate them -->
+                    <div class="divider"></div>
+
+                    <!-- Right column for existing users, introduces the login method -->
+                    <div class="d-flex flex-column justify-content-center ml-lg-auto mr-lg-5
+                                col-lg-5 col-md-6 col-12 feature-box">
+
+                        <div class="about-working-hours">
+
+                            <h2 class="mb-3 text-white" data-aos="fade-up" data-aos-delay="400">
+                                Already&nbsp;a&nbsp;member?
+                            </h2>
+
+                            <h6 class="mb-4 text-white" data-aos="fade-up" data-aos-delay="500">
+                                Stay consistent. Build your strength. Own your progress.
+                            </h6>
+
+                            <p class="para" data-aos="fade-up" data-aos-delay="700">
+                                Access your workouts, track your results, and keep building the discipline.
+                            </p>
+
+                            <a href="#" id="openLoginMain"
+                            class="btn custom-btn bg-color mt-3 member-btn"
+                            data-aos="fade-up" data-aos-delay="600">
+                                Continue your Journey
+                            </a>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </section>
+
+        <!-- PROGRAMS SECTION AND FUNCTIONALITY -->
+        <section class="programs section" id="programs">
+            <div class="container">
+
+                <!-- Section heading -->
+                <div class="row">
+                    <div class="col-lg-8 col-md-10 mx-auto text-center mb-5">
+                        <h2 data-aos="fade-up" data-aos-delay="300">Discover Our Programs</h2>
+                        <p data-aos="fade-up" data-aos-delay="400">
+                            At FitTrack, we believe fitness is not one-size-fits-all.
+                            That’s why we’ve designed a variety of programs to match every lifestyle and goal.
+                            Whether you’re looking to build strength, improve endurance, or find balance,
+                            there’s a path here for you. Click on a program to explore details and take the first step
+                            towards your transformation.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <!-- Program is always unlocked for all the users -->
+                    <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="450">
+                        <div class="programs-thumb card h-100">
+                            <img src="{% static 'images/programs/program 1.jpg' %}"
+                                class="img-fluid" alt="programs">
+
+                            <div class="programs-info text-center p-3">
+                                <h3>Strength Training</h3>
+                                <span>
+                                    Simple routines with weights to help you build muscle and feel stronger.
+                                </span>
+                                <br>
+                                <a href="#" class="btn program-btn mt-3">Start Training</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- The logic behind program 2–6 depends on the membership status of the user -->
+                    {% if user.is_authenticated and user.profile.is_member %}
+
+                        <!-- === Only members have full access to all the programs === -->
+
+                        <!-- Program 2 -->
+                        <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="550">
+                            <div class="programs-thumb card h-100">
+                                <img src="{% static 'images/programs/program 4.avif' %}"
+                                    class="img-fluid" alt="programs">
+
+                                <div class="programs-info text-center p-3">
+                                    <h3>Core & Abs</h3>
+                                    <span>
+                                        Crunches, planks, and easy routines to strengthen your midsection and posture.
+                                    </span>
+                                    <br>
+                                    <a href="#" class="btn program-btn mt-3">Start Training</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Program 3 -->
+                        <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="650">
+                            <div class="programs-thumb card h-100">
+                                <img src="{% static 'images/programs/program 2.jpg' %}"
+                                    class="img-fluid" alt="programs">
+
+                                <div class="programs-info text-center p-3">
+                                    <h3>Cardio & Endurance</h3>
+                                    <span>
+                                        Easy running, cycling, and circuit sessions to keep your heart healthy
+                                        and energy high.
+                                    </span>
+                                    <br>
+                                    <a href="#" class="btn program-btn mt-3">Start Training</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Program 4 -->
+                        <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="750">
+                            <div class="programs-thumb card h-100">
+                                <img src="{% static 'images/programs/program 3.webp' %}"
+                                    class="img-fluid" alt="programs">
+
+                                <div class="programs-info text-center p-3">
+                                    <h3>Yoga & Flexibility</h3>
+                                    <span>
+                                        Gentle flows and stretching sessions to improve mobility and reduce stress.
+                                    </span>
+                                    <br>
+                                    <a href="#" class="btn program-btn mt-3">Start Training</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Program 5 -->
+                        <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="850">
+                            <div class="programs-thumb card h-100">
+                                <img src="{% static 'images/programs/program 6.jpg' %}"
+                                    class="img-fluid" alt="programs">
+
+                                <div class="programs-info text-center p-3">
+                                    <h3>Jumping Training</h3>
+                                    <span>
+                                        Explosive exercises to boost your vertical leap, agility,
+                                        and overall lower-body power.
+                                    </span>
+                                    <br>
+                                    <a href="#" class="btn program-btn mt-3">Start Training</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Program 6 -->
+                        <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="950">
+                            <div class="programs-thumb card h-100">
+                                <img src="{% static 'images/programs/program 5.webp' %}"
+                                    class="img-fluid" alt="programs">
+
+                                <div class="programs-info text-center p-3">
+                                    <h3>Functional Training</h3>
+                                    <span>
+                                        Easy full-body moves like squats and lunges
+                                        to boost everyday strength and movement.
+                                    </span>
+                                    <br>
+                                    <a href="#" class="btn program-btn mt-3">Start Training</a>
+                                </div>
+                            </div>
+                        </div>
+
+                    {% else %}
+
+                        <!-- Logic for free users or users that are visitors -->
+                        <!-- Programs remain visible but locked and the button triggers the modals -->
+
+                        <!-- Program 2 -->
+                        <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="550">
+                            <div class="programs-thumb card h-100 locked-program">
+                                <img src="{% static 'images/programs/program 4.avif' %}"
+                                    class="img-fluid" alt="programs">
+
+                                <div class="programs-info text-center p-3">
+                                    <h3>Core & Abs</h3>
+                                    <span>
+                                        Crunches, planks, and easy routines to strengthen your midsection and posture.
+                                    </span>
+                                    <br>
+
+                                    <!-- Button behavior depends on authentication -->
+                                    {% if not user.is_authenticated %}
+                                        <!-- Popup for users that are not logged in -->
+                                        <button class="btn btn-get-full-access mt-3 get-full-access">
+                                            🔒 Get Full Access
+                                        </button>
+                                    {% else %}
+                                        <!-- Users that are logged in go to the upgrade modal -->
+                                        <a href="#" class="btn btn-get-access mt-3">
+                                            🔒 Get Full Access
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Program 3 -->
+                        <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="650">
+                            <div class="programs-thumb card h-100 locked-program">
+                                <img src="{% static 'images/programs/program 2.jpg' %}"
+                                    class="img-fluid" alt="programs">
+
+                                <div class="programs-info text-center p-3">
+                                    <h3>Cardio & Endurance</h3>
+                                    <span>
+                                        Easy running, cycling, and circuit sessions to keep your heart healthy
+                                        and energy high.
+                                    </span>
+                                    <br>
+
+                                    {% if not user.is_authenticated %}
+                                        <button class="btn btn-get-full-access mt-3 get-full-access">🔒 Get Full Access</button>
+                                    {% else %}
+                                        <a href="#" class="btn btn-get-access mt-3">🔒 Get Full Access</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Program 4 -->
+                        <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="750">
+                            <div class="programs-thumb card h-100 locked-program">
+                                <img src="{% static 'images/programs/program 3.webp' %}"
+                                    class="img-fluid" alt="programs">
+
+                                <div class="programs-info text-center p-3">
+                                    <h3>Yoga & Flexibility</h3>
+                                    <span>
+                                        Gentle flows and stretching sessions to improve mobility and reduce stress.
+                                    </span>
+                                    <br>
+
+                                    {% if not user.is_authenticated %}
+                                        <button class="btn btn-get-full-access mt-3 get-full-access">🔒 Get Full Access</button>
+                                    {% else %}
+                                        <a href="#" class="btn btn-get-access mt-3">🔒 Get Full Access</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Program 5 -->
+                        <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="850">
+                            <div class="programs-thumb card h-100 locked-program">
+                                <img src="{% static 'images/programs/program 6.jpg' %}"
+                                    class="img-fluid" alt="programs">
+
+                                <div class="programs-info text-center p-3">
+                                    <h3>Jumping Training</h3>
+                                    <span>
+                                        Explosive exercises to boost your vertical leap, agility,
+                                        and overall lower-body power.
+                                    </span>
+                                    <br>
+
+                                    {% if not user.is_authenticated %}
+                                        <button class="btn btn-get-full-access mt-3 get-full-access">🔒 Get Full Access</button>
+                                    {% else %}
+                                        <a href="#" class="btn btn-get-access mt-3">🔒 Get Full Access</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Program 6 -->
+                        <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="950">
+                            <div class="programs-thumb card h-100 locked-program">
+                                <img src="{% static 'images/programs/program 5.webp' %}"
+                                    class="img-fluid" alt="programs">
+
+                                <div class="programs-info text-center p-3">
+                                    <h3>Functional Training</h3>
+                                    <span>
+                                        Easy full-body moves like squats and lunges
+                                        to boost everyday strength and movement.
+                                    </span>
+                                    <br>
+
+                                    {% if not user.is_authenticated %}
+                                        <button class="btn btn-get-full-access mt-3 get-full-access">🔒 Get Full Access</button>
+                                    {% else %}
+                                        <a href="#" class="btn btn-get-access mt-3">🔒 Get Full Access</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                    {% endif %}
+
+                </div>
+            </div>
+        </section>
+
+
+        <!-- BMI CALCULATOR SECTION AND FUNCTIONALITY -->
+        <section class="bmi section" id="bmi">
+            <div class="container">
+
+                <!-- BMI header -->
+                <div class="row text-center mb-5">
+                    <div class="col-lg-8 col-md-10 mx-auto">
+                        <h2 data-aos="fade-up" data-aos-delay="300">
+                            Discover Your Body Mass Index
+                        </h2>
+                        <p data-aos="fade-up" data-aos-delay="400">
+                            Understanding your <strong>Body Mass Index (BMI)</strong> helps you track your health
+                            and fitness progress effectively. BMI provides insights into whether your weight is
+                            within a healthy range for your height, helping you maintain a balanced lifestyle.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- BMI functionality and content -->
+                <div class="bmi-card">
+                    <div class="bmi-content">
+                        <div class="row">
+
+                            <!-- Right column is the bmi calculator handled by external js file -->
+                            <div class="bmi-calculator-box" data-aos="fade-left" data-aos-delay="300">
+
+                                <h3 class="text-center mb-4">Calculate Your BMI</h3>
+
+                                <!-- Height form and weight form for bmi calculation -->
+                                <form id="bmiForm" novalidate>
+                                    <label for="height">Height (cm)</label>
+                                    <input type="number" id="height" class="form-control"
+                                        placeholder="e.g. 175" required>
+
+                                    <label for="weight" style="margin-top: 1rem;">Weight (kg)</label>
+                                    <input type="number" id="weight" class="form-control"
+                                        placeholder="e.g. 70" required>
+
+                                    <!-- Calculation button -->
+                                    <button type="submit" class="bmi-btn mt-3">Calculate BMI</button>
+
+                                    <button id="resetBtn" class="bmi-reset-btn">Reset</button>
+                                    
+                                </form>
+
+                                <!-- BMI result hanlded by an external js file -->
+                                <div class="bmi-result mt-4">
+                                    <h4><strong>Your BMI is: <span id="bmiValue">--</span></strong></h4>
+                                    <p id="bmiCategory"></p>
+                                    <p id="bmiIdealRange"></p>
+                                </div>
+                            </div>
+
+                            <!-- BMI info table -->
+                            <div class="bmi-table-box" data-aos="fade-right" data-aos-delay="100">
+
+                                <h3 class="text-center mb-3">BMI Classification</h3>
+
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Category</th>
+                                            <th>BMI Range</th>
+                                            <th>Description</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr id="underweight">
+                                            <td><strong>Underweight</strong></td>
+                                            <td>Below 18.5</td>
+                                            <td>
+                                                Your weight is below the healthy range. Consider a nutrient-rich
+                                                diet and strength training.
+                                            </td>
+                                        </tr>
+
+                                        <tr id="healthy">
+                                            <td><strong>Healthy weight</strong></td>
+                                            <td>18.5 - 24.9</td>
+                                            <td>
+                                                Great job! You’re within the recommended BMI range.
+                                                Maintain your current habits.
+                                            </td>
+                                        </tr>
+
+                                        <tr id="overweight">
+                                            <td><strong>Overweight</strong></td>
+                                            <td>25 - 29.9</td>
+                                            <td>
+                                                You’re slightly above the ideal range. Focus on balanced nutrition
+                                                and regular exercise.
+                                            </td>
+                                        </tr>
+
+                                        <tr id="obese">
+                                            <td><strong>Obese</strong></td>
+                                            <td>30 and above</td>
+                                            <td>
+                                                Your BMI is high. Consider adopting a healthier routine
+                                                and consulting a professional.
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+       {% include 'includes/footer.html' %}
+
+        <!-- External js scripts for functionality -->
+        <script src="{% static 'js/jquery.min.js' %}"></script>
+        <script src="{% static 'js/bootstrap.min.js' %}"></script>
+        <script src="{% static 'js/aos.js' %}"></script>
+        <script src="{% static 'js/smoothscroll.js' %}"></script>
+        <script src="{% static 'js/custom.js' %}"></script>
+        <script src="{% static 'js/activelink.js' %}"></script>
+        <script src="{% static 'js/bmicalculator.js' %}"></script>
+        <script src="{% static 'js/searchbar.js' %}"></script>
+        <script src="{% static 'js/profiledropdown.js' %}"></script>
+        <script src="{% static 'js/modalupgrading.js' %}"></script>
+        <script src="{% static 'js/chatbot.js' %}"></script>
+        <script src="{% static 'js/authmodal.js' %}"></script>
+
+        <!-- Include login modal, signup modal and the chatbot -->
+        {% include 'accounts/login.html' %}
+        {% include 'accounts/signup.html' %}
+        {% include 'chatbot.html' %}
+
+        <!-- UPGRADE MODAL SECTION AND FUNCTIONALITY -->
+        <div id="upgradeModal" class="upgrade-modal">
+
+            <!-- The upgrade modal works only for users that are not members -->
+            <div class="upgrade-modal-content">
+                <h3> Premium Members Only </h3>
+                </br>
+                <p>This feature is available only for FitTrack Premium Members.</p>
+                <p>
+                    Upgrade now for <strong>€4.99</strong> and unlock all workout
+                    programs and tools!
+                </p>
+                <a href="{% url 'membership_upgrade' %}" class="btn-upgrade-modal">
+                    Upgrade to Premium Member
+                </a>
+            </div>
+        </div>
+
+        <!-- AUTH REQUIRED MODAL (FOR NON-LOGGED-IN USERS) -->
+        <div id="authRequiredModal" class="auth-modal">
+
+            <!-- The upgrade modal works only for users that are not loged in or they do not have created an account-->
+            <div class="auth-modal-content" onclick="event.stopPropagation()">
+
+                <h3> Premium Members Only</h3>
+                <br>
+                <p>This feature is available only for FitTrack Premium Members.</p>
+                <p>You Have to Sign up or log and upgrade to a premium member to unlock the full programs.</p>
+
+                <div class="auth-buttons-group" style="display:flex; justify-content:center; gap:40px; margin-top:20px;">
+                    <button id="authSignupBtn" class="btn-upgrade-modal">Sign Up</button>
+                    <button id="authLoginBtn" class="btn-upgrade-modal">Log In</button>
+                </div>
+
+            </div>
+        </div>
+
+    </body>
+</html>
+

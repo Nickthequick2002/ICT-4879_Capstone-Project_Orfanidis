@@ -1,0 +1,32 @@
+{% if user.is_authenticated and user.profile.is_member %}
+
+<!-- Chatbot Container -->
+<div id="ft-chatbot">
+
+    <!-- Bubble -->
+    <button id="ft-chatbot-toggle">
+        <i class="fa-regular fa-comment-dots"></i>
+    </button>
+
+    <!-- Chat Window -->
+    <div id="ft-chatbot-window">
+        <div class="ft-chat-header">
+            <h4>FitTrack Chatbot</h4>
+            <button id="ft-chat-close"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+
+        <div id="ft-chat-body">
+            <div class="ft-msg bot">
+                Hi! 👋 How can I help you today?
+            </div>
+        </div>
+
+        <div class="ft-chat-input">
+            <input type="text" id="ft-chat-text" placeholder="Type a message...">
+            <button id="ft-chat-send"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+</div>
+
+{% endif %}

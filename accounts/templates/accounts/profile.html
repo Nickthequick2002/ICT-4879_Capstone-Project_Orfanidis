@@ -1,0 +1,383 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>FitTrack</title>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- Core styles: Bootstrap, animations, icon library, and main stylesheet -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/aos.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+    <body data-authenticated="{{ user.is_authenticated }}">
+
+        <!-- NAVBAR SECTION AND FUNCTIONALITY -->
+        <nav class="navbar navbar-expand-lg fixed-top">
+            <div class="container-fluid justify-content-between d-flex align-items-center">
+
+                <!-- Brand logo + name -->
+                <a class="navbar-brand d-flex align-items-center me-auto" href="{% url 'home' %}">
+                    <img src="{% static 'images/logo.png' %}" alt="FitTrack Logo"
+                        style="margin-right:10px; width:60px; height:auto;">
+                    <h3 class="mb-0">FitTrack</h3>
+                </a>
+
+                <!-- Mobile toggler -->
+                <button class="navbar-toggler" type="button" data-toggle="collapse"
+                        data-target="#navbarNav" aria-controls="navbarNav"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Navigation links and navigation menu -->
+                <div class="collapse navbar-collapse" id="navbarNav">
+
+                    <ul class="navbar-nav mx-auto">
+                        <li class="nav-item mx-2"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+                        <li class="nav-item mx-2"><a class="nav-link" href="{% url 'home' %}#programs">Programs</a></li>
+                        <li class="nav-item mx-2"><a class="nav-link" href="{% url 'home' %}#bmi">My BMI</a></li>
+                        <li class="nav-item mx-2"><a class="nav-link" href="{% url 'mycals' %}">My CALS</a></li>
+                        <li class="nav-item mx-2"><a class="nav-link" href="{% url 'aboutus' %}">About Us</a></li>
+                        <li class="nav-item mx-2"><a class="nav-link" href="{% url 'contact' %}">Contact</a></li>
+                        <li class="nav-item mx-2"><a class="nav-link" href="{% url 'fitshop' %}">FitShop</a></li>
+                    </ul>
+
+                    <!-- Search bar handled by a custom javascript file -->
+                    <div class="search-container ms-auto me-4">
+                        <input type="text" id="navSearch" placeholder="Search..." />
+                        <button id="searchBtn" type="button"><i class="fa fa-search"></i></button>
+                    </div>
+
+                    <!-- User controls, profile icon, cart icon -->
+                    <div class="user-controls d-flex align-items-center">
+
+                        {% if user.is_authenticated %}
+
+                            <!-- Profile dropdown only for users that are authenticated -->
+                            <div class="profile-dropdown">
+
+                                <button class="nav-icon profile-toggle" id="profileToggle" title="Profile">
+                                    <i class="fa fa-user" style="font-size: 18px;"></i>
+                                </button>
+
+                                <div class="dropdown-menu" id="profileMenu">
+                                    <a href="{% url 'profile' %}" class="dropdown-item">View Profile</a>
+
+                                    <!-- Show become member option only to authenticated users and non member users -->
+                                    {% if user.is_authenticated and not user.profile.is_member %}
+                                    <div class="upgrade-badge">
+                                        <a href="{% url 'membership_upgrade' %}" class="dropdown-item">Upgrade to Premium Member</a>
+                                    </div>
+                                    {% endif %}
+
+                                    <a href="{% url 'logout' %}" class="dropdown-item">Logout</a>
+                                </div>
+                            </div>
+
+
+                                <!-- Cart icon for fitshop that dynamically updates based on the number of items inside it-->
+                                <a href="{% url 'view_cart' %}" class="cart-icon-wrapper">
+                                    <i class="fa fa-shopping-cart nav-icon"></i>
+
+                                    {% if cart_count > 0 %}
+                                        <sup class="cart-superscript">{{ cart_count }}</sup>
+                                    {% endif %}
+                                </a>
+
+                        {% else %}
+
+                            <!-- Log in icon for the visitors -->
+                            <a href="#" class="nav-icon" id="openLogin" title="Login">
+                                <i class="fa fa-sign-in"></i>
+                            </a>
+
+                        {% endif %}
+                    </div>
+                </div>
+
+            </div>
+        </nav>
+
+        <br><br><br>
+
+        <div class="profile-container">
+
+            <!-- PROFILE PICTURE CARD THAT LETS THE USER SEE THEIR PROFILE AND UPLOAD A NEW ONE -->
+            <div class="ft-card">
+                <h3 class="ft-title">Profile Picture</h3>
+
+                <div class="pfp-wrapper">
+                    {% if user.profile.profile_picture and user.profile.profile_picture.name != '' %}
+                        <img src="{{ user.profile.profile_picture.url }}" class="pfp-img">
+                    {% else %}
+                        <!-- Fallback image -->
+                        <img src="/media/profile_pics/default.png" class="pfp-img" alt="Default Picture">
+                    {% endif %}
+                </div>
+
+                <!-- Upload a new profile picture -->
+                <form action="{% url 'change_pfp' %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="file" name="profile_picture" class="ft-input">
+                    <button class="ft-btn">Upload New Picture</button>
+                </form>
+            </div>
+
+            <!-- CHANGE USERNAME FUNCTIONALITY (USING AJAX) -->
+            <div class="ft-card">
+                <h3 class="ft-title">Change Username</h3>
+
+                <p class="current-username">
+                    Current username: <strong id="current-username">{{ user.username }}</strong>
+                </p>
+
+                <input type="text" id="new-username" class="ft-input" placeholder="New username">
+
+                <button class="ft-btn" onclick="changeUsername()">Update Username</button>
+            </div>
+
+            <!-- Success popup for username updates -->
+            <div id="username-popup" class="popup-message">Username updated successfully!</div>
+
+            <!-- Success popup for preferences update -->
+            <div id="preferences-popup" class="popup-message">
+                Preferences updated successfully!
+            </div>
+
+            <!-- Success popup for submiting a testimonial -->
+            <div id="testimonial-popup" class="success-popup" style="display:none;">
+                Thank you for your review!
+            </div>
+
+
+            <!-- CHANGE PASSWORD FUNCTIONALITY (USING AJAX) -->
+            <div class="ft-card">
+                <h3 class="ft-title">Change Password</h3>
+
+                <input type="password" id="current-password" class="ft-input" placeholder="Current password">
+                <input type="password" id="new-password" class="ft-input" placeholder="New password">
+                <input type="password" id="confirm-password" class="ft-input" placeholder="Confirm new password">
+
+                <button class="ft-btn" onclick="changePassword()">Change Password</button>
+            </div>
+
+            <!-- MEMBERS ARE ABLE TO CHANGE THEIR TRAINING PREFERENCES THAT SUBMITTED AT THE BEGINNING -->
+            {% if user.is_authenticated and user.profile.is_member %}
+            <div class="ft-card">
+                <h3 class="ft-title">Training Preferences</h3>
+
+                <form action="{% url 'update_preferences' %}" method="POST">
+                    {% csrf_token %}
+
+                    <label>Focus Body Part</label>
+                    <select name="focus_body_part" id="pref-focus" class="ft-input">
+
+                        <!-- This part of the code makes sure that the preferences that the user choosed at the beginning are already selected -->
+                        <option value="arms" {% if profile.focus_body_part == "arms" %}selected{% endif %}>Arms</option>
+                        <option value="legs" {% if profile.focus_body_part == "legs" %}selected{% endif %}>Legs</option>
+                        <option value="chest" {% if profile.focus_body_part == "chest" %}selected{% endif %}>Chest</option>
+                        <option value="back" {% if profile.focus_body_part == "back" %}selected{% endif %}>Back</option>
+                        <option value="abs" {% if profile.focus_body_part == "abs" %}selected{% endif %}>Abs</option>
+                        <option value="full" {% if profile.focus_body_part == "full" %}selected{% endif %}>Full Body</option>
+                    </select>
+
+                    <label>Goal</label>
+                    <select name="goal" id="pref-goal" class="ft-input">
+
+                        <!-- This part of the code makes sure that the preferences that the user choosed at the beginning are already selected -->
+                        <option value="strength" {% if profile.goal == "strength" %}selected{% endif %}>Build Strength</option>
+                        <option value="weight_loss" {% if profile.goal == "weight_loss" %}selected{% endif %}>Lose Weight</option>
+                        <option value="endurance" {% if profile.goal == "endurance" %}selected{% endif %}>Improve Endurance</option>
+                        <option value="flexibility" {% if profile.goal == "flexibility" %}selected{% endif %}>Increase Flexibility</option>
+                    </select>
+
+                    <label>Exercise Type</label>
+                    <select name="exercise_type" id="pref-exercise" class="ft-input">
+
+                        <!-- This part of the code makes sure that the preferences that the user choosed at the beginning are already selected -->
+                        <option value="cardio" {% if profile.exercise_type == "cardio" %}selected{% endif %}>Cardio</option>
+                        <option value="weights" {% if profile.exercise_type == "weights" %}selected{% endif %}>Weights</option>
+                        <option value="yoga" {% if profile.exercise_type == "yoga" %}selected{% endif %}>Yoga</option>
+                        <option value="hiit" {% if profile.exercise_type == "hiit" %}selected{% endif %}>High Intensity Interval Training</option>
+                        <option value="calisthenics" {% if profile.exercise_type == "calisthenics" %}selected{% endif %}>Calisthenics</option>
+                    </select>
+
+                    <button type="button" class="ft-btn" style="margin-top: 12px;" onclick="updatePreferences()">
+                        Update Preferences
+                    </button>
+                </form>
+            </div>
+            {% endif %}
+
+
+            <!-- TESTIMONIALS FUNCTION THAT ARE ADDED IN THE ABOUT US PAGE -->
+            {% if user.profile.is_member %}
+                {% if user.profile.testimonials.all %}
+                    {% with testimonial=user.profile.testimonials.all.0 %}
+
+                        <!-- User already has a testimonial: show editing form -->
+                        <div class="ft-card">
+                            <h3 class="ft-title">Your Testimonial</h3>
+
+                            <!-- Edit testimonial -->
+                            <form action="{% url 'edit_testimonial' %}" method="POST">
+                                {% csrf_token %}
+                                <textarea name="message" class="ft-input" rows="4">
+                                    {{ testimonial.message }}
+                                </textarea>
+
+                                <button class="ft-btn" style="margin-top: 10px;">
+                                    Update Testimonial
+                                </button>
+                            </form>
+
+                            <!-- Delete testimonial -->
+                            <form action="{% url 'delete_testimonial' %}" method="POST" style="margin-top: 10px;">
+                                {% csrf_token %}
+                                <button class="ft-btn" style="background-color:#d9534f;">
+                                    Delete Testimonial
+                                </button>
+                            </form>
+                        </div>
+
+                    {% endwith %}
+                {% else %}
+
+                    <!-- User has no testimonial yet: show create form -->
+                    <div class="ft-card">
+                        <h3 class="ft-title">Share Your Experience</h3>
+
+                        <p class="text-muted">
+                            Tell other visitors how FitTrack helped you in your journey.
+                        </p>
+
+                        <form action="{% url 'submit_testimonial' %}" method="POST">
+                            {% csrf_token %}
+                            <textarea name="message" class="ft-input" rows="4" 
+                                placeholder="Write your testimonial here..." required></textarea>
+
+                            <button class="ft-btn" style="margin-top: 10px;">
+                                Submit Testimonial
+                            </button>
+                        </form>
+                    </div>
+
+                {% endif %}
+            {% endif %}
+
+            <!-- Success popup for password changes -->
+            <div id="password-popup" class="popup-message">Password updated successfully!</div>
+
+            <!-- DELETE ACCOUNT FUNCTIONALITY AND REMOVE THE USER -->
+            <div class="ft-card delete-card">
+                <h3 class="ft-title delete-title">Delete Account</h3>
+
+                <p class="delete-warning">Once you delete your account, there is no way back.</p>
+
+                <form action="{% url 'delete_account' %}" method="POST">
+                    {% csrf_token %}
+                    <button class="ft-btn delete-btn">Delete My Account</button>
+                </form>
+            </div>
+
+        </div>
+
+        <!-- FOOTER SECTION AND FUNCTIONALITY-->
+        <footer class="site-footer">
+            <div class="container">
+                <div class="row">
+
+                    <!-- About text -->
+                    <div class="col-lg-3 col-md-6 footer-about">
+                        <h3 class="footer-text">FitTrack</h3>
+                        <p class="text-light small lh-base mb-0">
+                            FitTrack is dedicated to helping you stay motivated and consistent on your fitness journey.
+                            Whether you train at home or in the gym, we’re here to keep you on track every step of the way.
+                        </p>
+                        <br>
+                    </div>
+
+                    <!-- Blog links that will be redirecting user to a different page -->
+                    <div class="col-lg-3 col-md-6 footer-blog">
+                        <h5 class="footer-title">Our Blogs</h5>
+                        <ul>
+                            <li>
+                                <a class="text-light small lh-base mb-0" href="#">MOST PEOPLE WHO WORK</a>
+                                <span>Jan 02, 2019</span>
+                            </li>
+                            <li>
+                                <a class="text-light small lh-base mb-0" href="#">FREELANCE DESIGN TRICKS HOW</a>
+                                <span>Jan 02, 2019</span>
+                            </li>
+                            <li>
+                                <a class="text-light small lh-base mb-0" href="#">HAVE A COMPUTER AT HOME HAVE HAD</a>
+                                <span>Jan 02, 2019</span>
+                            </li>
+                        </ul>
+                        <br>
+                    </div>
+
+                    <!-- Contact info (phone number, email and address)-->
+                    <div class="col-lg-2 col-md-6 footer-info">
+                        <h5 class="footer-title">Get Info</h5>
+
+                        <p class="text-light small lh-base mb-2">
+                            <i class="fa fa-phone"></i> (+30) 210 4567890
+                        </p>
+
+                        <p class="text-light small lh-base mb-2">
+                            <i class="fa fa-envelope"></i> info@fittrack.com
+                        </p>
+
+                        <p class="text-light small lh-base mb-2">
+                            <i class="fa fa-map-marker"></i> 28 Ermou Street, Athens, Greece
+                        </p>
+
+                        <br>
+                    </div>
+
+                    <!-- Social links (instagram, facebook and twitter)-->
+                    <div class="col-lg-2 col-md-6 footer-social text-center">
+                        <h5 class="footer-title">Follow&nbsp;Us&nbsp;On</h5>
+
+                        <div class="footer-social">
+                            <a href="https://www.facebook.com/" class="me-3">
+                                <i class="fa-brands fa-facebook-f"></i>
+                            </a>
+
+                            <a href="https://x.com/" class="me-3">
+                                <i class="fa-brands fa-x-twitter"></i>
+                            </a>
+
+                            <a href="https://www.instagram.com/" class="me-3">
+                                <i class="fa-brands fa-instagram"></i>
+                            </a>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </footer>
+
+        <!-- External js scripts for functionality -->
+        <script src="{% static 'js/jquery.min.js' %}"></script>
+        <script src="{% static 'js/bootstrap.min.js' %}"></script>
+        <script src="{% static 'js/aos.js' %}"></script>
+        <script src="{% static 'js/smoothscroll.js' %}"></script>
+        <script src="{% static 'js/custom.js' %}"></script>
+        <script src="{% static 'js/activelink.js' %}"></script>
+        <script src="{% static 'js/bmicalculator.js' %}"></script>
+        <script src="{% static 'js/searchbar.js' %}"></script>
+        <script src="{% static 'js/profiledropdown.js' %}"></script>
+        <script src="{% static 'js/modalupgrading.js' %}"></script>
+        <script src="{% static 'js/chatbot.js' %}"></script>
+        <script src="{% static 'js/profilepopups.js' %}"></script> 
+    </body>
+</html>
