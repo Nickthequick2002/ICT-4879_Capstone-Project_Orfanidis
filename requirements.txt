@@ -1,0 +1,8 @@
+Django==5.2.4
+Pillow
+whitenoise
+requests
+python-dotenv
+paypalrestsdk
+nltk
+tensorflow
