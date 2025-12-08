@@ -1,6 +1,8 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Program, ProgramExercise
 from django.db.models import Q
+from django.contrib.auth.decorators import login_required
+
 
 def program_detail(request, program_id):
     # Get the program the user clicked
