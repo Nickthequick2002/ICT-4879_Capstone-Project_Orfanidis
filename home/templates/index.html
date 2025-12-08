@@ -144,7 +144,7 @@
                         </p>
                     </div>
                 </div>
-
+                
                 <div class="row">
 
                     <!-- Program is always unlocked for all the users -->
@@ -159,15 +159,16 @@
                                     Simple routines with weights to help you build muscle and feel stronger.
                                 </span>
                                 <br>
-                                <a href="#" class="btn program-btn mt-3">Start Training</a>
+                                <a href="/programs/1/start/" class="btn program-btn mt-3">Start Training</a>
                             </div>
                         </div>
                     </div>
 
-                    <!-- The logic behind program 2–6 depends on the membership status of the user -->
-                    {% if user.is_authenticated and user.profile.is_member%}
+                    <!-- The logic behind program 2–6 depends on the membership status of the user and gives full access to the admin -->
+                    {% if user.is_authenticated and user.profile.is_member or user.is_staff or user.is_superuser %}
 
-                        <!-- === Only members have full access to all the programs === -->
+
+                        <!-- === Only premium members have full access to all the programs === -->
 
                         <!-- Program 2 -->
                         <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="550">
@@ -181,7 +182,7 @@
                                         Crunches, planks, and easy routines to strengthen your midsection and posture.
                                     </span>
                                     <br>
-                                    <a href="#" class="btn program-btn mt-3">Start Training</a>
+                                    <a href="/programs/2/start/" class="btn program-btn mt-3">Start Training</a>
                                 </div>
                             </div>
                         </div>
@@ -199,7 +200,7 @@
                                         and energy high.
                                     </span>
                                     <br>
-                                    <a href="#" class="btn program-btn mt-3">Start Training</a>
+                                    <a href="/programs/3/start/" class="btn program-btn mt-3">Start Training</a>
                                 </div>
                             </div>
                         </div>
@@ -216,7 +217,7 @@
                                         Gentle flows and stretching sessions to improve mobility and reduce stress.
                                     </span>
                                     <br>
-                                    <a href="#" class="btn program-btn mt-3">Start Training</a>
+                                    <a href="/programs/4/start/"class="btn program-btn mt-3">Start Training</a>
                                 </div>
                             </div>
                         </div>
@@ -234,7 +235,7 @@
                                         and overall lower-body power.
                                     </span>
                                     <br>
-                                    <a href="#" class="btn program-btn mt-3">Start Training</a>
+                                    <a href="/programs/5/start/" class="btn program-btn mt-3">Start Training</a>
                                 </div>
                             </div>
                         </div>
@@ -252,7 +253,7 @@
                                         to boost everyday strength and movement.
                                     </span>
                                     <br>
-                                    <a href="#" class="btn program-btn mt-3">Start Training</a>
+                                    <a href="/programs/6/start/" class="btn program-btn mt-3">Start Training</a>
                                 </div>
                             </div>
                         </div>

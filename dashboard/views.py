@@ -4,6 +4,9 @@ from django.contrib.auth import get_user_model
 from fitshop.models import Product  
 from django import forms
 from home.models import Blog
+from workouts.models import Exercise, Program, ProgramExercise
+from django.contrib import messages
+
 
 # Create your views here.
 
@@ -131,7 +134,7 @@ def user_list(request):
 @staff_required
 def blog_list(request):
 
-     # List all blogs (newest first)
+     # List all blogs for newest to olders 
     blogs = Blog.objects.all().order_by('-created_at')
     return render(request, 'dashboard/blog_list.html', {'blogs': blogs})
 
@@ -191,5 +194,149 @@ def delete_blog(request, blog_id):
     blog = get_object_or_404(Blog, id=blog_id)
     blog.delete()
     return redirect('blog_list')
+
+
+def dashboard_exercises_list(request):
+    # Prefetch related programs for each exercise for performance
+    exercises = Exercise.objects.all().prefetch_related('programexercise_set__program')
+
+    # Handles the search bar logic
+    query = request.GET.get("q")
+    if query:
+        exercises = exercises.filter(name__icontains=query)
+
+    # Calculates the total amount of exercises in the list
+    total_exercises = exercises.count() 
+
+    return render(request, 'dashboard/exercise_list.html', {
+        'exercises': exercises,
+        'total_exercises': total_exercises, 
+        'query': query,
+    })
+
+def dashboard_add_exercise(request):
+    programs = Program.objects.all()  # Used in the multi-select dropdown
+
+    if request.method == 'POST':
+        # Basic exercise fields
+        name = request.POST.get('name')
+        short_description = request.POST.get('short_description')
+        detailed_instructions = request.POST.get('detailed_instructions')
+
+        image = request.FILES.get("image")
+
+        
+        video_url = request.POST.get('video_url')
+
+        body_part = request.POST.get('body_part')
+        goal = request.POST.get('goal')
+        exercise_type = request.POST.get('exercise_type')
+        difficulty = request.POST.get('difficulty')
+        equipment = request.POST.get('equipment')
+
+        # Create exercise object
+        exercise = Exercise.objects.create(
+            name=name,
+            short_description=short_description,
+            detailed_instructions=detailed_instructions,
+            image=image,
+            video_url=video_url,
+            body_part=body_part,
+            goal=goal,
+            exercise_type=exercise_type,
+            difficulty=difficulty,
+            equipment=equipment,
+        )
+
+        # Program assignment (multi-select)
+        selected_program_ids = request.POST.getlist('programs')
+
+        for program_id in selected_program_ids:
+            ProgramExercise.objects.create(
+                program_id=program_id,
+                exercise=exercise,
+                day_number=1,  # simple for now
+                order=1,
+            )
+
+        messages.success(request, "Exercise added successfully.")
+        return redirect('dashboard-exercises')
+
+    return render(request, 'dashboard/exercise_form.html', {
+        'title': 'Add New Exercise',
+        'exercise': None,
+        'programs': programs,
+        'selected_program_ids': [],
+    })
+
+def dashboard_edit_exercise(request, exercise_id):
+    exercise = get_object_or_404(Exercise, id=exercise_id)
+    programs = Program.objects.all()
+
+    # Current program assignments for this exercise
+    selected_program_ids = list(
+        ProgramExercise.objects.filter(exercise=exercise).values_list('program_id', flat=True)
+    )
+
+    if request.method == 'POST':
+        # Update basic fields
+        exercise.name = request.POST.get('name')
+        exercise.short_description = request.POST.get('short_description')
+        exercise.detailed_instructions = request.POST.get('detailed_instructions')
+
+        # If a new image is uploaded, replace it
+        image = request.FILES.get('image')
+        if image:
+            exercise.image = image
+
+        exercise.video_url = request.POST.get('video_url')
+        exercise.body_part = request.POST.get('body_part')
+        exercise.goal = request.POST.get('goal')
+        exercise.exercise_type = request.POST.get('exercise_type')
+        exercise.difficulty = request.POST.get('difficulty')
+        exercise.equipment = request.POST.get('equipment')
+
+        exercise.save()
+
+        # Update program assignments
+        new_program_ids = request.POST.getlist('programs')
+
+        # Remove old links
+        ProgramExercise.objects.filter(exercise=exercise).delete()
+
+        # Create new links
+        for program_id in new_program_ids:
+            ProgramExercise.objects.create(
+                program_id=program_id,
+                exercise=exercise,
+                day_number=1,
+                order=1,
+            )
+
+        messages.success(request, "Exercise updated successfully.")
+        return redirect('dashboard-exercises')
+
+    return render(request, 'dashboard/exercise_form.html', {
+        'title': 'Edit Exercise',
+        'exercise': exercise,
+        'programs': programs,
+        'selected_program_ids': selected_program_ids,
+    })
+
+def dashboard_delete_exercise(request, exercise_id):
+    exercise = get_object_or_404(Exercise, id=exercise_id)
+    exercise.delete()  # ProgramExercise rows are deleted via CASCADE
+    messages.success(request, "Exercise deleted successfully.")
+    return redirect('dashboard-exercises')
+
+# Calculates how many exercises exist up  to now.
+def manage_exercises(request):
+    exercises = Exercise.objects.all()
+    total_exercises = exercises.count()
+    return render(request, "exercise_list.html", {
+        "exercises": exercises,
+        "total_exercises": total_exercises
+    })
+
 
 

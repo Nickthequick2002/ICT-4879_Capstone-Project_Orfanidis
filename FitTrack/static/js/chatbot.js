@@ -86,38 +86,75 @@ document.addEventListener("DOMContentLoaded", () => {
     /** Attempts to match the user's message with the patterns created
      * in the intents.json file
      */
+    
     function findIntent(message) {
-        const matches = [];
+        // Clean message
+        const cleanedMessage = message.toLowerCase().replace(/[^\w\s]/g, " ").trim();
+        const msgWords = cleanedMessage.split(/\s+/);
 
+        // Common filler words we ignore
+        const stopWords = new Set(["what", "how", "the", "is", "are", "can", "should", "i", "for", "to", "of", "in"]);
+        
+        // Remove filler words from message
+        const filteredMsgWords = msgWords.filter(w => !stopWords.has(w));
+
+        let bestIntent = null;
+        let bestScore = 0;
+
+        // Loop through intents
         for (let intent of intents) {
             for (let pattern of intent.patterns) {
+                
+                const cleanedPattern = pattern.toLowerCase().replace(/[^\w\s]/g, " ").trim();
+                const patternWords = cleanedPattern.split(/\s+/);
 
-                const escaped = escapeRegex(pattern.toLowerCase());
-                const regex = new RegExp("\\b" + escaped + "\\b", "i");
+                // Remove filler words from patterns too
+                const filteredPatternWords = patternWords.filter(w => !stopWords.has(w));
 
-                if (regex.test(message)) {
-                    matches.push(intent);
+                // Count matches
+                let score = 0;
+                for (let pw of filteredPatternWords) {
+                    if (filteredMsgWords.includes(pw)) {
+                        score += 1;
+                    }
+                }
+
+                // AUTOMATIC SYNONYMS (expandable)
+                const synonyms = {
+                    "lose": ["reduce", "drop", "burn"],
+                    "weight": ["fat", "bodyfat"],
+                    "foods": ["food", "meal", "meals"],
+                    "exercise": ["workout", "training", "activity"]
+                };
+
+                filteredPatternWords.forEach(pw => {
+                    if (synonyms[pw]) {
+                        synonyms[pw].forEach(syn => {
+                            if (filteredMsgWords.includes(syn)) score += 0.8;
+                        });
+                    }
+                });
+
+                // Normalize score by pattern length
+                let finalScore = score / filteredPatternWords.length;
+
+                if (finalScore > bestScore && finalScore >= 0.4) { 
+                    bestScore = finalScore;
+                    bestIntent = intent;
                 }
             }
         }
 
-        if (matches.length === 1) return matches[0];
-
-        // Signals a multi-intent situation when the intents are more than one
-        if (matches.length > 1) {
-            return { tag: "multi_intent" };
-        }
-
-        return null; // Return when no matches were found
+        return bestIntent;
     }
 
 
     /** Main logic for deciding how the chatbot responds */
     function processBotReply(userMessage) {
 
-        // If intents are failed to load, gibe a nice feedback to the user
+        // Stop the bot if intents haven't loaded yet
         if (!intents || intents.length === 0) {
-            addBotMessage("I can't load my data right now");
+            addBotMessage("I'm still loading... try again in a moment!");
             return;
         }
 
@@ -134,12 +171,30 @@ document.addEventListener("DOMContentLoaded", () => {
         // Attempts to find the best intent
         let bestIntent = findIntent(message);
 
-        // Tracks the number the chatbot has greeted 
+        // If no intent found
+        if (!bestIntent) {
+            addBotMessage("I'm not sure I understand. Could you rephrase that?");
+            return;
+        }
+
+        // If multiple intents matched
+        if (bestIntent.tag === "multi_intent") {
+            addBotMessage("It seems like you're asking more than one thing. Try asking one question at a time!");
+            return;
+        }
+
+        // Mark greeting
         if (bestIntent.tag === "greeting") {
             hasGreeted = true;
         }
 
-        // Picks a ranodm response form the matched intent
+        // Ensure responses exists
+        if (!bestIntent.responses || bestIntent.responses.length === 0) {
+            addBotMessage("I don't have an answer prepared for that yet!");
+            return;
+        }
+
+        // Picks a random response from the matched intent
         const responses = bestIntent.responses;
         const reply = responses[Math.floor(Math.random() * responses.length)];
 

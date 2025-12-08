@@ -1,0 +1,153 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{{ title }}</title>
+
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+    <body style="background-color:#f3f4f6;">
+
+        <!-- ADMIN TOP BAR-->
+        <div class="d-flex justify-content-between align-items-center px-4 py-3"
+            style="background-color:#111; color:#fff;">
+
+            <div class="d-flex align-items-center">
+                <img src="{% static 'images/logo.png' %}" alt="FitTrack Logo"
+                    style="margin-right:10px; width:40px;">
+                <h4 class="mb-0">FitTrack Admin</h4>
+            </div>
+
+            <div class="d-flex align-items-center" style="gap: 20px;">
+                <div class="d-flex align-items-center" style="gap: 8px;">
+                    <i class="fa fa-user-circle text-light" style="font-size: 22px;"></i>
+                    <span style="color:#e5e7eb; font-weight:500; font-size:15px;">
+                        {{ request.user.username }}
+                    </span>
+                </div>
+
+                <a href="{% url 'home' %}" class="ft-btn-outline" style="padding:6px 16px;">View Site</a>
+                <a href="{% url 'logout' %}" class="ft-btn-outline" style="padding:6px 16px;">Logout</a>
+            </div>
+        </div>
+
+        <!-- EXERCISE FORM -->
+        <div class="container py-5">
+
+            <h2 class="fw-bold text-center mb-4">{{ title }}</h2>
+
+            <div class="form-card">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <!-- Exercise Name -->
+                    <label class="form-label">Exercise Name</label>
+                    <input type="text" name="name" class="form-control"
+                        value="{{ exercise.name|default:'' }}" required>
+
+                    <!-- Short Description -->
+                    <label class="form-label mt-3">Short Description</label>
+                    <input type="text" name="short_description" class="form-control"
+                        value="{{ exercise.short_description|default:'' }}">
+
+                    <!-- Instructions -->
+                    <label class="form-label mt-3">Detailed Instructions</label>
+                    <textarea name="detailed_instructions" rows="5"
+                            class="form-control">{{ exercise.detailed_instructions|default:'' }}</textarea>
+
+                    <!-- Image -->
+                    <label class="form-label mt-3">Exercise Image</label><br>
+                    {% if exercise and exercise.image %}
+                        <img src="{{ exercise.image.url }}" width="120" class="mb-2"><br>
+                    {% endif %}
+                    <input type="file" name="image" class="form-control">
+
+                    <!-- Video URL -->
+                    <label class="form-label mt-3">Video URL</label>
+                    <input type="text" name="video_url" class="form-control"
+                        value="{{ exercise.video_url|default:'' }}">
+
+                    <!-- Body Part -->
+                    <label class="form-label mt-3">Body Part</label>
+                    <select name="body_part" class="form-control" required>
+                        <option value="">Select...</option>
+                        <option value="arms" {% if exercise.body_part == 'arms' %}selected{% endif %}>Arms</option>
+                        <option value="legs" {% if exercise.body_part == 'legs' %}selected{% endif %}>Legs</option>
+                        <option value="chest" {% if exercise.body_part == 'chest' %}selected{% endif %}>Chest</option>
+                        <option value="back" {% if exercise.body_part == 'back' %}selected{% endif %}>Back</option>
+                        <option value="abs" {% if exercise.body_part == 'abs' %}selected{% endif %}>Abs</option>
+                        <option value="full" {% if exercise.body_part == 'full' %}selected{% endif %}>Full Body</option>
+                    </select>
+
+                    <!-- Goal -->
+                    <label class="form-label mt-3">Goal</label>
+                    <select name="goal" class="form-control" required>
+                        <option value="">Select...</option>
+                        <option value="strength" {% if exercise.goal == 'strength' %}selected{% endif %}>Build Strength</option>
+                        <option value="weight_loss" {% if exercise.goal == 'weight_loss' %}selected{% endif %}>Lose Weight</option>
+                        <option value="endurance" {% if exercise.goal == 'endurance' %}selected{% endif %}>Improve Endurance</option>
+                        <option value="flexibility" {% if exercise.goal == 'flexibility' %}selected{% endif %}>Increase Flexibility</option>
+                    </select>
+
+                    <!-- Exercise Type -->
+                    <label class="form-label mt-3">Exercise Type</label>
+                    <select name="exercise_type" class="form-control" required>
+                        <option value="">Select...</option>
+                        <option value="cardio" {% if exercise.exercise_type == 'cardio' %}selected{% endif %}>Cardio</option>
+                        <option value="weights" {% if exercise.exercise_type == 'weights' %}selected{% endif %}>Weights</option>
+                        <option value="yoga" {% if exercise.exercise_type == 'yoga' %}selected{% endif %}>Yoga</option>
+                        <option value="hiit" {% if exercise.exercise_type == 'hiit' %}selected{% endif %}>HIIT</option>
+                        <option value="calisthenics" {% if exercise.exercise_type == 'calisthenics' %}selected{% endif %}>Calisthenics</option>
+                    </select>
+
+                    <!-- Difficulty -->
+                    <label class="form-label mt-3">Difficulty</label>
+                    <select name="difficulty" class="form-control">
+                        <option value="">Select...</option>
+                        <option value="beginner" {% if exercise.difficulty == 'beginner' %}selected{% endif %}>Beginner</option>
+                        <option value="intermediate" {% if exercise.difficulty == 'intermediate' %}selected{% endif %}>Intermediate</option>
+                        <option value="advanced" {% if exercise.difficulty == 'advanced' %}selected{% endif %}>Advanced</option>
+                    </select>
+
+                    <!-- Equipment -->
+                    <label class="form-label mt-3">Equipment (optional)</label>
+                    <input type="text" name="equipment" class="form-control"
+                        value="{{ exercise.equipment|default:'' }}">
+
+                    <!-- Assign to Programs -->
+                    <label class="form-label mt-3">Assign to Programs</label>
+                    <select name="programs" multiple class="form-control">
+                        {% for program in programs %}
+                            <option value="{{ program.id }}"
+                                {% if program.id in selected_program_ids %}selected{% endif %}>
+                                {{ program.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                    <small class="text-muted">Hold CTRL (or CMD on Mac) to select multiple programs.</small>
+
+                    <!-- Buttons -->
+                    <div class="d-flex justify-content-center mt-4" style="gap: 15px;">
+                        <button type="submit" class="ft-btn ft-btn-outline" 
+                                style="padding:8px 20px; width:auto; display:inline-block;">
+                            Save
+                        </button>
+
+                        <a href="{% url 'dashboard-exercises' %}" 
+                        class="ft-btn ft-btn-outline"
+                        style="padding:8px 20px; width:auto; display:inline-block;">
+                            Cancel
+                        </a>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+
+        <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    </body>
+</html>

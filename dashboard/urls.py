@@ -14,4 +14,8 @@ urlpatterns = [
     path('blogs/create/', views.create_blog, name='create_blog'),
     path('blogs/<int:blog_id>/edit/', views.edit_blog, name='dashboard-edit-blog'),
     path('blogs/<int:blog_id>/delete/', views.delete_blog, name='dashboard-delete-blog'),
+    path('exercises/', views.dashboard_exercises_list, name='dashboard-exercises'),
+    path('exercises/add/', views.dashboard_add_exercise, name='dashboard-add-exercise'),
+    path('exercises/<int:exercise_id>/edit/', views.dashboard_edit_exercise, name='dashboard-edit-exercise'),
+    path('exercises/<int:exercise_id>/delete/', views.dashboard_delete_exercise, name='dashboard-delete-exercise'),
 ]

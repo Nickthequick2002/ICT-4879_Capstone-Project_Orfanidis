@@ -2266,6 +2266,38 @@ button#submit-button:hover {
     font-weight: 600;
 }
 
+/* --- Search Bar Container for managing exercises--- */
+.search-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+/* --- Input Field --- */
+.search-input {
+    position: relative;
+    max-width: 260px;
+    width: 100%;
+}
+
+.search-input input {
+    width: 100%;
+    padding: 10px 14px 10px 38px;
+    border-radius: 12px;
+    border: 1.5px solid #dcdcdc;
+    outline: none;
+    transition: 0.2s ease;
+    font-size: 0.95rem;
+    background-color: #fff;
+}
+
+.search-input input:focus {
+    border-color: #ff8c42;
+    box-shadow: 0 0 0 2px rgba(255, 140, 66, 0.2);
+}
+
+
+
 /*---------------------------------------
     CART TABLE           
 -----------------------------------------*/
@@ -2296,6 +2328,46 @@ button#submit-button:hover {
 hr.my-4 {
     border: 1px solid #ddd;
     margin: 40px 0;
+}
+
+/*---------------------------------------
+    PROGRAMS SECTION        
+-----------------------------------------*/
+
+.exercise-header {
+    cursor: pointer;
+    padding: 18px;
+    background: #ffffff;
+    border-bottom: 1px solid #ebeaea;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.exercise-header:hover {
+    background: #f8f8f8;
+}
+
+.exercise-title {
+    font-size: 1.15rem;
+    font-weight: 600;
+}
+
+.exercise-tags small {
+    margin-right: 12px;
+    color: #6c757d;
+    font-size: 0.85rem;
+}
+
+.exercise-body {
+    background: #ffffff;
+    padding: 20px;
+}
+
+.exercise-body img {
+    max-width: 200px;
+    border-radius: 8px;
+    margin-bottom: 12px;
 }
 
 

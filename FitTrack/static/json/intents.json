@@ -21,16 +21,12 @@
     ],
 
     "responses": [
-        "Hi, how can I help you today?",
-        "Hello, what can I do for you?",
-        "Hey, how can I assist you?",
-        "Hi there, what would you like to know?",
-        "Hello, I am here if you need anything.",
-        "Hey, how can I support you today?",
-        "Hi, I am your FitTrack Assistant. How can I help?",
-        "Hello, feel free to ask me anything.",
-        "Hi, let me know how I can assist you.",
-        "Hello, how may I assist you?"
+      "Hi! How can I help you today?",
+      "Hello! What can I assist you with?",
+      "Hey! How can I support your fitness journey?",
+      "Hi there! Feel free to ask me anything.",
+      "Hello! I'm here if you need anything.",
+      "Hey! What would you like to know today?"
     ]
     },
 
@@ -109,12 +105,12 @@
         "order id problem"
       ],
 
-      "responses": [
-        "You can find your Order ID on the payment success page immediately after your purchase.",
-        "Your Order ID is included in the automated email sent to the PayPal account you used during checkout.",
-        "Please check the confirmation email sent after payment. Your Order ID is listed there.",
-        "The Order ID appears both on the success page and in the confirmation email you receive after completing your purchase."
-      ]
+    "responses": [
+        "Your Order ID appears on the payment success page right after you complete your purchase.",
+        "You will also receive your Order ID in the confirmation email sent to the PayPal address you used.",
+        "Check the success page or your confirmation email — your Order ID is shown in both places.",
+        "If you completed the payment process, your Order ID should be visible on the success screen and included in your email receipt."
+    ]
     },
 
 
@@ -172,11 +168,11 @@
       ],
 
       "responses": [
-        "If your receipt did not arrive, please contact the FitTrack support team through the contact page and explain that your PayPal receipt email was not delivered.",
-        "A missing receipt usually means the confirmation email was blocked or delayed. Please reach out to the support team and mention that the receipt email is missing.",
-        "If PayPal did not send you a receipt email, contact the support team via the contact page and let them know you never received your payment receipt.",
-        "Please use the contact page to notify the support team that the payment receipt was not sent to your email."
-      ]
+        "If your receipt didn’t arrive, it may have been delayed or filtered by your email provider. Please contact FitTrack support through the contact page so we can resend it.",
+        "A missing receipt usually means the email was blocked or delayed. Reach out to support and let them know you didn’t receive your PayPal confirmation.",
+        "If PayPal did not send you a receipt, please contact FitTrack support so we can verify your payment and resend the confirmation.",
+        "Please use the contact page to notify support that your payment receipt wasn’t delivered. We’ll help you resolve it quickly."
+    ]
     },
 
 
@@ -236,10 +232,10 @@
       ],
 
       "responses": [
-        "Your payment is successful if you reached the payment success page after checkout.",
-        "Once the payment is completed, you are automatically redirected to the payment success page with your order ID.",
-        "If your payment went through, you should see the payment success screen and also receive a confirmation email from PayPal.",
-        "A successful payment always leads to the payment success page and a PayPal confirmation email sent to your account."
+        "If your payment was successful, you’ll automatically be redirected to the payment success page with your Order ID.",
+        "A completed payment always leads to the success page and a confirmation email sent to you.",
+        "You can confirm your payment by checking the success screen and the confirmation email that follows.",
+        "Once the payment is processed, you should see the success page and receive your PayPal confirmation email."
       ]
     },
 
@@ -309,10 +305,10 @@
       ],
 
       "responses": [
-        "You can reduce calories by choosing low-calorie, high-volume foods such as vegetables, salads, lean meats, eggs, and Greek yogurt. Drinking water before meals helps as well.",
-        "To cut calories, focus on lean proteins, vegetables, and fiber-rich foods. Avoid sugary drinks, processed snacks, and large portions.",
-        "A simple way to reduce calories is to replace high-calorie foods with lighter alternatives, eat slower, and avoid late-night snacking.",
-        "Increasing protein and fiber helps you feel full and naturally reduces calorie intake without feeling deprived."
+        "To reduce calories, focus on high-volume, low-calorie foods like vegetables, salads, lean protein, fruit, and Greek yogurt. Drinking water before meals also helps.",
+        "Try replacing high-calorie foods with lighter options, eating slower, and avoiding sugary drinks or processed snacks.",
+        "Choose meals that combine lean protein and vegetables — they help control hunger while keeping calories low.",
+        "Boost protein and fiber to stay full longer. These naturally reduce your calorie intake throughout the day."
       ]
     },
 
@@ -432,10 +428,10 @@
       ],
 
       "responses": [
-        "Foods that help build muscle include chicken breast, beef, fish, eggs, Greek yogurt, cottage cheese, beans, lentils, quinoa, and whey protein.",
-        "To support muscle growth, prioritize high-protein foods such as tuna, turkey, eggs, whey protein, tofu, and lean meats.",
-        "Combining protein with complex carbohydrates like oats, rice, potatoes, and whole grains helps fuel muscle growth and recovery.",
-        "Eating protein-rich meals regularly throughout the day along with a slight calorie surplus is key to building muscle efficiently."
+        "Foods that help build muscle include chicken, beef, eggs, fish, Greek yogurt, cottage cheese, lentils, beans, quinoa, and whey protein.",
+        "Prioritize high-protein foods like tuna, turkey, eggs, whey protein, tofu, and lean meats to support muscle growth.",
+        "Pair protein with carbs such as oats, rice, potatoes, and whole grains — this helps fuel performance and recovery.",
+        "Aim for consistent protein intake throughout the day along with a slight calorie surplus for best muscle-building results."
       ]
     },
 
@@ -490,10 +486,10 @@
       ],
 
       "responses": [
-        "High-protein, low-calorie foods include egg whites, tuna, cod, shrimp, turkey breast, chicken breast, tofu, low-fat Greek yogurt, and cottage cheese.",
-        "Lean protein sources like Greek yogurt, egg whites, shrimp, and white fish provide excellent protein with minimal calories.",
-        "Tuna, turkey breast, and cod offer very high protein per calorie, making them ideal for dieting and fat loss.",
-        "Low-fat dairy, lean meats, and egg whites are strong protein options that help increase protein intake while keeping calories low."
+        "Great high-protein, low-calorie foods include egg whites, tuna, cod, shrimp, chicken breast, turkey breast, tofu, low-fat Greek yogurt, and cottage cheese.",
+        "Lean protein sources like Greek yogurt, egg whites, shrimp, and white fish offer strong protein with very few calories.",
+        "White fish, turkey, and tuna are some of the highest-protein foods per calorie — ideal for cutting or weight loss.",
+        "Lean meats, egg whites, and low-fat dairy help you increase protein intake without adding many calories."
       ]
     },
 
@@ -554,11 +550,11 @@
       ],
 
       "responses": [
-        "Good pre-workout meals include oatmeal with fruit, Greek yogurt with honey, chicken with rice, a banana with peanut butter, or a protein shake with oats. Aim for carbs plus a bit of protein.",
-        "Before a workout, choose easily digestible foods like fruit, yogurt, oats, rice cakes, or a light portion of chicken and rice for consistent energy.",
-        "A balanced pre-workout meal should include carbohydrates for energy and a moderate amount of protein. Examples include oatmeal, bananas, rice, yogurt, or whole-grain toast with peanut butter.",
-        "If you prefer something light, fruit, rice cakes, a protein shake, or low-fat yogurt can fuel your workout without feeling heavy.",
-        "Avoid heavy meals before training. Choose foods that digest easily, such as fruit, oats, yogurt, or a small lean protein portion with carbs."
+        "Great pre-workout meals include oatmeal with fruit, Greek yogurt with honey, chicken with rice, a banana with peanut butter, or a protein shake with oats.",
+        "Choose easily digestible foods like fruit, yogurt, oats, or rice cakes for steady energy without feeling too full.",
+        "A good pre-workout meal has carbs for energy and a bit of protein. Examples: oatmeal, bananas, rice, Greek yogurt, or whole-grain toast.",
+        "If you want something light, try fruit, a protein shake, rice cakes, or low-fat yogurt before your workout.",
+        "Avoid heavy meals before training. Stick to foods that digest easily so you feel energized, not sluggish."
       ]
     },
 
@@ -621,11 +617,11 @@
       ],
 
       "responses": [
-        "Good post-workout meals include chicken breast, eggs, tuna, Greek yogurt, protein shakes, rice, potatoes, oats, and fruit. Aim for protein plus carbohydrates.",
-        "After workouts, focus on protein sources like turkey, eggs, whey protein, fish, or Greek yogurt combined with carbs like rice, potatoes, or fruit.",
-        "A strong post-workout meal includes high protein for muscle repair and carbs to restore energy. Examples: chicken and rice, eggs and toast, or a protein shake with fruit.",
-        "Try to eat within 1–2 hours after training. Choose foods like lean meat, eggs, dairy, rice, potatoes, or oats to optimize recovery.",
-        "If you cannot eat a full meal immediately, start with a protein shake, then follow with a balanced meal within a couple of hours for proper recovery."
+        "Great post-workout meals include chicken, eggs, tuna, Greek yogurt, protein shakes, rice, potatoes, oats, and fruit — aim for protein plus carbs.",
+        "After training, focus on protein sources like turkey, eggs, whey protein, or fish along with carbs like rice, potatoes, or fruit to refuel.",
+        "Eat within 1–2 hours of training. Choose meals like chicken and rice, eggs and toast, or a protein shake with fruit.",
+        "If you can't eat right away, start with a protein shake and follow with a balanced meal later for full recovery.",
+        "Protein repairs muscles, and carbs restore energy — combining them after exercise speeds up recovery."
       ]
     },
 
@@ -684,11 +680,11 @@
       ],
 
       "responses": [
-        "Good post-workout stretches include hamstring stretches, quad stretches, glute stretches, chest stretches, back stretches, and shoulder stretches. Hold each stretch for 20–30 seconds.",
-        "A simple post-workout routine can include hamstring stretch, quad stretch, hip flexor stretch, calf stretch, chest opener, shoulder stretch, and a gentle spinal twist.",
-        "Stretching after training helps reduce stiffness. Focus on major muscle groups: legs, hips, chest, shoulders, and back. Hold each stretch without bouncing.",
-        "To reduce soreness, stretch your legs, hips, back, and shoulders after training. Combine slow stretching with controlled breathing for better relaxation.",
-        "A balanced cool-down includes light walking for a couple of minutes followed by static stretching for all the muscles you trained that day."
+        "Useful post-workout stretches include hamstring, quad, glute, chest, shoulder, and back stretches. Hold each for 20–30 seconds.",
+        "A simple cool-down includes hamstring stretch, quad stretch, hip-flexor stretch, calf stretch, chest opener, shoulder stretch, and a gentle spinal twist.",
+        "Stretching after training reduces stiffness. Focus on legs, hips, chest, shoulders, and back — hold each stretch without bouncing.",
+        "To reduce soreness, stretch all major muscle groups you trained. Slow, controlled breathing helps relaxation.",
+        "Walk lightly for a few minutes, then stretch all major muscle groups to complete a balanced cool-down routine."
       ]
     },
 
