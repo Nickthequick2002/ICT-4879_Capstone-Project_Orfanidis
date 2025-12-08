@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-3!jefitf(00!$n#&__j-$%1^i)%hp0#(p+3*!_%pbr#!c+tz4g
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["NikolasOrfanidis.pythonanywhere.com"]
+ALLOWED_HOSTS = ["NikolasOrfanidis.pythonanywhere.com","127.0.0.1"]
 
 # Application definition
 
@@ -155,3 +155,5 @@ EMAIL_HOST_PASSWORD = 'qpokkpccutqckbox'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+MEDIA_URL = '/media/'  # URL path to access media files in the browser
