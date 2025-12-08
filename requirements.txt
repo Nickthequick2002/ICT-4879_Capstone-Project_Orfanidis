@@ -4,5 +4,3 @@ whitenoise
 requests
 python-dotenv
 paypalrestsdk
-nltk
-tensorflow
