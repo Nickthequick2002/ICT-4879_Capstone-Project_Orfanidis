@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-3!jefitf(00!$n#&__j-$%1^i)%hp0#(p+3*!_%pbr#!c+tz4g
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["NikolasOrfanidis.pythonanywhere.com","127.0.0.1"]
+ALLOWED_HOSTS = ["NikolasOrfanidis.pythonanywhere.com","127.0.0.1", "localhost"]
 
 # Application definition
 
@@ -145,7 +145,7 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-# === EMAIL CONFIGURATION ===
+# Eamil configuration for automated email send
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
@@ -158,4 +158,4 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 MEDIA_URL = '/media/'  # URL path to access media files in the browser
 
-SECURE_CROSS_ORIGIN_OPENER_POLICY='same-origin-allow-popups' 
+SECURE_CROSS_ORIGIN_OPENER_POLICY='same-origin-allow-popups' # Prevent extra popups when paying with PayPal

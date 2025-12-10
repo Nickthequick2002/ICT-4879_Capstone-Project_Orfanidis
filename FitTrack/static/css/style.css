@@ -23,7 +23,6 @@
 }
 
 :root {
-    --primary-color:        #f13a11;
     --white-color:          #ffffff;
     --dark-color:           #171819;
     --about-bg-color:       #f9f9f9;
@@ -452,7 +451,7 @@ a:focus {
     color: var(--primary-color);
 }
 
-/* === Upgrade Modal Styling === */
+/* Styling Of Upgrade Modal  */
 .upgrade-modal {
     display: none;
     position: fixed;
@@ -661,7 +660,7 @@ a:focus {
     }
 }
 
-/* Hover + active underline effect */
+/* Hover and active underline effect */
 .nav-item .nav-link:hover::after,
 .nav-item .nav-link.active::after {
     width: 100%;
@@ -734,7 +733,7 @@ a:focus {
     gap: 15px;
 }
 
-/* Icons for profile/cart */
+/* Icons for profile and cart */
 .nav-icon {
     color: #ffd8a8;
     font-size: 1.2rem;
@@ -809,7 +808,7 @@ a:focus {
     font-size: 1rem;
 }
 
-/* === Profile Dropdown === */
+/* Profile Dropdown located in navbar*/
 .profile-dropdown {
   position: relative;
   display: inline-block;
@@ -930,7 +929,7 @@ a:focus {
     display: inline-block;
 }
 
-/* ===== Locked Program Card ===== */
+/* Locked Program Card */
 .locked-program {
     opacity: 0.7;
     filter: blur(1px);
@@ -1129,7 +1128,7 @@ a:focus {
     background: #fff !important;
 }
 
-/* Ensure the card shadow looks clean */
+/* Ensure that the card shadow ic clean */
 .programs .row {
     margin-bottom: 0 !important;
 }
@@ -1482,11 +1481,11 @@ button#submit-button:hover {
   transform: translateY(-2px);
 }
 
-/* === FitTrack Brand Button === */
+/* FitTrack Brand Button */
 .btn-fittrack {
   display: inline-block;
   background: #ffb266;
-  color: #000;                      /* keep text solid */
+  color: #000;                      
   font-weight: 600;
   border: none;
   border-radius: 50px;
@@ -1506,8 +1505,8 @@ button#submit-button:hover {
 
 
 .btn-fittrack:active {
-  background: #ff9933;              /* keep same color as hover */
-  color: #000;                      /* prevent dimming */
+  background: #ff9933;              
+  color: #000;                      
   transform: scale(0.97);
   box-shadow: 0 6px 15px rgba(255, 140, 66, 0.3);
 }
@@ -1623,7 +1622,7 @@ button#submit-button:hover {
     border: 4px solid #ff8c42;
 }
 
-/* Delete section */
+/* Delete action */
 .delete-card {
     background: #fff6f6;
     border: 1px solid #f5b5b5;
@@ -2226,7 +2225,7 @@ button#submit-button:hover {
 .card-body {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;   /* Pushes button to bottom */
+    justify-content: space-between;   
 }
 
 .form-card {
@@ -2266,7 +2265,7 @@ button#submit-button:hover {
     font-weight: 600;
 }
 
-/* --- Search Bar Container for managing exercises--- */
+/* Search Bar Container for managing exercises*/
 .search-wrapper {
     display: flex;
     align-items: center;
@@ -2455,7 +2454,7 @@ hr.my-4 {
     }
 }
 
-/* BMI + Feature Responsiveness */
+/* BMI and Feature Responsiveness */
 @media (max-width: 992px) {
     .bmi-content .row {
         flex-wrap: wrap;
@@ -2486,10 +2485,11 @@ hr.my-4 {
     display: none;
 }
 
-/* ============ COLLAPSED NAVBAR LAYOUT ============ */
+/* COLLAPSED NAVBAR LAYOUT */
 @media (max-width: 1600px) {
 
-    /* Top row: FitTrack LEFT, X RIGHT */
+    /* I had a little problem with the responsiveness 
+    I changed the navbar toggler to appear earlier */
     .navbar .container-fluid {
         display: flex;
         align-items: center;
@@ -2549,7 +2549,7 @@ hr.my-4 {
         padding: 6px 8px;
     }
 
-    /* Icons at the bottom, centered */
+    /* Icons at the bottom and centered */
     .user-controls {
         display: flex !important;
         justify-content: center !important;
@@ -2588,22 +2588,22 @@ hr.my-4 {
         align-items: center !important;
         justify-content: space-between !important;
         width: 100%;
-        flex-wrap: nowrap !important; /* prevent wrapping */
+        flex-wrap: nowrap !important; /* Prevent wrapping */
         gap: 20px;
     }
 
-    /* the collapsing container becomes horizontal */
+    /* The collapsing container becomes horizontal */
     .navbar-collapse {
         display: flex !important;
         flex-direction: row !important;
         align-items: center !important;
         justify-content: space-between !important;
         flex-grow: 1;
-        flex-wrap: nowrap !important; /* THIS forces one line */
+        flex-wrap: nowrap !important; /* Forces one line */
         gap: 20px;
     }
 
-    /* nav links stay in a row */
+    /* Nav links stay in a row */
     .navbar-nav {
         flex-direction: row !important;
         align-items: center !important;
@@ -2611,7 +2611,7 @@ hr.my-4 {
         white-space: nowrap;
     }
     
-    /* search bar stays in row */
+    /* Search bar stays in row */
     .search-container {
         width: 200px;
         flex-shrink: 0;
@@ -2619,7 +2619,7 @@ hr.my-4 {
         margin-left: 0 !important;
     }
 
-    /* icons stay in row */
+    /* Icons stay in row */
     .user-controls {
         display: flex !important;
         flex-direction: row !important;
@@ -2632,7 +2632,7 @@ hr.my-4 {
 }
 
 
-/* === FitTrack MyCals Responsiveness === */
+/* MyCals page Responsiveness */
 @media (max-width: 992px) {
     .fittrack-mycals-consumption {
         max-width: 95%;
@@ -2778,7 +2778,7 @@ hr.my-4 {
         text-align: left;
     }
 
-    /* Row: quantity + button */
+    /* Row quantity and button */
     .product-container .d-flex.justify-content-between {
         flex-direction: column !important;
         align-items: center !important;

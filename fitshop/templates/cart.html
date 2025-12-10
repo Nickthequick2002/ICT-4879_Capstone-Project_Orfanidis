@@ -139,22 +139,27 @@
                         {% for item in items %}
                         <tr>
                             <td>
+                                <!-- Product's image -->
                                 <img src="{{ item.product.image.url }}" width="60" style="border-radius:6px;">
                             </td>
 
                             <td>
+                                <!-- Product's name -->
                                 <strong>{{ item.product.name }}</strong><br>
                                 <small class="text-muted">€{{ item.product.price }}</small>
                             </td>
 
+                            <!-- Product's quantity -->
                             <td class="text-center">
                                 {{ item.quantity }}
                             </td>
 
+                            <!-- Product's subtotal -->
                             <td>
                                 €{{ item.subtotal }}
                             </td>
 
+                            <!-- Remove product from cart -->
                             <td>
                                 <a href="{% url 'remove_from_cart' item.id %}"
                                 class="btn shop-btn">
