@@ -1,0 +1,351 @@
+name,calories,protein,carbs,fats
+Apple,52.0,0.3,14.0,0.2
+Banana,89.0,1.1,23.0,0.3
+Orange,62.0,1.2,15.4,0.2
+Strawberries,32.0,0.7,7.7,0.3
+Blueberries,57.0,0.7,14.5,0.3
+Grapes,69.0,0.7,18.0,0.2
+Pineapple,50.0,0.5,13.0,0.1
+Watermelon,30.0,0.6,8.0,0.2
+Kiwi,61.0,1.1,15.0,0.5
+Mango,60.0,0.8,15.0,0.4
+Pear,57.0,0.4,15.0,0.1
+Peach,39.0,0.9,10.0,0.3
+Plum,46.0,0.7,11.4,0.3
+Raspberries,52.0,1.2,12.0,0.7
+Cherries,63.0,1.0,16.0,0.2
+Broccoli,34.0,2.8,6.6,0.4
+Spinach,23.0,2.9,3.6,0.4
+Carrots,41.0,0.9,10.0,0.2
+Potato,87.0,2.0,20.0,0.1
+Sweet Potato,86.0,1.6,20.0,0.1
+Tomato,18.0,0.9,3.9,0.2
+Cucumber,15.0,0.7,3.6,0.1
+Lettuce,15.0,1.4,2.9,0.2
+Zucchini,17.0,1.2,3.1,0.3
+Bell Pepper,31.0,1.0,6.0,0.3
+Onion,40.0,1.1,9.3,0.1
+Garlic,149.0,6.4,33.0,0.5
+Asparagus,20.0,2.2,3.9,0.1
+Cauliflower,25.0,2.0,5.0,0.3
+Mushrooms,22.0,3.1,3.3,0.3
+Chicken Breast,165.0,31.0,0.0,3.6
+Ground Beef 90/10,242.0,27.0,0.0,14.0
+Beef Steak,271.0,25.0,0.0,19.0
+Turkey Breast,135.0,29.0,0.0,1.0
+Pork Chop,231.0,26.0,0.0,14.0
+Bacon,541.0,37.0,1.4,42.0
+Ham,145.0,20.0,1.5,6.0
+Sausage,301.0,13.0,2.0,26.0
+Lamb,294.0,25.0,0.0,21.0
+Meatballs,250.0,17.0,9.0,15.0
+Salmon,208.0,20.0,0.0,13.0
+Tuna,132.0,29.0,0.0,1.0
+Cod,82.0,18.0,0.0,0.7
+Shrimp,99.0,24.0,0.0,0.3
+Sardines,208.0,25.0,0.0,11.0
+Tilapia,129.0,26.0,0.0,3.0
+Mussels,172.0,24.0,7.0,4.0
+Oysters,199.0,24.0,12.0,5.0
+Greek Yogurt,59.0,10.0,3.6,0.4
+Cheddar Cheese,402.0,25.0,1.3,33.0
+Mozzarella,280.0,28.0,3.1,17.0
+Butter,717.0,0.9,0.1,81.0
+Cottage Cheese,98.0,11.0,3.4,4.3
+Cream Cheese,350.0,6.0,5.0,34.0
+Egg,78.0,6.0,0.6,5.0
+Egg Whites,52.0,11.0,1.0,0.2
+Omelette,154.0,11.0,1.2,11.0
+Boiled Egg,77.0,6.0,0.6,5.3
+White Rice,130.0,2.7,28.0,0.3
+Brown Rice,123.0,2.6,25.6,1.0
+Pasta,131.0,5.0,25.0,1.1
+Whole Wheat Bread,247.0,13.0,41.0,4.0
+Oats,389.0,17.0,66.0,7.0
+Quinoa,120.0,4.4,21.3,1.9
+Tortilla,218.0,5.7,35.0,4.9
+Cereal,379.0,8.0,84.0,2.0
+Granola,471.0,10.0,64.0,20.0
+Bagel,250.0,10.0,48.0,1.5
+Chocolate,546.0,4.9,61.0,31.0
+Potato Chips,536.0,7.0,52.0,35.0
+Popcorn,387.0,13.0,78.0,4.3
+Pretzels,380.0,10.0,80.0,3.0
+Crackers,502.0,7.0,68.0,24.0
+Protein Bar,250.0,20.0,22.0,9.0
+Almonds,579.0,21.0,22.0,50.0
+Walnuts,654.0,15.0,14.0,65.0
+Cashews,553.0,18.0,30.0,44.0
+Peanuts,567.0,26.0,16.0,49.0
+Pistachios,562.0,20.0,28.0,45.0
+Chia Seeds,486.0,17.0,42.0,31.0
+Flax Seeds,534.0,18.0,29.0,42.0
+Coca-Cola,140.0,0.0,39.0,0.0
+Orange Juice,112.0,1.7,26.0,0.5
+Apple Juice,114.0,0.2,28.0,0.3
+Latte,190.0,12.0,18.0,7.0
+Cappuccino,110.0,6.0,10.0,4.0
+Iced Tea,90.0,0.0,24.0,0.0
+Avocado,160.0,2.0,9.0,15.0
+Turkey Bacon,226.0,17.0,1.0,18.0
+Ribeye Steak,291.0,24.0,0.0,21.0
+Pork Ribs,320.0,20.0,0.0,25.0
+Salami,336.0,22.0,2.0,26.0
+Tofu,76.0,8.0,2.0,4.0
+Tempeh,193.0,20.0,7.0,11.0
+Lentils,116.0,9.0,20.0,0.4
+Black Beans,339.0,21.0,62.0,0.9
+Kidney Beans,333.0,24.0,60.0,1.0
+Hummus,166.0,8.0,14.0,10.0
+Pita Bread,275.0,9.0,55.0,1.2
+Ramen Noodles,436.0,10.0,60.0,17.0
+Lasagna,135.0,7.0,16.0,5.0
+Pizza Slice,285.0,12.0,36.0,10.0
+Chicken Wings,203.0,19.0,0.0,14.0
+BBQ Chicken,197.0,29.0,7.0,3.0
+Granola Bar,132.0,3.0,17.0,5.0
+Protein Shake,120.0,24.0,3.0,1.0
+Greek Salad,106.0,5.0,6.0,8.0
+Caesar Salad,190.0,7.0,8.0,15.0
+Big Mac,563.0,25.0,44.0,33.0
+Cheeseburger,303.0,17.0,30.0,14.0
+Pepperoni Pizza Slice,313.0,13.0,35.0,14.0
+Hot Dog,290.0,11.0,24.0,17.0
+Donut,195.0,2.0,22.0,11.0
+Chocolate Muffin,426.0,6.0,53.0,22.0
+Ice Cream Cone,207.0,5.0,24.0,11.0
+Milkshake,530.0,17.0,63.0,24.0
+Taco,226.0,9.0,19.0,13.0
+Burrito,455.0,20.0,54.0,18.0
+Nachos,346.0,8.0,32.0,21.0
+Garlic Bread,206.0,5.0,19.0,12.0
+Onion Rings,411.0,4.0,41.0,27.0
+Fried Chicken Drumstick,265.0,18.0,8.0,18.0
+KFC Zinger Burger,480.0,29.0,46.0,21.0
+Whopper,677.0,28.0,49.0,40.0
+McChicken,400.0,14.0,40.0,21.0
+Chicken Souvlaki,220.0,32.0,2.0,8.0
+Moussaka,370.0,14.0,20.0,25.0
+Pastitsio,420.0,18.0,45.0,20.0
+Spanakopita,260.0,7.0,24.0,16.0
+Greek Salad Full,210.0,6.0,10.0,16.0
+Eggplant Imam,280.0,4.0,24.0,18.0
+KFC Original Recipe Chicken Breast,390.0,39.0,11.0,21.0
+Starbucks Frappuccino Mocha,370.0,6.0,61.0,15.0
+Whiskey Shot,97.0,0.0,0.0,0.0
+Vodka Shot,97.0,0.0,0.0,0.0
+Gin Tonic,180.0,0.0,14.0,0.0
+Mojito,240.0,0.0,25.0,0.0
+Papaya,43.0,0.5,11.0,0.3
+Guava,68.0,2.6,14.0,1.0
+Lychee,66.0,0.8,17.0,0.4
+Dragon Fruit,60.0,1.2,13.0,0.0
+Apricot,48.0,1.4,11.0,0.4
+Fig,74.0,0.8,19.0,0.3
+Pomegranate,83.0,1.7,19.0,1.2
+Coconut Meat,354.0,3.3,15.0,33.0
+Kale,49.0,4.3,9.0,0.9
+Brussels Sprouts,43.0,3.4,9.0,0.3
+Beetroot,43.0,1.6,10.0,0.2
+Green Beans,31.0,1.8,7.1,0.1
+Sweet Corn,86.0,3.4,19.0,1.2
+Pumpkin,26.0,1.0,7.0,0.1
+Sirloin Steak,271.0,25.0,0.0,19.0
+Roast Beef,170.0,24.0,0.0,7.0
+Chicken Thigh,209.0,17.0,0.0,15.0
+Duck Breast,337.0,19.0,0.0,28.0
+Turkey Legs,208.0,27.0,0.0,10.0
+Beef Liver,135.0,21.0,3.9,3.6
+Halibut,140.0,27.0,0.0,2.5
+Mackerel,205.0,19.0,0.0,13.9
+Trout,119.0,20.0,0.0,3.5
+Squid,175.0,15.0,8.0,7.0
+Crab,97.0,19.0,0.0,1.5
+Skim Milk,34.0,3.4,5.0,0.1
+Whole Milk,61.0,3.2,5.0,3.3
+Ricotta Cheese,174.0,11.0,3.0,13.0
+Feta Cheese,265.0,14.0,4.0,21.0
+Soy Milk,54.0,3.3,6.0,1.8
+White Bread Slice,79.0,3.0,14.0,1.0
+Basmati Rice,121.0,2.9,25.0,0.4
+Couscous,112.0,3.8,23.0,0.2
+Barley,354.0,12.0,73.0,2.3
+Rye Bread,259.0,9.0,48.0,3.3
+Pringles,536.0,4.0,52.0,34.0
+Doritos,490.0,6.6,61.0,25.0
+Twix Bar,286.0,2.8,37.0,14.0
+Mars Bar,228.0,2.2,35.0,9.0
+Haribo Gummy Bears (100g),343.0,6.0,77.0,0.0
+Croissant,406.0,8.0,45.0,21.0
+Pancakes,227.0,6.0,28.0,9.0
+Waffles,291.0,7.0,34.0,14.0
+French Toast,226.0,8.0,28.0,9.0
+Cheesecake Slice,410.0,7.0,32.0,29.0
+Brownie,387.0,4.5,48.0,20.0
+Apple Pie Slice,296.0,2.4,41.0,14.0
+Ice Cream (Vanilla),207.0,3.5,23.0,11.0
+Milk Chocolate,535.0,7.6,59.0,30.0
+Espresso,3.0,0.1,0.0,0.0
+Mocha Coffee,290.0,8.0,36.0,12.0
+Energy Drink (250ml),110.0,1.0,28.0,0.0
+Gatorade (500ml),120.0,0.0,30.0,0.0
+McDouble,400.0,22.0,34.0,20.0
+Chicken Tenders (3 pcs),263.0,19.0,14.0,15.0
+Cheese Pizza Slice,272.0,12.0,33.0,10.0
+Fish and Chips,585.0,25.0,52.0,32.0
+Gemista,220.0,4.0,26.0,12.0
+Fasolada,250.0,12.0,32.0,8.0
+Loukoumades (6 pcs),380.0,6.0,45.0,20.0
+Kourabiedes (1 pc),210.0,2.0,17.0,14.0
+Baklava (1 piece),290.0,4.0,38.0,15.0
+Nectarine,44.0,1.1,10.5,0.3
+Mandarin,53.0,0.8,13.3,0.3
+Clementine,47.0,0.9,12.0,0.2
+Starfruit,31.0,1.0,7.0,0.3
+Persimmon,81.0,0.6,18.0,0.3
+Honeydew Melon,36.0,0.5,9.0,0.1
+Plantain,122.0,1.3,32.0,0.4
+Mulberries,43.0,1.4,10.0,0.4
+Goji Berries,349.0,14.3,77.0,0.4
+Soursop,66.0,1.0,17.0,0.3
+Bok Choy,13.0,1.5,2.2,0.2
+Swiss Chard,19.0,1.8,3.7,0.2
+Collard Greens,32.0,3.0,6.0,0.6
+Mustard Greens,27.0,2.9,4.7,0.4
+Parsnip,75.0,1.2,18.0,0.3
+Rutabaga,37.0,1.1,8.6,0.2
+Red Cabbage,31.0,1.4,7.4,0.2
+Savoy Cabbage,27.0,2.0,6.0,0.1
+Endive,17.0,1.3,3.4,0.2
+Watercress,11.0,2.3,1.3,0.1
+Arugula,25.0,2.6,3.7,0.7
+Radicchio,23.0,1.4,4.5,0.3
+Butternut Squash,45.0,1.0,12.0,0.1
+Acorn Squash,40.0,0.8,10.0,0.1
+Yam,118.0,1.5,28.0,0.2
+Okra,33.0,2.0,7.0,0.2
+Jalapeno Pepper,29.0,0.9,6.5,0.4
+Habanero Pepper,40.0,1.9,8.4,0.4
+Chickpeas,164.0,8.9,27.4,2.6
+Green Lentils,116.0,9.0,20.0,0.4
+Red Lentils,113.0,9.0,20.0,0.4
+Black Beans (Cooked),132.0,8.9,23.7,0.5
+Pinto Beans (Cooked),143.0,9.0,27.0,0.7
+White Beans,139.0,9.7,25.0,0.6
+Edamame,121.0,11.9,8.9,5.2
+Green Peas,81.0,5.4,14.5,0.4
+Soybeans (Cooked),173.0,16.6,9.9,9.0
+Prosciutto,247.0,25.9,0.0,14.0
+Pastrami,147.0,21.8,1.2,5.9
+Mortadella,311.0,16.7,4.7,25.0
+Turkey Ham,124.0,16.0,3.0,4.0
+Beef Jerky,410.0,33.0,11.0,27.0
+Chicken Sausage,196.0,20.0,3.0,11.0
+Venison Steak,158.0,30.0,0.0,3.2
+Rabbit Meat,173.0,33.0,0.0,3.5
+Goat Meat,143.0,27.0,0.0,3.0
+Anchovy Fillets,210.0,29.0,0.0,10.0
+Herring,158.0,18.0,0.0,9.0
+Bluefin Tuna,144.0,23.0,0.0,5.0
+Oysters (Cooked),199.0,24.0,12.0,5.0
+Scallops,111.0,20.0,5.0,0.8
+Crayfish,82.0,17.0,0.0,1.0
+Eel,236.0,23.7,0.0,15.0
+Caviar,264.0,24.6,4.0,17.9
+Smoked Salmon,117.0,18.3,0.0,4.3
+Kefir,55.0,3.4,7.5,1.5
+Evaporated Milk,135.0,6.8,10.0,7.6
+Condensed Milk,321.0,8.0,54.0,8.7
+Blue Cheese,353.0,21.0,2.3,28.0
+Brie,334.0,21.0,0.5,28.0
+Camembert,300.0,19.0,0.5,24.0
+Halloumi,321.0,22.0,2.2,26.0
+Soy Yogurt,66.0,3.6,6.4,2.3
+Almond Milk,15.0,0.6,0.3,1.2
+Coconut Milk,230.0,2.3,6.2,24.0
+Millet,378.0,11.0,73.0,4.2
+Teff,367.0,13.0,73.0,2.4
+Spelt,338.0,15.0,70.0,2.4
+Quinoa Flakes,368.0,13.2,64.0,6.1
+Buckwheat Groats,343.0,13.3,71.5,3.4
+Cornmeal,370.0,8.1,79.4,1.8
+Udon Noodles,127.0,4.4,25.2,0.6
+Rice Noodles,192.0,3.1,43.0,0.4
+Soba Noodles,99.0,5.1,21.4,0.1
+Tortilla Wrap,218.0,5.7,35.0,4.9
+English Muffin,223.0,8.5,43.0,2.0
+Ciabatta Bread,271.0,9.0,51.0,4.0
+Brioche Bread,330.0,9.7,57.0,9.3
+Hazelnuts,628.0,15.0,17.0,61.0
+Macadamia Nuts,718.0,8.0,14.0,76.0
+Pecan Nuts,691.0,9.2,14.0,72.0
+Pine Nuts,673.0,13.7,13.0,68.0
+Sunflower Seeds,584.0,21.0,20.0,51.0
+Pumpkin Seeds,559.0,30.0,11.0,49.0
+Sesame Seeds,573.0,17.0,23.0,50.0
+Hemp Seeds,553.0,31.6,8.7,48.8
+Caramel Candy,382.0,3.0,88.0,4.0
+Lollipop,394.0,0.0,98.0,0.2
+Toffee,387.0,1.0,89.0,4.0
+Gingerbread Cookie,416.0,5.6,72.0,12.0
+Shortbread Biscuit,519.0,5.6,64.0,27.0
+Macaron,451.0,8.0,50.0,23.0
+Panna Cotta,291.0,5.0,25.0,18.0
+Tiramisu,354.0,5.0,45.0,18.0
+Creme Brulee,330.0,5.0,33.0,20.0
+Fruit Jelly,250.0,4.0,60.0,0.1
+Granola with Nuts,489.0,13.0,64.0,24.0
+Muesli,389.0,12.0,72.0,8.0
+Breakfast Burrito,305.0,13.0,29.0,14.0
+Eggs Benedict,340.0,13.0,29.0,19.0
+Chia Pudding,139.0,4.7,14.0,7.0
+Avocado Toast,250.0,6.0,26.0,14.0
+Oatmeal with Fruit,180.0,6.0,32.0,3.0
+Chicken Alfredo Pasta,650.0,25.0,60.0,32.0
+Beef Lasagna,340.0,15.0,32.0,18.0
+Margherita Pizza,270.0,11.0,33.0,10.0
+Chicken Caesar Wrap,390.0,25.0,30.0,18.0
+BBQ Ribs,480.0,28.0,24.0,30.0
+Fried Calamari,350.0,15.0,27.0,19.0
+Chicken Quesadilla,510.0,28.0,40.0,27.0
+Pad Thai,430.0,17.0,70.0,11.0
+Chicken Tikka Masala,450.0,25.0,20.0,30.0
+Beef Stir Fry,300.0,22.0,18.0,14.0
+Briam,145.0,3.0,14.0,9.0
+Lahanodolmades,190.0,7.0,15.0,11.0
+Soutzoukakia,260.0,14.0,10.0,18.0
+Pita Gyro,650.0,32.0,55.0,30.0
+Frappe Coffee,80.0,1.0,15.0,2.0
+Green Tea,2.0,0.4,0.0,0.0
+Black Tea,2.0,0.4,0.0,0.0
+Herbal Tea,0.0,0.0,0.0,0.0
+Lemonade,99.0,0.1,25.0,0.0
+Iced Coffee,80.0,1.0,15.0,2.0
+Protein Shake (Whey),120.0,24.0,3.0,1.0
+Casein Protein Shake,130.0,24.0,4.0,1.5
+Soy Protein Shake,140.0,25.0,4.0,2.0
+Banoffee Pie,395.0,4.0,58.0,16.0
+Chocolate Ice Cream,216.0,4.0,24.0,12.0
+Vanilla Cupcake,305.0,3.0,45.0,13.0
+Strawberry Milkshake,380.0,8.0,60.0,10.0
+Chicken Fried Rice,330.0,14.0,45.0,10.0
+Vegetable Fried Rice,290.0,7.0,50.0,7.0
+Pork Dumplings,320.0,12.0,34.0,14.0
+Spring Rolls,220.0,5.0,28.0,10.0
+Sushi Roll (Salmon),250.0,13.0,30.0,8.0
+Sushi Roll (Avocado),230.0,4.0,32.0,8.0
+Ramen Soup,430.0,17.0,60.0,14.0
+Pho Soup,350.0,20.0,45.0,8.0
+Falafel,333.0,13.0,31.0,18.0
+Shawarma Wrap,550.0,26.0,45.0,28.0
+Hawaiian Pizza,290.0,13.0,34.0,11.0
+Pesto Pasta,420.0,12.0,45.0,20.0
+Stuffed Peppers,220.0,9.0,26.0,9.0
+Grilled Cheese Sandwich,320.0,12.0,28.0,18.0
+BLT Sandwich,360.0,18.0,30.0,19.0
+Club Sandwich,450.0,25.0,35.0,22.0
+Mashed Potatoes,214.0,4.0,35.0,7.0
+Roasted Potatoes,170.0,3.0,30.0,4.0
+Coleslaw,150.0,1.0,13.0,10.0
+Cauliflower Rice,25.0,2.0,5.0,0.3
+Veggie Burger,250.0,13.0,30.0,9.0

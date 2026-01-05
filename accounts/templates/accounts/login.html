@@ -1,0 +1,46 @@
+{% load static %}
+
+<div id="loginModal" class="modal-overlay">
+    <div class="modal-card">
+
+        <span id="closeModal" class="close">&times;</span>
+
+        <h2 class="login-title">Login</h2>
+
+        <form id="loginForm" method="POST">
+            {% csrf_token %}
+
+            <!-- Username -->
+            <div class="form-field">
+                <input type="text" name="username" required>
+                <label>Username</label>
+            </div>
+
+            <!-- Password -->
+            <div class="form-field password-field">
+                <input type="password" name="password" id="passwordInput" required>
+                <label>Password</label>
+
+                <span class="toggle-password">
+                    <i class="fa fa-eye-slash" id="togglePassword"></i>
+                </span>
+            </div>
+
+            <!-- Remember Me -->
+            <div class="remember-row">
+                <input type="checkbox" id="rememberMe" name="remember_me">
+                <label for="rememberMe">Remember Me</label>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="login-btn">Login</button>
+
+            <!-- Error message -->
+            <p id="loginError" class="error-msg"></p>
+
+        </form>
+    </div>
+</div>
+
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
+<script src="{% static 'js/login.js' %}"></script>

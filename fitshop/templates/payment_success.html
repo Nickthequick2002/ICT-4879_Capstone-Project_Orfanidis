@@ -1,0 +1,100 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FitTrack</title>
+
+    <!-- Basic page styling + icons -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        /* Center everything nicely on the screen */
+        body {
+            background: white;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+            padding: 20px;
+        }
+
+        /* Container fade-in animation */
+        .success-box {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Big green checkmark icon */
+        .checkmark {
+            font-size: 80px;
+            color: #4BB543;
+            margin-bottom: 20px;
+        }
+
+        /* Main heading */
+        h2 {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        /* Subtitle */
+        p {
+            color: #555;
+            margin-bottom: 25px;
+        }
+
+        /* Button styling */
+        .ok-btn {
+            background: #FFB266;
+            border: none;
+            padding: 12px 35px;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            transition: 0.3s;
+            font-size: 16px;
+        }
+
+        .ok-btn:hover {
+            background: #F39C42;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+    <body>
+
+        <!-- Success message container -->
+        <div class="success-box">
+
+            <!-- Checkmark icon -->
+            <i class="fa-solid fa-circle-check checkmark"></i>
+
+            <h2>Success! Your Payment Was Processed Successfully!</h2>
+            <p>Thank you for your purchase! Your payment has been successfully processed, and your order is now being prepared. We're excited to help you reach your fitness goals with FitTrack! </p>
+
+            <!-- Show order ID only if backend passed it -->
+            {% if order_id %}
+                <p style="font-size: 14px; color: #777;">
+                    Order ID: {{ order_id }}
+                </p>
+            {% endif %}
+
+            <!-- Go back home -->
+            <a href="{% url 'fitshop' %}">
+                <button class="ok-btn">Browse More Products </button>
+            </a>
+
+        </div>
+
+    </body>
+</html>
