@@ -1,0 +1,59 @@
+<ul class="nav flex-column">
+
+    <!-- Dashboard link -->
+    <li class="nav-item mb-4">
+        <a class="nav-link {% if request.resolver_match.url_name == 'dashboard-home' %}fw-bold{% else %}text-light{% endif %}" 
+           style="{% if request.resolver_match.url_name == 'dashboard-home' %}color: #ff8c42;{% endif %}"
+           href="{% url 'dashboard-home' %}">
+            <i class="fa fa-chart-line me-2"></i>
+            Dashboard
+        </a>
+    </li>
+
+    <!-- Products -->
+    {% with 'dashboard-products dashboard-add-product dashboard-edit-product dashboard-delete-product' as product_urls %}
+    <li class="nav-item mb-4">
+        <a class="nav-link {% if request.resolver_match.url_name in product_urls %}fw-bold{% else %}text-light{% endif %}" 
+           style="{% if request.resolver_match.url_name in product_urls %}color: #ff8c42;{% endif %}"
+           href="{% url 'dashboard-products' %}">
+            <i class="fa fa-dumbbell me-2"></i>
+            Products
+        </a>
+    </li>
+    {% endwith %}
+
+    <!-- Blogs -->
+    {% with 'blog_list create_blog dashboard-edit-blog dashboard-delete-blog' as blog_urls %}
+    <li class="nav-item mb-4">
+        <a class="nav-link {% if request.resolver_match.url_name in blog_urls %}fw-bold{% else %}text-light{% endif %}" 
+           style="{% if request.resolver_match.url_name in blog_urls %}color: #ff8c42;{% endif %}"
+           href="{% url 'blog_list' %}">
+            <i class="fa fa-pen-nib me-2"></i>
+            Blogs
+        </a>
+    </li>
+    {% endwith %}
+
+    <!-- Exercises -->
+    {% with 'dashboard-exercises dashboard-add-exercise dashboard-edit-exercise dashboard-delete-exercise' as exercise_urls %}
+    <li class="nav-item mb-4">
+        <a class="nav-link {% if request.resolver_match.url_name in exercise_urls %}fw-bold{% else %}text-light{% endif %}" 
+           style="{% if request.resolver_match.url_name in exercise_urls %}color: #ff8c42;{% endif %}"
+           href="{% url 'dashboard-exercises' %}">
+            <i class="fas fa-running me-2"></i>
+            Exercises
+        </a>
+    </li>
+    {% endwith %}
+
+    <!-- Users -->
+    <li class="nav-item mb-4">
+        <a class="nav-link {% if request.resolver_match.url_name == 'user_list' %}fw-bold{% else %}text-light{% endif %}" 
+           style="{% if request.resolver_match.url_name == 'user_list' %}color: #ff8c42;{% endif %}"
+           href="{% url 'user_list' %}">
+            <i class="fa fa-users me-2"></i>
+            Users
+        </a>
+    </li>
+
+</ul>

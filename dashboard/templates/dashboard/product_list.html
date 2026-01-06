@@ -58,49 +58,7 @@
             <!-- LEFT SIDEBAR THAT SHOWS ADMIN NAVIGATION -->
             <aside class="col-md-3 col-lg-2 p-3 d-none d-md-block" style="background-color:#111; min-height:100vh;">
 
-                <ul class="nav flex-column">
-
-                    <!-- Dashboard link -->
-                    <li class="nav-item mb-4">
-                        <a class="nav-link text-light fw-bold" href="{% url 'dashboard-home' %}">
-                            <i class="fa fa-chart-line me-2"></i>
-                            Dashboard
-                        </a>
-                    </li>
-
-                    <!-- Products -->
-                    <li class="nav-item mb-4">
-                        <a class="nav-link text-light" href="#">
-                            <i class="fa fa-dumbbell me-2"></i>
-                            Products
-                        </a>
-                    </li>
-
-                    <!-- Blogs -->
-                    <li class="nav-item mb-4">
-                        <a class="nav-link text-light" href="{% url 'blog_list' %}">
-                            <i class="fa fa-pen-nib me-2"></i>
-                            Blogs
-                        </a>
-                    </li>
-
-                    <!-- Exercises -->
-                    <li class="nav-item mb-4">
-                        <a class="nav-link text-light" href="{% url 'dashboard-exercises' %}">
-                            <i class="fas fa-running me-2"></i>
-                            Exercises
-                        </a>
-                    </li>
-
-                    <!-- Users -->
-                    <li class="nav-item mb-4">
-                        <a class="nav-link text-light" href="{% url 'user_list' %}">
-                            <i class="fa fa-users me-2"></i>
-                            Users
-                        </a>
-                    </li>
-
-                </ul>
+                {% include 'dashboard/includes/sidebar.html' %}
             </aside>
 
             <!-- MAIN CONTENT -->
