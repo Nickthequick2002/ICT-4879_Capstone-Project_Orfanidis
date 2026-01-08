@@ -46,7 +46,7 @@ Checking out the project is just a click away:
 
 *   **Backend**: Python, Django 5.x
 *   **Frontend**: HTML5, CSS3, JavaScript, Bootstrap 5
-*   **Database**: SQLite (Development) / PostgreSQL (Production ready)
+*   **Database**: SQLite (Development) 
 *   **AI Integration**: OpenAI API
 *   **Security**: Django-Axes, CSP Headers, Secure Session Management
 
@@ -91,16 +91,3 @@ python manage.py runserver
 
 Visit `http://127.0.0.1:8000/` in your browser.
 
----
-
-## 🔐 Administrative Access
-To access the admin panel, create a superuser:
-```bash
-python manage.py createsuperuser
-```
-Access the panel at `http://127.0.0.1:8000/admin`.
-
----
-
-## 📞 Support
-Developed by **Nick Orfanidis** for Deree - The American College of Greece (Fall 2025).
