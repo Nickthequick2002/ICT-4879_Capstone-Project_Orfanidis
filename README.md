@@ -1,82 +1,106 @@
-<b>FitTrack</b>
+# 🏋️‍♂️ FitTrack - ICT 4879 Capstone Project
 
-FitTrack is a web-based fitness platform developed as part of the ICT 4879 Capstone Project.
+**FitTrack** is a comprehensive web-based fitness platform designed to promote healthy lifestyle habits. It combines professional workout programs, advanced nutrition tracking, e-commerce functionality, and an AI-powered personal assistant into a single, cohesive application.
 
-The project focuses on encouraging healthy lifestyle habits by combining workout programs, nutrition tracking, and an AI-powered chatbot in a single application.
+![Status](https://img.shields.io/badge/Status-Maintained-success?style=flat-square)
+![Stack](https://img.shields.io/badge/Stack-Django%20%7C%20Python%20%7C%20Bootstrap-blue?style=flat-square)
+![License](https://img.shields.io/badge/License-MIT-lightgrey?style=flat-square)
 
-<b>Features</b>
+---
 
-- FitTrack allows users to browse and follow workout programs.
+## 🌐 Live Demo
+Checking out the project is just a click away:
+👉 **[View Live Demo on PythonAnywhere](https://nikolasorf.pythonanywhere.com)**
 
-- Users can track calories and food intake through a simple nutrition system.
+---
 
-- A user dashboard provides access to personal fitness-related information.
+## ✨ Key Features
 
-- Premium features are available through the platform.
+### 🛡️ Security (Enterprise-Grade)
+*   **Brute-Force Protection**: Intelligent rate limiting blocks suspicious IPs after 5 failed login attempts (`django-axes`).
+*   **Security Logging**: Detailed audit trails for all security-critical events.
+*   **Payment Verification**: Server-side validation prevents price tampering during checkout.
+*   **Data Privacy**: Automated PII masking in logs (configurable for admins).
 
-- An AI-powered chatbot assists users with fitness and nutrition questions.
+### 🤖 AI-Powered Coach
+*   **Smart Assistant**: Integrated Chatbot (OpenAI/Gemini) provides personalized fitness and nutrition advice.
+*   **Context Aware**: The backend manages the AI logic, ensuring consistent and safe responses.
 
-- The interface is fully responsive and designed for ease of use.
+### 📊 User Dashboard
+*   **Progress Tracking**: Interactive charts visualize weight trends and workout frequency (`Chart.js`).
+*   **BMI Calculator**: Real-time health metrics calculation.
+*   **Recent Activity**: Scrollable history of past orders and logs.
 
-<b>AI Chatbot</b>
+### 🛒 FitShop (E-Commerce)
+*   **Product Catalog**: Browse supplements and gear.
+*   **Shopping Cart**: Dynamic cart management with stock checks.
+*   **Secure Checkout**: Integration with PayPal API for safe transactions.
 
-- FitTrack includes an AI-powered chatbot that helps users with fitness-related questions.
+### 🍎 Nutrition & Training
+*   **Calorie Tracker**: Log daily meals and track macro/micronutrients.
+*   **Workout Library**: curated exercise programs for various goals (Strength, Weight Loss, Flexibility).
 
-- The chatbot provides guidance on workouts, nutrition, and general healthy habits.
+---
 
-- All chatbot intelligence is handled on the backend using an AI model, while the frontend manages only the user interface.
+## 🛠️ Technologies Used
 
-- The chatbot does not provide medical advice.
+*   **Backend**: Python, Django 5.x
+*   **Frontend**: HTML5, CSS3, JavaScript, Bootstrap 5
+*   **Database**: SQLite (Development) / PostgreSQL (Production ready)
+*   **AI Integration**: OpenAI API
+*   **Security**: Django-Axes, CSP Headers, Secure Session Management
 
-<b>Technologies Used</b>
+---
 
-- The backend of the application is built using Python and Django.
+## 🚀 Installation & Setup
 
-- The frontend uses HTML, CSS, and JavaScript.
+Follow these steps to run the project locally.
 
-- SQLite is used as the database during development.
+### 1. Prerequisites
+*   Python 3.10+
+*   Git
 
-- The chatbot uses the OpenAI API.
+### 2. Clone the Repository
+```bash
+git clone https://github.com/Nickthequick2002/ICT-4879_Capstone-Project_Orfanidis.git
+cd ICT-4879_Capstone-Project_Orfanidis
+```
 
-
-<b>Environment Setup</b>
-
-To run the project locally, an environment variable is required.
-
-Create a .env file in the project root directory and add the OpenAI API key as shown below:
-
+### 3. Set Up Environment
+Create a `.env` file in the root directory (same folder as `manage.py`) with your secrets:
+```ini
+DEBUG=True
+SECRET_KEY=your_secret_key_here
 OPENAI_API_KEY=your_openai_api_key_here
+```
 
-<b>Run the Project Locally</b>
+### 4. Install Dependencies
+```bash
+pip install -r requirements.txt
+```
 
-1. Clone the repository with the following command. Make sure that git is installed into the system. 
-   - git clone https://github.com/Nickthequick2002/ICT-4879_Capstone-Project_Orfanidis.git
+### 5. Initialize Database
+```bash
+python manage.py migrate
+```
 
-2. After the repository is cloned, move into the project directory using the following command:
-   - cd FitTrack
+### 6. Run the Server
+```bash
+python manage.py runserver
+```
 
-3. Install the required dependencies using the requirements file.
-   - pip install -r requirements.txt
+Visit `http://127.0.0.1:8000/` in your browser.
 
-4. Apply database migrations.
-   - python manage.py migrate
+---
 
-5. Start the development server.
-   - python manage.py runserver
+## 🔐 Administrative Access
+To access the admin panel, create a superuser:
+```bash
+python manage.py createsuperuser
+```
+Access the panel at `http://127.0.0.1:8000/admin`.
 
-6. Open a browser and navigate to:
-   - http://127.0.0.1:8000/
-  
+---
 
-**LIVE DEMO**
-
-Below there is a link for testing the website live. The link was created using PythonAnywhere.
-
-- Website URL: [https://nikolasorf.pythonanywhere.com](https://nikolasorf.pythonanywhere.com)
-
-
-
-
-
-
-
+## 📞 Support
+Developed by **Nick Orfanidis** for Deree - The American College of Greece (Fall 2025).
