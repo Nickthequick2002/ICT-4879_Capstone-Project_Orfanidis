@@ -30,19 +30,19 @@
             <div class="d-flex align-items-center" style="gap: 20px;">
 
                 <!-- View Site button -->
-                <a href="{% url 'home' %}" class="ft-btn-outline d-none d-md-block"
+                <a href="{% url 'home' %}" class="ft-btn-outline d-none d-xl-block"
                     style="padding:6px 16px; white-space: nowrap;">
                     View Site
                 </a>
 
                 <!-- Logout button -->
-                <a href="{% url 'logout' %}" class="ft-btn-outline d-none d-md-block"
+                <a href="{% url 'logout' %}" class="ft-btn-outline d-none d-xl-block"
                     style="padding:6px 16px; white-space: nowrap;">
                     Logout
                 </a>
 
                 <!-- Burger Menu Toggle (Visible only on mobile, placed on the right) -->
-                <button id="admin-mobile-toggle" class="d-md-none"
+                <button id="admin-mobile-toggle" class="d-xl-none"
                     style="background:none; border:none; color:white; font-size:24px; position:relative; z-index:100001;">
                     <i class="fas fa-bars"></i>
                 </button>
@@ -56,13 +56,13 @@
         <div class="row">
 
             <!-- LEFT SIDEBAR THAT SHOWS ADMIN NAVIGATION -->
-            <aside class="col-md-3 col-lg-2 p-3 d-none d-md-block" style="background-color:#111; min-height:100vh;">
+            <aside class="col-xl-2 p-3 d-none d-xl-block" style="background-color:#111; min-height:100vh;">
 
                 {% include 'dashboard/includes/sidebar.html' %}
             </aside>
 
             <!-- MAIN CONTENT -->
-            <main class="col-md-9 col-lg-10 p-4">
+            <main class="col-xl-10 col-12 p-4">
 
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h2 class="fw-bold mb-0">Manage Products</h2>
@@ -78,64 +78,66 @@
                     <div class="card-body">
 
                         <!-- Table card titles -->
-                        <table class="table align-middle mb-0">
-                            <thead>
-                                <tr>
-                                    <th style="width:80px;">Image</th>
-                                    <th>Name</th>
-                                    <th style="width:120px;">Price</th>
-                                    <th style="width:150px;">Actions</th>
-                                </tr>
-                            </thead>
+                        <div class="table-responsive">
+                            <table class="table align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th style="width:80px;">Image</th>
+                                        <th>Name</th>
+                                        <th style="width:120px;">Price</th>
+                                        <th style="width:150px;">Actions</th>
+                                    </tr>
+                                </thead>
 
-                            <!-- Image handler to show or not the image, if it exists.  -->
-                            <tbody>
-                                {% for product in products %}
-                                <tr>
-                                    <td>
-                                        {% if product.image %}
-                                        <img src="{{ product.image.url }}" width="60" style="border-radius:6px;">
-                                        {% else %}
-                                        <span class="text-muted small">No image</span>
-                                        {% endif %}
-                                    </td>
+                                <!-- Image handler to show or not the image, if it exists.  -->
+                                <tbody>
+                                    {% for product in products %}
+                                    <tr>
+                                        <td>
+                                            {% if product.image %}
+                                            <img src="{{ product.image.url }}" width="60" style="border-radius:6px;">
+                                            {% else %}
+                                            <span class="text-muted small">No image</span>
+                                            {% endif %}
+                                        </td>
 
-                                    <td>
-                                        <strong>{{ product.name }}</strong><br>
-                                        <small class="text-muted">{{ product.description|truncatechars:80 }}</small>
-                                    </td>
+                                        <td>
+                                            <strong>{{ product.name }}</strong><br>
+                                            <small class="text-muted">{{ product.description|truncatechars:80 }}</small>
+                                        </td>
 
-                                    <td>€{{ product.price }}</td>
+                                        <td>€{{ product.price }}</td>
 
-                                    <!-- EDIT AND DELETE OPTION FOR THE PRODUCT -->
-                                    <td>
-                                        <div class="d-flex flex-column">
+                                        <!-- EDIT AND DELETE OPTION FOR THE PRODUCT -->
+                                        <td>
+                                            <div class="d-flex flex-column">
 
-                                            <a href="{% url 'dashboard-edit-product' product.id %}"
-                                                class="ft-btn-outline text-center mb-3">
-                                                Edit
-                                            </a>
+                                                <a href="{% url 'dashboard-edit-product' product.id %}"
+                                                    class="ft-btn-outline text-center mb-3">
+                                                    Edit
+                                                </a>
 
-                                            <a href="{% url 'dashboard-delete-product' product.id %}"
-                                                class="ft-btn-outline  text-center">
-                                                Delete
-                                            </a>
+                                                <a href="{% url 'dashboard-delete-product' product.id %}"
+                                                    class="ft-btn-outline  text-center">
+                                                    Delete
+                                                </a>
 
-                                        </div>
-                                    </td>
+                                            </div>
+                                        </td>
 
-                                </tr>
+                                    </tr>
 
-                                <!-- If products are empty, ggoes here -->
-                                {% empty %}
-                                <tr>
-                                    <td colspan="4" class="text-center text-muted py-4">
-                                        No products found.
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                                    <!-- If products are empty, ggoes here -->
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="4" class="text-center text-muted py-4">
+                                            No products found.
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
 
                     </div>
                 </div>

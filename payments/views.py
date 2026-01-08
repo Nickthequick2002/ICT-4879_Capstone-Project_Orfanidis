@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.conf import settings
 from django.urls import reverse
+from .models import SubscriptionTransaction
 
 @login_required
 def membership_success(request):
@@ -12,6 +13,16 @@ def membership_success(request):
     profile = request.user.profile
     profile.is_member = True
     profile.save()
+
+    # --- SAVE SUBSCRIPTION TRANSACTION ---
+    # We assume a fixed price of 19.99 since it's not passed in the callback currently
+    SubscriptionTransaction.objects.get_or_create(
+        order_id=order_id,
+        defaults={
+            'user': request.user,
+            'amount': 4.99
+        }
+    )
 
     # Send a welcome email after a successful payment
     subject = "🎉 Welcome to FitTrack Premium!"

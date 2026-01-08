@@ -70,13 +70,7 @@
                         </li>
                     </ul>
 
-                    <!-- Search bar -->
-                    <div class="search-container ms-auto">
-                        <input type="text" id="navSearch" placeholder="Search..." />
-                        <button id="searchBtn" type="button">
-                            <i class="fa fa-search"></i>
-                        </button>
-                    </div>
+
 
                     <!-- ADMIN BUTTON ONLY FOR STAFF MEMBERS -->
                     {% if user.is_authenticated and user.is_staff %}
@@ -449,7 +443,7 @@
         <script src="{% static 'js/custom.js' %}"></script>
         <script src="{% static 'js/swiper-bundle.min.js' %}"></script>
         <script src="{% static 'js/testimonials.js' %}"></script>
-        <script src="{% static 'js/searchbar.js' %}"></script>
+        <!-- searchbar.js removed -->
         <script src="{% static 'js/profiledropdown.js' %}"></script>
         <script src="{% static 'js/chatbot.js' %}"></script>
 

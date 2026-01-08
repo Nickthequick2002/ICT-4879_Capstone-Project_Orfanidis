@@ -1,0 +1,292 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>FitTrack</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/aos.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        .nav-pills .nav-link {
+            border-radius: 50px;
+            padding: 10px 25px;
+            margin: 0 5px;
+            background: #fff;
+            color: #555;
+            font-weight: 600;
+            border: 1px solid #eee;
+            transition: all 0.3s ease;
+        }
+        .nav-pills .nav-link.active {
+            background-color: #ff8c42;
+            color: white;
+            box-shadow: 0 4px 12px rgba(255, 140, 66, 0.3);
+            border-color: transparent;
+        }
+        .nav-pills .nav-link:hover:not(.active) {
+            background-color: #fff5eb;
+            color: #ff8c42;
+            transform: translateY(-2px);
+        }
+        .profile-container-horizontal {
+            max-width: 1000px;
+            margin: 50px auto 100px;
+            padding: 0 20px;
+        }
+    </style>
+</head>
+<body data-authenticated="{{ user.is_authenticated }}">
+
+    {% include 'includes/navbar.html' %}
+
+    <div class="profile-container-horizontal" style="margin-top: 140px;">
+        
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">My Account</h2>
+            <p class="text-muted">Manage your profile, nutrition, and settings</p>
+        </div>
+
+        <!-- Horizontal Navigation -->
+        <ul class="nav nav-pills justify-content-center mb-5" id="pills-tab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="pills-dashboard-tab" data-bs-toggle="pill" data-bs-target="#pills-dashboard" type="button" role="tab">
+                    <i class="fa fa-chart-line me-2"></i> Dashboard
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab">
+                    <i class="fa fa-user me-2"></i> Profile
+                </button>
+            </li>
+            {% if user.is_authenticated and user.profile.is_member %}
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="pills-training-tab" data-bs-toggle="pill" data-bs-target="#pills-training" type="button" role="tab">
+                    <i class="fa fa-dumbbell me-2"></i> Training
+                </button>
+            </li>
+            {% endif %}
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="pills-security-tab" data-bs-toggle="pill" data-bs-target="#pills-security" type="button" role="tab">
+                    <i class="fa fa-shield-alt me-2"></i> Security
+                </button>
+            </li>
+        </ul>
+
+        <!-- Content Area -->
+        <div class="tab-content" id="pills-tabContent">
+            
+            <!-- DASHBOARD TAB -->
+            <div class="tab-pane fade show active" id="pills-dashboard" role="tabpanel">
+                <div class="row g-4">
+                    <!-- Welcome Card -->
+                    <div class="col-12">
+                        <div class="ft-card bg-light border-0">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <h3>Welcome back, {{ user.username }}!</h3>
+                                    {% if user.profile.is_member %}
+                                        <span class="badge" style="background-color: #f0ad4e; color: black;">Premium Member</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">Free Member</span>
+                                    {% endif %}
+                                </div>
+                                <div class="text-end text-warning">
+                                    {% if profile.goal == 'strength' %}<i class="fa fa-dumbbell fa-3x"></i>{% endif %}
+                                    {% if profile.goal == 'weight_loss' %}<i class="fa fa-fire fa-3x"></i>{% endif %}
+                                    {% if profile.goal == 'endurance' %}<i class="fa fa-person-running fa-3x"></i>{% endif %}
+                                    {% if profile.goal == 'flexibility' %}<i class="fa fa-child-reaching fa-3x"></i>{% endif %}
+                                    {% if not profile.goal %}<i class="fa fa-user fa-3x"></i>{% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Nutrition & Orders Split -->
+                    <div class="col-md-6">
+                        <div class="ft-card h-100">
+                            <h4 class="ft-title">Today's Nutrition</h4>
+                            <h2 class="display-4 text-warning fw-bold">{{ nutrition.calories }} <span class="fs-5 text-muted">kcal</span></h2>
+                            <div class="progress my-3" style="height: 6px;">
+                                <div class="progress-bar bg-warning" role="progressbar" style="width: {% widthratio nutrition.calories 2000 100 %}%"></div>
+                            </div>
+                            <div class="row text-muted small">
+                                <div class="col">Protein: <strong>{{ nutrition.protein }}g</strong></div>
+                                <div class="col">Carbs: <strong>{{ nutrition.carbs }}g</strong></div>
+                                <div class="col">Fats: <strong>{{ nutrition.fats }}g</strong></div>
+                            </div>
+                            <a href="{% url 'mycals' %}" class="btn btn-outline-warning btn-sm mt-3 w-100 rounded-pill">View Log</a>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="ft-card h-100">
+                            <h4 class="ft-title">Recent Orders</h4>
+                            {% if recent_orders %}
+                            <ul class="list-group list-group-flush">
+                                {% for order in recent_orders %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
+                                    <span>
+                                        <span class="text-muted small">{{ order.created_at|date:"M d" }}</span> <br>
+                                        Order #{{ order.order_id|slice:":6" }}
+                                    </span>
+                                    <span class="fw-bold">${{ order.total_price }}</span>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            {% else %}
+                            <p class="text-muted text-center my-4">No recent orders.</p>
+                            {% endif %}
+                            <a href="{% url 'fitshop' %}" class="btn btn-light btn-sm mt-auto w-100 rounded-pill">Go to Shop</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PROFILE TAB -->
+            <div class="tab-pane fade" id="pills-profile" role="tabpanel">
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <!-- PFP -->
+                        <div class="ft-card mb-4 text-center">
+                            <div class="pfp-wrapper mb-3">
+                                {% if user.profile.profile_picture and user.profile.profile_picture.name != '' %}
+                                    <img src="{{ user.profile.profile_picture.url }}" class="pfp-img" style="width:120px; height:120px; border-radius:50%; object-fit:cover;">
+                                {% else %}
+                                    <img src="/media/profile_pics/default.png" class="pfp-img" style="width:120px; height:120px; border-radius:50%;">
+                                {% endif %}
+                            </div>
+                            <form action="{% url 'change_pfp' %}" method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <input type="file" name="profile_picture" class="form-control mb-2">
+                                <button class="btn btn-warning rounded-pill btn-sm">Update Picture</button>
+                            </form>
+                        </div>
+
+                        <!-- User Info -->
+                        <div class="ft-card mb-4">
+                            <h4 class="mb-3">Account Details</h4>
+                            <div class="mb-3">
+                                <label class="small text-muted">Username</label>
+                                <div class="d-flex gap-2">
+                                    <input type="text" id="new-username" class="form-control" value="{{ user.username }}">
+                                    <button onclick="changeUsername()" class="btn btn-dark rounded-pill">Save</button>
+                                </div>
+                            </div>
+                            <div id="username-popup" class="popup-message">Username updated!</div>
+                        </div>
+
+                        <!-- Testimonial -->
+                         <div class="ft-card">
+                             <h4 class="mb-3">Your Testimonial</h4>
+                             {% if user.profile.is_member %}
+                                 {% if user.profile.testimonials.all %}
+                                     {% with testimonial=user.profile.testimonials.all.0 %}
+                                     <form action="{% url 'edit_testimonial' %}" method="POST">
+                                         {% csrf_token %}
+                                         <textarea name="message" class="form-control mb-2" rows="3">{{ testimonial.message }}</textarea>
+                                         <button class="btn btn-sm btn-dark rounded-pill">Update</button>
+                                         <button formaction="{% url 'delete_testimonial' %}" class="btn btn-sm btn-outline-danger rounded-pill float-end">Delete</button>
+                                     </form>
+                                     {% endwith %}
+                                 {% else %}
+                                     <form action="{% url 'submit_testimonial' %}" method="POST">
+                                         {% csrf_token %}
+                                         <textarea name="message" class="form-control mb-2" rows="3" placeholder="Share your story..."></textarea>
+                                         <button class="btn btn-sm btn-warning rounded-pill">Submit</button>
+                                     </form>
+                                 {% endif %}
+                             {% endif %}
+                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TRAINING TAB -->
+            <div class="tab-pane fade" id="pills-training" role="tabpanel">
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <div class="ft-card">
+                           <h4 class="mb-4">Training Preferences</h4>
+                           <form action="{% url 'update_preferences' %}" method="POST">
+                                {% csrf_token %}
+                                <div class="row g-3">
+                                    <div class="col-md-12">
+                                        <label class="form-label">Focus Area</label>
+                                        <select id="pref-focus" class="form-select">
+                                            <option value="arms" {% if profile.focus_body_part == "arms" %}selected{% endif %}>Arms</option>
+                                            <option value="legs" {% if profile.focus_body_part == "legs" %}selected{% endif %}>Legs</option>
+                                            <option value="chest" {% if profile.focus_body_part == "chest" %}selected{% endif %}>Chest</option>
+                                            <option value="back" {% if profile.focus_body_part == "back" %}selected{% endif %}>Back</option>
+                                            <option value="abs" {% if profile.focus_body_part == "abs" %}selected{% endif %}>Abs</option>
+                                            <option value="full" {% if profile.focus_body_part == "full" %}selected{% endif %}>Full Body</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Main Goal</label>
+                                        <select id="pref-goal" class="form-select">
+                                            <option value="strength" {% if profile.goal == "strength" %}selected{% endif %}>Strength</option>
+                                            <option value="weight_loss" {% if profile.goal == "weight_loss" %}selected{% endif %}>Weight Loss</option>
+                                            <option value="endurance" {% if profile.goal == "endurance" %}selected{% endif %}>Endurance</option>
+                                            <option value="flexibility" {% if profile.goal == "flexibility" %}selected{% endif %}>Flexibility</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Preferred Exercise</label>
+                                        <select id="pref-exercise" class="form-select">
+                                            <option value="cardio" {% if profile.exercise_type == "cardio" %}selected{% endif %}>Cardio</option>
+                                            <option value="weights" {% if profile.exercise_type == "weights" %}selected{% endif %}>Weights</option>
+                                            <option value="yoga" {% if profile.exercise_type == "yoga" %}selected{% endif %}>Yoga</option>
+                                            <option value="hiit" {% if profile.exercise_type == "hiit" %}selected{% endif %}>HIIT</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <button type="button" onclick="updatePreferences()" class="btn btn-warning rounded-pill mt-4 w-100">Save Preferences</button>
+                           </form>
+                           <div id="preferences-popup" class="popup-message">Saved!</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECURITY TAB -->
+            <div class="tab-pane fade" id="pills-security" role="tabpanel">
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <div class="ft-card mb-4">
+                            <h4 class="mb-3">Change Password</h4>
+                            <input type="password" id="current-password" class="form-control mb-2" placeholder="Current Password">
+                            <input type="password" id="new-password" class="form-control mb-2" placeholder="New Password">
+                            <input type="password" id="confirm-password" class="form-control mb-3" placeholder="Confirm Password">
+                            <button onclick="changePassword()" class="btn btn-dark w-100 rounded-pill">Update Password</button>
+                            <div id="password-popup" class="popup-message mt-2">Password Updated!</div>
+                        </div>
+
+                        <div class="card border-danger text-center p-3" style="border-radius: 18px;">
+                            <h5 class="text-danger">Danger Zone</h5>
+                            <p class="small text-muted">Deleting your account is permanent.</p>
+                            <form action="{% url 'delete_account' %}" method="POST">
+                                {% csrf_token %}
+                                <button class="btn btn-outline-danger btn-sm">Delete Account</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    {% comment %} Reusing existing JS logic {% endcomment %}
+    <script src="{% static 'js/profilepopups.js' %}"></script>
+    <script>
+        // Inline JS for preference update since it relies on IDs that matched old template, kept same IDs
+        // Inline JS for password/username also kept same IDs
+    </script>
+</body>
+</html>

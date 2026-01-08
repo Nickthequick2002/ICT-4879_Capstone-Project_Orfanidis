@@ -51,3 +51,20 @@ class Testimonial(models.Model):
     def __str__(self):
         return f"{self.user.username} Profile"
 
+
+class UserProgress(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='progress_logs')
+    date = models.DateField(auto_now_add=True)
+    weight = models.FloatField(null=True, blank=True)
+    calories_burned = models.IntegerField(default=0)
+    workout_count = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ['date']
+        get_latest_by = 'date'
+        # Ensure one log per day per user?? Maybe not, allow multiple updates?
+        # Maybe unique_together = ('user', 'date')? 
+        # For simplicity, we'll store logs and filter by date.
+
+    def __str__(self):
+        return f"{self.user.username} - {self.date}"

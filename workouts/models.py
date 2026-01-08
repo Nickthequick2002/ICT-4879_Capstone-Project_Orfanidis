@@ -134,6 +134,24 @@ class ProgramExercise(models.Model):
     class Meta:
         ordering = ['day_number', 'order']
 
+
     def __str__(self):
         return f"{self.program.name} - {self.exercise.name}"
+
+
+# Tracks which user viewed/started which program.
+# This avoids duplicate counting by checking existing entries.
+from django.contrib.auth import get_user_model
+User = get_user_model()
+
+class UserProgramActivity(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='program_activities')
+    program = models.ForeignKey(Program, on_delete=models.CASCADE, related_name='user_activities')
+    
+    # When did they access it?
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} viewed {self.program.name}"
+
 

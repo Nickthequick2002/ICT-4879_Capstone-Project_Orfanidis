@@ -30,19 +30,19 @@
             <div class="d-flex align-items-center" style="gap: 20px;">
 
                 <!-- View Site button -->
-                <a href="{% url 'home' %}" class="ft-btn-outline d-none d-md-block"
+                <a href="{% url 'home' %}" class="ft-btn-outline d-none d-xl-block"
                     style="padding:6px 16px; white-space: nowrap;">
                     View Site
                 </a>
 
                 <!-- Logout button -->
-                <a href="{% url 'logout' %}" class="ft-btn-outline d-none d-md-block"
+                <a href="{% url 'logout' %}" class="ft-btn-outline d-none d-xl-block"
                     style="padding:6px 16px; white-space: nowrap;">
                     Logout
                 </a>
 
                 <!-- Burger Menu Toggle (Visible only on mobile, placed on the right) -->
-                <button id="admin-mobile-toggle" class="d-md-none"
+                <button id="admin-mobile-toggle" class="d-xl-none"
                     style="background:none; border:none; color:white; font-size:24px; position:relative; z-index:100001;">
                     <i class="fas fa-bars"></i>
                 </button>
@@ -56,14 +56,14 @@
         <div class="row">
 
             <!-- LEFT SIDEBAR THAT SHOWS ADMIN NAVIGATION -->
-            <aside class="col-md-3 col-lg-2 p-3 d-none d-md-block" style="background-color:#111; min-height:100vh;">
+            <aside class="col-xl-2 p-3 d-none d-xl-block" style="background-color:#111; min-height:100vh;">
 
                 {% include 'dashboard/includes/sidebar.html' %}
             </aside>
 
 
             <!-- MAIN CONTENT -->
-            <main class="col-md-9 col-lg-10 p-4">
+            <main class="col-xl-10 col-12 p-4">
 
                 <!-- Header row (same as products) -->
                 <div class="d-flex justify-content-between align-items-center mb-4">
@@ -80,92 +80,94 @@
                     <div class="card-body">
 
                         <!-- Table card titles -->
-                        <table class="table align-middle mb-0">
-                            <thead>
-                                <tr>
-                                    <th style="width:80px;">Image</th>
-                                    <th>Title</th>
-                                    <th style="width:150px;">Author</th>
-                                    <th style="width:150px;">Date</th>
-                                    <th style="width:150px;">Actions</th>
-                                </tr>
-                            </thead>
+                        <div class="table-responsive">
+                            <table class="table align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th style="width:80px;">Image</th>
+                                        <th>Title</th>
+                                        <th style="width:150px;">Author</th>
+                                        <th style="width:150px;">Date</th>
+                                        <th style="width:150px;">Actions</th>
+                                    </tr>
+                                </thead>
 
-                            <tbody>
+                                <tbody>
 
-                                {% for blog in blogs %}
-                                <tr>
+                                    {% for blog in blogs %}
+                                    <tr>
 
-                                    <!-- Blog image -->
-                                    <td>
-                                        {% if blog.image %}
-                                        <img src="{{ blog.image.url }}" width="60" style="border-radius:6px;">
-                                        {% else %}
-                                        <span class="text-muted small">No image</span>
-                                        {% endif %}
-                                    </td>
+                                        <!-- Blog image -->
+                                        <td>
+                                            {% if blog.image %}
+                                            <img src="{{ blog.image.url }}" width="60" style="border-radius:6px;">
+                                            {% else %}
+                                            <span class="text-muted small">No image</span>
+                                            {% endif %}
+                                        </td>
 
-                                    <!-- Blog title + subtitle -->
-                                    <td>
-                                        <strong>{{ blog.title }}</strong><br>
-                                        {% if blog.subtitle %}
-                                        <small class="text-muted">
-                                            {{ blog.subtitle|truncatechars:80 }}
-                                        </small>
-                                        {% else %}
-                                        <small class="text-muted">No subtitle</small>
-                                        {% endif %}
-                                    </td>
+                                        <!-- Blog title + subtitle -->
+                                        <td>
+                                            <strong>{{ blog.title }}</strong><br>
+                                            {% if blog.subtitle %}
+                                            <small class="text-muted">
+                                                {{ blog.subtitle|truncatechars:80 }}
+                                            </small>
+                                            {% else %}
+                                            <small class="text-muted">No subtitle</small>
+                                            {% endif %}
+                                        </td>
 
-                                    <!-- Author -->
-                                    <td>
-                                        {% if blog.author %}
-                                        {{ blog.author.username }}
-                                        {% else %}
-                                        <span class="text-muted">Unknown</span>
-                                        {% endif %}
-                                    </td>
+                                        <!-- Author -->
+                                        <td>
+                                            {% if blog.author %}
+                                            {{ blog.author.username }}
+                                            {% else %}
+                                            <span class="text-muted">Unknown</span>
+                                            {% endif %}
+                                        </td>
 
-                                    <!-- Date -->
-                                    <td>{{ blog.created_at|date:"M d, Y" }}</td>
+                                        <!-- Date -->
+                                        <td>{{ blog.created_at|date:"M d, Y" }}</td>
 
-                                    <!-- ACTIONS -->
-                                    <td>
-                                        <div class="d-flex flex-column">
+                                        <!-- ACTIONS -->
+                                        <td>
+                                            <div class="d-flex flex-column">
 
-                                            <!-- EDIT BLOG -->
-                                            <a href="{% url 'dashboard-edit-blog' blog.id %}"
-                                                class="ft-btn-outline text-center mb-3">
-                                                Edit
-                                            </a>
+                                                <!-- EDIT BLOG -->
+                                                <a href="{% url 'dashboard-edit-blog' blog.id %}"
+                                                    class="ft-btn-outline text-center mb-3">
+                                                    Edit
+                                                </a>
 
-                                            <!-- VIEW PUBLIC BLOG -->
-                                            <a href="{% url 'blog_detail' blog.id %}"
-                                                class="ft-btn-outline text-center mb-3" target="_blank">
-                                                View
-                                            </a>
+                                                <!-- VIEW PUBLIC BLOG -->
+                                                <a href="{% url 'blog_detail' blog.id %}"
+                                                    class="ft-btn-outline text-center mb-3" target="_blank">
+                                                    View
+                                                </a>
 
-                                            <!-- DELETE BLOG -->
-                                            <a href="{% url 'dashboard-delete-blog' blog.id %}"
-                                                class="ft-btn-outline text-center">
-                                                Delete
-                                            </a>
+                                                <!-- DELETE BLOG -->
+                                                <a href="{% url 'dashboard-delete-blog' blog.id %}"
+                                                    class="ft-btn-outline text-center">
+                                                    Delete
+                                                </a>
 
-                                        </div>
-                                    </td>
+                                            </div>
+                                        </td>
 
-                                </tr>
+                                    </tr>
 
-                                {% empty %}
-                                <tr>
-                                    <td colspan="5" class="text-center text-muted py-4">
-                                        No blogs found.
-                                    </td>
-                                </tr>
-                                {% endfor %}
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="5" class="text-center text-muted py-4">
+                                            No blogs found.
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
 
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>
 
                     </div>
                 </div>

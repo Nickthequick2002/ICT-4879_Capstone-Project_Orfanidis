@@ -63,6 +63,15 @@ document.addEventListener("DOMContentLoaded", function () {
         credentials: "same-origin", // Ensure that CSRF cookies work
       });
 
+      // Security: Check for Rate Limiting Lockout (Status 429)
+      if (response.status === 429) {
+         const html = await response.text();
+         document.open();
+         document.write(html);
+         document.close();
+         return;
+      }
+
       const data = await response.json();
 
       if (data.success) {

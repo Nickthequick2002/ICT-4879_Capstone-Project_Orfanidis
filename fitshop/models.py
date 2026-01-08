@@ -43,3 +43,38 @@ class CartItem(models.Model):
     def subtotal(self):
         # Price for this cart line: product price × quantity.
         return self.product.price * self.quantity
+
+
+# Order model to store purchase history
+class Order(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
+    
+    # Store the exact snapshot of the total price at the time of purchase
+    total_price = models.DecimalField(max_digits=10, decimal_places=2)
+    
+    # Order ID from PayPal or generated one
+    order_id = models.CharField(max_length=100, unique=True)
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Order {self.order_id} - {self.user.username}"
+
+
+# OrderItem model to store the items within an Order
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
+    
+    # Snapshot of the product name/price in case product is deleted/changed later
+    product_name = models.CharField(max_length=100)
+    price = models.DecimalField(max_digits=8, decimal_places=2)
+    
+    quantity = models.PositiveIntegerField(default=1)
+
+    def __str__(self):
+        return f"{self.quantity} x {self.product_name}"
+
+    @property
+    def get_total_item_price(self):
+        return self.price * self.quantity

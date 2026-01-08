@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Program, ProgramExercise
+from .models import Program, ProgramExercise, UserProgramActivity
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 
@@ -7,6 +7,14 @@ from django.contrib.auth.decorators import login_required
 def program_detail(request, program_id):
     # Get the program the user clicked
     program = get_object_or_404(Program, id=program_id)
+
+    # --- TRACK VIEW/ENROLLMENT ---
+    if request.user.is_authenticated:
+        # We record this as an "enrollment" or unique view
+        UserProgramActivity.objects.get_or_create(
+            user=request.user,
+            program=program
+        )
 
     # Try to get the user's fitness preferences
     profile = getattr(request.user, "profile", None)

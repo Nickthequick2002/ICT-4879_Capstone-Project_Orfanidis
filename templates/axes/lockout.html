@@ -1,0 +1,30 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Account Locked - FitTrack</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body style="background-color: #f8f9fa;">
+
+    <div class="container d-flex flex-column justify-content-center align-items-center" style="min-height: 100vh;">
+        <div class="card shadow text-center p-5" style="max-width: 500px; border-radius: 20px; border: none;">
+            <div class="mb-4">
+                <i class="fa fa-lock" style="font-size: 5rem; color: #ff8c42;"></i>
+            </div>
+            <h2 class="fw-bold mb-3 text-dark">Too Many Attempts</h2>
+            <p class="text-muted mb-4">
+                We've detected too many failed login attempts from your IP address. 
+                For security reasons, your access has been temporarily locked.
+            </p>
+
+            <a href="{% url 'home' %}" class="btn btn-outline-brand-orange rounded-pill px-5 py-2 fw-bold mt-3">Return to Home</a>
+        </div>
+    </div>
+
+</body>
+</html>

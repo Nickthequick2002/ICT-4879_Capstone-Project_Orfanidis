@@ -30,17 +30,29 @@ ssl._create_default_https_context = ssl._create_unverified_context
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-3!jefitf(00!$n#&__j-$%1^i)%hp0#(p+3*!_%pbr#!c+tz4g'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG') == 'True'
 
 if DEBUG:
     # Bypass SSL verification for all default contexts. This is in order to send email when websites run locally.
     ssl._create_default_https_context = ssl._create_unverified_context
     ssl.create_default_context = lambda *args, **kwargs: ssl._create_unverified_context()
 
-ALLOWED_HOSTS = ["nikolasorf.pythonanywhere.com","127.0.0.1", "localhost"]
+ALLOWED_HOSTS = ["nikolasorf.pythonanywhere.com", "127.0.0.1", "localhost"]
+
+if not DEBUG:
+    # Security Headers for Production
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_HSTS_SECONDS = 31536000  # 1 year
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    X_FRAME_OPTIONS = 'DENY'
 
 # Application definition
 
@@ -55,6 +67,7 @@ INSTALLED_APPS = [
     'chatbot',
     'dashboard',
     'workouts',
+    'axes', # Rate Limiting
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -69,9 +82,26 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'axes.middleware.AxesMiddleware', # Rate Limiting Middleware
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+# Authentication Backends
+AUTHENTICATION_BACKENDS = [
+    # AxesBackend should be the first backend in the AUTHENTICATION_BACKENDS list.
+    'axes.backends.AxesStandaloneBackend',
+    # Django ModelBackend is the default authentication backend.
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+# Axes Configuration
+AXES_FAILURE_LIMIT = 5 # Lock out after 5 failed attempts
+AXES_COOLOFF_TIME = 1 # Lock out for 1 hour (default is hours if integer, can use timedelta)
+AXES_RESET_ON_SUCCESS = True # Reset count after successful login
+AXES_LOCKOUT_TEMPLATE = 'axes/lockout.html' # We will create this customized template
+AXES_VERBOSE = True # Enable verbose logging
+AXES_SENSITIVE_PARAMETERS = [] # CRITICAL: Disable PII masking to show username/IP
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
@@ -133,7 +163,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Athens'
 
 USE_I18N = True
 
@@ -163,7 +193,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'fittrack.services@gmail.com'
-EMAIL_HOST_PASSWORD = 'qpokkpccutqckbox'
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -171,3 +201,49 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'  # URL path to access media files in the browser
 
 SECURE_CROSS_ORIGIN_OPENER_POLICY='same-origin-allow-popups' # Prevent extra popups when paying with PayPal
+
+# Logging Configuration
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'WARNING',  # Capture Warnings (like 404s) and Errors
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'security.log'),
+            'formatter': 'verbose',
+        },
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file', 'console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'axes': {  # Specifically log the Rate Limiting events
+            'handlers': ['file', 'console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'django.security': { # Log security violations
+            'handlers': ['file', 'console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+}

@@ -28,19 +28,19 @@
         <div class="d-flex align-items-center" style="gap: 20px;">
 
             <!-- View Site button (Hidden on mobile) -->
-            <a href="{% url 'home' %}" class="ft-btn-outline d-none d-md-block"
+            <a href="{% url 'home' %}" class="ft-btn-outline d-none d-xl-block"
                 style="padding:6px 16px; white-space: nowrap;">
                 View Site
             </a>
 
             <!-- Logout button (Hidden on mobile) -->
-            <a href="{% url 'logout' %}" class="ft-btn-outline d-none d-md-block"
+            <a href="{% url 'logout' %}" class="ft-btn-outline d-none d-xl-block"
                 style="padding:6px 16px; white-space: nowrap;">
                 Logout
             </a>
 
             <!-- Burger Menu Toggle (Visible only on mobile, placed on the right) -->
-            <button id="admin-mobile-toggle" class="d-md-none"
+            <button id="admin-mobile-toggle" class="d-xl-none"
                 style="background:none; border:none; color:white; font-size:24px; position:relative; z-index:100001;">
                 <i class="fas fa-bars"></i>
             </button>
@@ -52,73 +52,221 @@
         <div class="row">
 
             <!-- LEFT SIDEBAR THAT SHOWS ADMIN NAVIGATION -->
-            <aside class="col-md-3 col-lg-2 p-3 d-none d-md-block" style="background-color:#111; min-height:100vh;">
+            <aside class="col-xl-2 p-3 d-none d-xl-block" style="background-color:#111; min-height:100vh;">
 
                 {% include 'dashboard/includes/sidebar.html' %}
             </aside>
 
 
             <!-- MAIN DASHBOARD CONTENT -->
-            <main class="col-md-9 col-lg-10 p-4">
+            <main class="col-xl-10 col-12 p-4">
 
-                <h2 class="fw-bold mb-4">Dashboard Overview</h2>
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="fw-bold mb-0">Dashboard Overview</h2>
+                    <span class="badge text-dark p-2" style="font-weight: 700; font-size: 14px;">Real-time Analytics</span>
+                </div>
 
-                <div class="row g-4">
-
-                    <!-- Total Products -->
-                    <div class="col-md-4">
-                        <div class="card shadow-sm border-0 h-100">
-                            <div class="card-body">
-                                <h5 class="fw-bold">Total Products</h5>
-                                <p class="display-6">{{ products_count }}</p>
-                                <p class="text-muted small">Items in FitShop</p>
-
-                                <!-- Will link to products manager soon -->
-                                <a href="{% url 'dashboard-products' %}" class="btn w-100 ft-btn-outline mt-3">
-                                    Manage Products
-                                </a>
+                <!-- 1. KEY METRICS CARDS -->
+                <div class="row g-4 mb-4">
+                    <!-- Total Revenue -->
+                    <div class="col-md-3">
+                        <div class="card shadow-sm border-0 h-100 text-white" style="background-color: #ff8c42 !important;">
+                            <div class="card-body d-flex flex-column justify-content-between">
+                                <h6 class="text-uppercase small fw-bold" style="color: #fff;">Total Revenue</h6>
+                                <h3 class="display-6 fw-bold mb-0" style="color: #fff;">${{ total_revenue|floatformat:2 }}</h3>
+                                <p class="small mb-0 mt-2" style="color: rgba(255,255,255,0.8);">
+                                    <i class="fas fa-calendar-alt me-1"></i> this month: ${{ monthly_income|floatformat:2 }}
+                                </p>
                             </div>
                         </div>
                     </div>
 
                     <!-- Total Users -->
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="card shadow-sm border-0 h-100">
-                            <div class="card-body">
-                                <h5 class="fw-bold">Total Users</h5>
-                                <p class="display-6">{{ users_count }}</p>
-                                <p class="text-muted small">Registered Users</p>
-
-                                <a href="{% url 'user_list' %}" class="btn w-100 ft-btn-outline mt-3">
-                                    View Users
-                                </a>
+                            <div class="card-body d-flex flex-column justify-content-between">
+                                <h6 class="text-muted text-uppercase small fw-bold">Total Users</h6>
+                                <h3 class="display-6 fw-bold text-dark mb-0">{{ users_count }}</h3>
+                                <div class="mt-2 small">
+                                    <span class="text-success fw-bold"><i class="fas fa-arrow-up"></i> {{ new_users_week }}</span> new this week
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Products -->
+                    <div class="col-md-3">
+                        <div class="card shadow-sm border-0 h-100">
+                            <div class="card-body d-flex flex-column justify-content-between">
+                                <h6 class="text-muted text-uppercase small fw-bold">Products</h6>
+                                <h3 class="display-6 fw-bold text-dark mb-0">{{ products_count }}</h3>
+                                <p class="text-muted small mt-2 mb-0">Active items in FitShop</p>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Quick Actions -->
-                    <div class="col-md-4">
-                        <div class="card shadow-sm border-0 h-100">
-                            <div class="card-body">
-                                <h5 class="fw-bold">Quick Actions</h5>
-
-                                <a href="{% url 'dashboard-products' %}" class="btn w-100 ft-btn-outline mb-3">
-                                    + Add New Product
-                                </a>
-
-                                <a href="{% url 'blog_list' %}" class="btn w-100 ft-btn-outline mb-3">
-                                    + Add New Blog
-                                </a>
-
-
-                                <a href="{% url 'dashboard-exercises' %}" class="btn w-100 ft-btn-outline">
-                                    + Add New Exercise
-                                </a>
+                     <!-- Quick Actions -->
+                     <div class="col-md-3">
+                        <div class="card shadow-sm border-0 h-100 bg-light">
+                            <div class="card-body d-flex flex-column justify-content-center">
+                                <h6 class="fw-bold mb-3">Quick Actions</h6>
+                                <div class="d-flex flex-column">
+                                    <a href="{% url 'dashboard-products' %}" class="ft-btn-outline text-center py-2 mb-3">
+                                        + Product
+                                    </a>
+                                    <a href="{% url 'blog_list' %}" class="ft-btn-outline text-center py-2 mb-3">
+                                        + Blog
+                                    </a>
+                                    <a href="{% url 'dashboard-exercises' %}" class="ft-btn-outline text-center py-2">
+                                        + Exercise
+                                    </a>
+                                </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+
+                <!-- 2. DETAILED INSIGHTS -->
+                <div class="row g-4 mb-4">
+                    
+                    <!-- Left Column: User & Business Stats -->
+                    <div class="col-lg-8">
+                        
+                        <!-- Row: User Engagement -->
+                        <div class="card shadow-sm border-0 mb-4">
+                            <div class="card-header bg-white py-3">
+                                <h5 class="mb-0 fw-bold">User Engagement & Growth</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row text-center">
+                                    <div class="col-md-4 mb-3 mb-md-0 border-end">
+                                        <h6 class="text-muted small">New (Month)</h6>
+                                        <h4 class="fw-bold">{{ new_users_month }}</h4>
+                                    </div>
+                                    <div class="col-md-4 mb-3 mb-md-0 border-end">
+                                        <h6 class="text-muted small">Active (24h)</h6>
+                                        <h4 class="fw-bold text-success">{{ active_users_24h }}</h4>
+                                        <small class="text-muted">Last 7 days: {{ active_users_7d }}</small>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <h6 class="text-muted small">Premium Ratio</h6>
+                                        <h4 class="fw-bold text-warning">{{ premium_ratio }}%</h4>
+                                        <small class="text-muted">{{ premium_users }} Premium / {{ free_users }} Free</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Row: Recent Activity -->
+                        <div class="row g-4">
+                            <!-- Recent Users -->
+                            <div class="col-md-6">
+                                <div class="card shadow-sm border-0 h-100">
+                                    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                                        <h6 class="mb-0 fw-bold">New Registrations</h6>
+                                        <a href="{% url 'user_list' %}" class="text-decoration-none small">View All</a>
+                                    </div>
+                                    <ul class="list-group list-group-flush">
+                                        {% for user in recent_users %}
+                                        <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent">
+                                            <div class="d-flex align-items-center">
+                                                <div class="bg-light rounded-circle d-flex align-items-center justify-content-center me-3" style="width:32px; height:32px;">
+                                                    <i class="fas fa-user text-muted small"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="mb-0 small fw-bold">{{ user.username }}</p>
+                                                    <p class="mb-0 text-muted" style="font-size:10px;">{{ user.date_joined|date:"M d, H:i" }}</p>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        {% empty %}
+                                        <li class="list-group-item text-center text-muted small">No new users</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Recent Orders -->
+                            <div class="col-md-6">
+                                <div class="card shadow-sm border-0 h-100">
+                                    <div class="card-header bg-white py-3">
+                                        <h6 class="mb-0 fw-bold">Recent Orders</h6>
+                                    </div>
+                                    <ul class="list-group list-group-flush">
+                                        {% for order in recent_orders %}
+                                        <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent">
+                                            <div>
+                                                <p class="mb-0 small fw-bold">Order #{{ order.id }}</p>
+                                                <p class="mb-0 text-muted" style="font-size:10px;">{{ order.user.username }}</p>
+                                            </div>
+                                            <span class="badge bg-success rounded-pill">${{ order.total_price }}</span>
+                                        </li>
+                                        {% empty %}
+                                        <li class="list-group-item text-center text-muted small">No orders recorded yet</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Right Column: Content & ARPU -->
+                    <div class="col-lg-4">
+                        
+                        <!-- Business Metric: ARPU -->
+                        <div class="card shadow-sm border-0 mb-4 bg-light">
+                            <div class="card-body text-center py-4">
+                                <h6 class="text-muted text-uppercase small ls-1">Avg Revenue Per User</h6>
+                                <h2 class="display-5 fw-bold mb-0 text-dark">${{ arpu }}</h2>
+                                <p class="small text-muted mb-0">Lifetime Value Metric</p>
+                            </div>
+                        </div>
+
+                        <!-- Top Content Table -->
+                        <div class="card shadow-sm border-0">
+                            <div class="card-header bg-white py-3">
+                                <h6 class="mb-0 fw-bold">Most Viewed Programs</h6>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="table table-hover mb-0 align-middle">
+                                        <thead class="bg-light">
+                                            <tr>
+                                                <th class="small text-muted ps-4 py-3 border-0">Program</th>
+                                                <th class="small text-muted text-end pe-4 py-3 border-0">Visits</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for prog in most_accessed_programs %}
+                                            <tr>
+                                                <td class="ps-4">
+                                                    <span class="fw-bold text-dark small">{{ prog.program__name }}</span>
+                                                </td>
+                                                <td class="pe-4 text-end">
+                                                    <span class="badge bg-light text-dark border">{{ prog.views }}</span>
+                                                </td>
+                                            </tr>
+                                            {% empty %}
+                                            <tr>
+                                                <td colspan="2" class="text-center py-4 text-muted small">
+                                                    No program activity yet.
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="card-footer bg-white border-0 text-center py-3">
+                                <small class="text-muted">Total Enrollments: <span class="fw-bold text-dark">{{ total_enrollments }}</span></small>
+                            </div>
+                        </div>
+
                     </div>
 
                 </div>
+
             </main>
 
         </div>

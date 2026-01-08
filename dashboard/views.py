@@ -1,16 +1,17 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import get_user_model
-from fitshop.models import Product  
+from fitshop.models import Product, Order 
+from payments.models import SubscriptionTransaction 
+from workouts.models import Exercise, Program, ProgramExercise, UserProgramActivity
 from django import forms
 from home.models import Blog
-from workouts.models import Exercise, Program, ProgramExercise
 from django.contrib import messages
+from django.db.models import Count, Sum
+from django.utils import timezone
+from datetime import timedelta
 
-
-# Create your views here.
-
-# Use of Django's user model 
+# ... (keep existing imports)
 User = get_user_model()
 
 # This function checks if the logged-in user is a staff member.
@@ -27,14 +28,93 @@ def staff_required(view_func):
 # Custom Admin Dashboard Home
 @staff_required
 def dashboard_home(request):
+    
+    # --- 1. USER ANALYTICS ---
+    users = User.objects.all()
+    total_users = users.count()
+    
+    # Time ranges
+    now = timezone.now()
+    week_ago = now - timedelta(days=7)
+    month_ago = now - timedelta(days=30)
+    day_ago = now - timedelta(days=1)
+    
+    new_users_week = users.filter(date_joined__gte=week_ago).count()
+    new_users_month = users.filter(date_joined__gte=month_ago).count()
+    
+    # Active users (last login)
+    active_users_24h = users.filter(last_login__gte=day_ago).count()
+    active_users_7d = users.filter(last_login__gte=week_ago).count()
+    
+    # Premium Ratio
+    # We need to access the Profile model. "is_member" indicates premium.
+    premium_users = 0
+    for u in users:
+        if hasattr(u, 'profile') and u.profile.is_member:
+            premium_users += 1
+            
+    premium_ratio = round((premium_users / total_users * 100), 1) if total_users > 0 else 0
 
-    # Basic stats shown on the dashboard cards
+    # --- 2. BUSINESS ANALYTICS ---
+    # Total Revenue = Orders + Subscriptions
+    order_revenue = Order.objects.aggregate(sum=Sum('total_price'))['sum'] or 0
+    sub_revenue = SubscriptionTransaction.objects.aggregate(sum=Sum('amount'))['sum'] or 0
+    total_revenue = float(order_revenue) + float(sub_revenue)
+    
+    # Monthly Income (Orders + Subs in last 30 days)
+    # Ideally "Monthly" means "This Month", but "Last 30 Days" is often more useful for rolling stats.
+    # Let's do "Current Month" to be precise with "Income" terminology usually.
+    current_month_start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+    
+    monthly_orders = Order.objects.filter(created_at__gte=current_month_start).aggregate(sum=Sum('total_price'))['sum'] or 0
+    monthly_subs = SubscriptionTransaction.objects.filter(created_at__gte=current_month_start).aggregate(sum=Sum('amount'))['sum'] or 0
+    monthly_income = float(monthly_orders) + float(monthly_subs)
+    
+    # ARPU (Average Revenue Per User)
+    arpu = round(total_revenue / total_users, 2) if total_users > 0 else 0
+
+
+    # --- 3. CONTENT ANALYTICS ---
+    # Most accessed programs
+    most_accessed = UserProgramActivity.objects.values('program__name').annotate(views=Count('id')).order_by('-views')[:5]
+    
+    # Program Enrollments (Total count of activity records)
+    total_enrollments = UserProgramActivity.objects.count()
+
+    # Basic stats shown on the dashboard cards (kept for compatibility)
     products_count = Product.objects.count()
-    users_count = User.objects.count()
+
+
+    # --- 4. ACTIVITY FEED ---
+    recent_users = User.objects.order_by('-date_joined')[:5]
+    recent_orders = Order.objects.order_by('-created_at')[:5]
 
     context = {
+        # Core Stats
         'products_count': products_count,
-        'users_count': users_count,
+        'users_count': total_users,
+        
+        # User Stats
+        'new_users_week': new_users_week,
+        'new_users_month': new_users_month,
+        'active_users_24h': active_users_24h,
+        'active_users_7d': active_users_7d,
+        'premium_ratio': premium_ratio,
+        'premium_users': premium_users,
+        'free_users': total_users - premium_users,
+        
+        # Business Stats
+        'total_revenue': total_revenue,
+        'monthly_income': monthly_income,
+        'arpu': arpu,
+        
+        # Content Stats
+        'most_accessed_programs': most_accessed,
+        'total_enrollments': total_enrollments,
+        
+        # Activity Feed
+        'recent_users': recent_users,
+        'recent_orders': recent_orders,
     }
 
     # Render the dashboard homepage HTML template with these stats.

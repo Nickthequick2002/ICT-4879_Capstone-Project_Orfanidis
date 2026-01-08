@@ -19,6 +19,9 @@ def blog_detail(request, id):
     blog = get_object_or_404(Blog, id=id)
     return render(request, "blog_detail.html", {'blog': blog})
 
+def custom_404(request, exception=None):
+    return render(request, "404.html", status=404)
+
 
 
 

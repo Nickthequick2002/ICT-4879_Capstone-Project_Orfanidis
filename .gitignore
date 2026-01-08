@@ -19,3 +19,11 @@ Thumbs.db
 
 # Database
 db.sqlite3
+
+# Logs
+*.log
+security.log
+
+# Media (User uploads)
+media/
+

@@ -1,11 +1,10 @@
 from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Product
+from .models import Product, CartItem, Order, OrderItem
 from django.contrib.auth.decorators import login_required
-from .models import CartItem
-from django.http import JsonResponse
 from django.core.mail import send_mail
 
+# ... (keep existing imports)
 
 # PRODUCT LIST INSIDE THE FITSHOP
 def shop_home(request):
@@ -68,7 +67,14 @@ def add_to_cart(request, product_id):
     product = get_object_or_404(Product, id=product_id)
 
     # Read quantity from the form (defaults to 1 if missing)
-    quantity_to_add = int(request.POST.get("quantity", 1))
+    try:
+        quantity_to_add = int(request.POST.get("quantity", 1))
+        if quantity_to_add < 1:
+            quantity_to_add = 1
+        elif quantity_to_add > 50: # Security Limit
+            quantity_to_add = 50
+    except ValueError:
+        quantity_to_add = 1
 
     # Get or create cart item for this user + product
     cart_item, created = CartItem.objects.get_or_create(
@@ -105,9 +111,38 @@ def checkout(request):
 
 
 # Payment success view when the user's payment goes through
+from paypalcheckoutsdk.core import PayPalHttpClient, SandboxEnvironment, LiveEnvironment
+from paypalcheckoutsdk.orders import OrdersGetRequest
+import os
+
 def payment_success(request):
     order_id = request.GET.get('orderID')
 
+    # Security Check: Verify order with PayPal
+    client_id = "AcGV6r1y2PyR1xxDV9o5gZ0xuLKBKeScocKUk5JuXGW_7ujD5BAHxh3c4QpTtbuZGL45b53Sq6gAkhUm" # Ideally this should be in .env
+    client_secret = os.getenv('PAYPAL_CLIENT_SECRET') # Must be in .env
+
+    # Choose environment based on DEBUG or a specific setting
+    environment = SandboxEnvironment(client_id=client_id, client_secret=client_secret)
+                  # Use LiveEnvironment for production!
+    client = PayPalHttpClient(environment)
+
+    try:
+        request_obj = OrdersGetRequest(order_id)
+        response = client.execute(request_obj)
+        order_details = response.result
+        
+        if order_details.status != "COMPLETED":
+             # Log this event!
+             return render(request, 'fitshop/payment_error.html', {'message': 'Payment not completed'})
+
+    except Exception as e:
+        # Log error
+        return render(request, 'fitshop/payment_error.html', {'message': 'Verification failed'})
+
+
+    # ... Proceed with existing order creation logic ...
+    
     # Send an email to the user after the transaction
     subject = "Thank You for Your Purchase! Your Order is Confirmed"
     message = (
@@ -129,12 +164,41 @@ def payment_success(request):
         fail_silently=False,
     )
 
-    # Clear the user's cart after successful payment
+    # --- SAVE ORDER HISTORY ---
+    # Fetch all cart items that belong to the current user
     user_cart_items = CartItem.objects.filter(user=request.user)
+    
+    if user_cart_items.exists():
+        # Calculate total price again to be safe
+        total_price = sum(item.subtotal for item in user_cart_items)
+        
+        # Verify total matches paid amount (Optional but recommended)
+        # if float(order_details.purchase_units[0].amount.value) != float(total_price):
+             # handle Mismatch
+
+        # Create the Order record
+        order = Order.objects.create(
+            user=request.user,
+            total_price=total_price,
+            order_id=order_id
+        )
+        
+        # Save each item
+        for item in user_cart_items:
+            OrderItem.objects.create(
+                order=order,
+                product=item.product,
+                product_name=item.product.name,
+                price=item.product.price,
+                quantity=item.quantity
+            )
+
+    # Clear the user's cart after successful payment
     user_cart_items.delete()  # This will delete all items from the user's cart
 
     # Process order or save the payment details here
     return render(request, 'payment_success.html', {'order_id': order_id})
+
 
 
 # View that handles the clerance of the cart when user ends his payment
@@ -144,3 +208,14 @@ def clear_cart(request):
         user_cart_items.delete()  # Delete all items from the user's cart
         return JsonResponse({"status": "success"}, status=200)
     return JsonResponse({"status": "error"}, status=400)
+
+
+# Order Detail View
+@login_required(login_url="login")
+def order_detail(request, id):
+    # Fetch the order and ensure it belongs to the logged-in user
+    order = get_object_or_404(Order, id=id, user=request.user)
+    
+    return render(request, 'order_detail.html', {
+        'order': order
+    })

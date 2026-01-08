@@ -8,8 +8,13 @@ from django.contrib import messages
 import json
 from django.http import JsonResponse
 from django.contrib.auth.hashers import check_password
-from .models import Profile, Testimonial
+from .models import Profile, Testimonial, UserProgress
+from fitshop.models import Order
+from mycals.models import Consume
+from django.utils import timezone
+from django.db.models import Sum
 from django.views.decorators.http import require_POST
+from datetime import timedelta
 
 
 # LOGIN FUNCTIONALITY 
@@ -100,18 +105,69 @@ def signup_view(request):
     return JsonResponse({'success': False, 'error': 'Invalid request method.'})
 
 # PROFILE PAGE VIEW AND UPDATE FUNCTIONALITY
+# HELPER FOR PROFILE CONTEXT
+def get_profile_context(request):
+    user = request.user
+    profile = Profile.objects.get(user=user)
+
+    # Fetch recent orders (limit to 3)
+    recent_orders = Order.objects.filter(user=user).order_by('-created_at')[:3]
+
+    # Fetch today's nutrition
+    today = timezone.now().date()
+    consumed_today = Consume.objects.filter(user=user, date=today)
+    
+    # Calculate totals
+    total_calories = consumed_today.aggregate(Sum('food_consumed__calories'))['food_consumed__calories__sum'] or 0
+    total_protein = consumed_today.aggregate(Sum('food_consumed__protein'))['food_consumed__protein__sum'] or 0
+    total_carbs = consumed_today.aggregate(Sum('food_consumed__carbs'))['food_consumed__carbs__sum'] or 0
+    total_fats = consumed_today.aggregate(Sum('food_consumed__fats'))['food_consumed__fats__sum'] or 0
+
+    # TRAINING STATS
+    # 1. Total Workouts
+    total_workouts = UserProgress.objects.filter(user=user).aggregate(Sum('workout_count'))['workout_count__sum'] or 0
+
+    # 2. Day Streak
+    # Get all dates where workouts > 0 ordered descending
+    workout_dates = list(UserProgress.objects.filter(user=user, workout_count__gt=0).order_by('-date').values_list('date', flat=True))
+    
+    streak = 0
+    if workout_dates:
+        check_date = timezone.now().date()
+        
+        # If no workout today, check if there was one yesterday to keep streak alive
+        if check_date not in workout_dates:
+            check_date -= timedelta(days=1)
+            
+        # If check_date (today or yesterday) is present, count backwards
+        while check_date in workout_dates:
+            streak += 1
+            check_date -= timedelta(days=1)
+
+    return {
+        "user": user,
+        "profile": profile,
+        "recent_orders": recent_orders,
+        "total_workouts": int(total_workouts),
+        "streak": streak,
+        "nutrition": {
+            "calories": round(total_calories),
+            "protein": round(total_protein),
+            "carbs": round(total_carbs),
+            "fats": round(total_fats),
+        }
+    }
+
+# PROFILE PAGE VIEW AND UPDATE FUNCTIONALITY
 @login_required
 def profile_view(request):
     user = request.user
     profile = Profile.objects.get(user=user)
 
     if request.method == "POST":
-
         # Update username 
         new_username = request.POST.get("username")
         if new_username:
-
-            # Prevent duplicate usernames
             if User.objects.filter(username=new_username).exclude(id=user.id).exists():
                 messages.error(request, "This username is already taken.")
             else:
@@ -125,12 +181,9 @@ def profile_view(request):
             profile.save()
             messages.success(request, "Profile picture updated successfully.")
 
-        return redirect("profile")  # Prevent resubmission on refresh
+        return redirect("profile")
 
-    return render(request, "accounts/profile.html", {
-        "user": user,
-        "profile": profile,
-    })
+    return render(request, "accounts/profile.html", get_profile_context(request))
 
 # CHANGE PROFILE PICTURE FUNCTIONALITY
 @login_required
@@ -321,3 +374,168 @@ def update_preferences(request):
 
 
 
+
+
+@require_POST
+def update_account_details(request):
+    import json
+    data = json.loads(request.body)
+    
+    first_name = data.get('first_name', '').strip()
+    last_name = data.get('last_name', '').strip()
+    email = data.get('email', '').strip()
+    username = data.get('username', '').strip()
+    
+    if not username or not email:
+        return JsonResponse({'success': False, 'error': 'Username and Email are required.'})
+        
+    # Check if username exists
+    if User.objects.filter(username=username).exclude(pk=request.user.pk).exists():
+        return JsonResponse({'success': False, 'error': 'Username already taken.'})
+        
+    user = request.user
+    user.first_name = first_name
+    user.last_name = last_name
+    user.email = email
+    user.username = username
+    user.save()
+    
+    return JsonResponse({'success': True})
+
+@login_required
+@require_POST
+def update_pfp_ajax(request):
+    picture = request.FILES.get("profile_picture")
+    if picture:
+        profile = request.user.profile
+        profile.profile_picture = picture
+        profile.save()
+        return JsonResponse({"success": True, "image_url": profile.profile_picture.url})
+    return JsonResponse({"success": False, "error": "No image selected."})
+
+
+@login_required
+@require_POST
+def edit_testimonial_ajax(request):
+    profile = request.user.profile
+    testimonial = Testimonial.objects.filter(profile=profile).first()
+    
+    if not testimonial:
+        return JsonResponse({"success": False, "error": "No testimonial found."})
+
+    try:
+        data = json.loads(request.body)
+    except:
+        return JsonResponse({"success": False, "error": "Invalid JSON."})
+
+    new_message = data.get("message", "").strip()
+
+    if not new_message:
+        return JsonResponse({"success": False, "error": "Message cannot be empty."})
+
+    testimonial.message = new_message
+    testimonial.save()
+    return JsonResponse({"success": True})
+
+
+@login_required
+@require_POST
+def submit_testimonial_ajax(request):
+    profile = request.user.profile
+
+    try:
+        data = json.loads(request.body)
+    except:
+        return JsonResponse({"success": False, "error": "Invalid JSON."})
+
+    message = data.get("message", "").strip()
+    
+    if not message:
+         return JsonResponse({"success": False, "error": "Message cannot be empty."})
+
+    # Update if exists, else create
+    existing = Testimonial.objects.filter(profile=profile).first()
+    if existing:
+        existing.message = message
+        existing.save()
+    else:
+        Testimonial.objects.create(profile=profile, message=message)
+
+    return JsonResponse({"success": True})
+
+
+@login_required
+@require_POST
+def delete_testimonial_ajax(request):
+    profile = request.user.profile
+    testimonial = Testimonial.objects.filter(profile=profile).first()
+    if testimonial:
+        testimonial.delete()
+    return JsonResponse({"success": True})
+
+
+@login_required
+def get_progress_data(request):
+    today = timezone.now().date()
+    last_30_days = today - timezone.timedelta(days=30)
+    
+    # Fetch logs
+    logs = UserProgress.objects.filter(user=request.user, date__gte=last_30_days).order_by('date')
+    
+    # Calculate Stats for API
+    total_workouts = UserProgress.objects.filter(user=request.user).aggregate(Sum('workout_count'))['workout_count__sum'] or 0
+    
+    workout_dates = list(UserProgress.objects.filter(user=request.user, workout_count__gt=0).order_by('-date').values_list('date', flat=True))
+    streak = 0
+    if workout_dates:
+        check_date = today
+        if check_date not in workout_dates:
+            check_date -= timedelta(days=1)
+        while check_date in workout_dates:
+            streak += 1
+            check_date -= timedelta(days=1)
+
+    if not logs.exists():
+        # RETURN DUMMY DATA FOR DEMO
+        dates = [(today - timezone.timedelta(days=i)).strftime('%Y-%m-%d') for i in range(7)][::-1]
+        weights = [70, 70.5, 70.2, 69.8, 69.5, 69.2, 69.0] 
+        workouts = [0, 1, 0, 1, 1, 0, 1]
+    else:
+        dates = [log.date.strftime('%Y-%m-%d') for log in logs]
+        weights = [log.weight for log in logs]
+        workouts = [log.workout_count for log in logs]
+        
+    return JsonResponse({
+        'dates': dates, 
+        'weights': weights, 
+        'workouts': workouts,
+        'streak': streak,
+        'total_workouts': int(total_workouts)
+    })
+
+
+@login_required
+@require_POST
+def log_progress_ajax(request):
+    try:
+        user = request.user
+        weight = request.POST.get('weight')
+        workouts = request.POST.get('workouts', 0)
+        
+        # Validate
+        if not weight:
+            return JsonResponse({"success": False, "error": "Weight is required."})
+
+        # Update or Create for Today
+        progress, created = UserProgress.objects.update_or_create(
+            user=user,
+            date=timezone.localdate(),
+            defaults={
+                'weight': float(weight),
+                'workout_count': int(workouts)
+            }
+        )
+        
+        return JsonResponse({"success": True})
+    except Exception as e:
+        return JsonResponse({"success": False, "error": str(e)})

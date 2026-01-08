@@ -34,6 +34,14 @@ urlpatterns = [
 ]
 
 
+
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    # Temporary route to test 404 page in DEBUG mode
+    from home.views import custom_404
+    urlpatterns += [
+        path('test-404/', custom_404),
+    ]
+
+handler404 = 'home.views.custom_404'
 
