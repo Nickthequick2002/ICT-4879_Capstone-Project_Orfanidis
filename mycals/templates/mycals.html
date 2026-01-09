@@ -54,6 +54,9 @@
 
 
 
+                    <!-- Mobile Separator Line -->
+                    <div class="mobile-menu-separator"></div>
+
                     <!-- ADMIN BUTTON ONLY FOR STAFF MEMBERS -->
                     {% if user.is_authenticated and user.is_staff %}
                         <a href="{% url 'dashboard-home' %}" class="admin-btn me-4">
@@ -215,6 +218,23 @@
                                 data-aos="fade-up" data-aos-delay="300"
                                 required />
 
+                            <!-- Quantity Stepper with Unit Toggle -->
+                            <div class="quantity-stepper" data-aos="fade-up" data-aos-delay="300">
+                                <button type="button" class="stepper-btn minus">-</button>
+                                <input id="quantityField" name="quantity"
+                                    class="add-food-input quantity-input"
+                                    type="number" step="any" min="0" value="1.0"
+                                    placeholder="Qty"
+                                    required />
+                                <button type="button" class="stepper-btn plus">+</button>
+                                
+                                <!-- Unit Toggle -->
+                                <button type="button" id="unitToggle" class="unit-toggle-btn" title="Switch Unit (Servings / Grams)">
+                                    Srv
+                                </button>
+                                <input type="hidden" name="unit_mode" id="unitMode" value="x">
+                            </div>
+
                             <button type="submit"
                                     class="add-food-btn"
                                     data-aos="fade-up" data-aos-delay="300">
@@ -263,11 +283,11 @@
                                     <tbody>
                                         {% for c in consumed_food %}
                                         <tr>
-                                            <td>{{ c.food_consumed.name }}</td>
-                                            <td>{{ c.food_consumed.carbs }}</td>
-                                            <td>{{ c.food_consumed.protein }}</td>
-                                            <td>{{ c.food_consumed.fats }}</td>
-                                            <td>{{ c.food_consumed.calories }}</td>
+                                            <td>{{ c.food_consumed.name }} <small class="text-muted">(x{{ c.quantity }})</small></td>
+                                            <td>{{ c.total_carbs }}</td>
+                                            <td>{{ c.total_protein }}</td>
+                                            <td>{{ c.total_fats }}</td>
+                                            <td>{{ c.total_calories }}</td>
                                             <td><a href="{% url 'delete_food' c.pk %}" class="remove-btn">X</a></td>
                                         </tr>
                                         {% empty %}
@@ -415,6 +435,91 @@
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script src="{% static 'js/profiledropdown.js' %}"></script>
         <script src="{% static 'js/chatbot.js' %}"></script>
+
+        <!-- Stepper Logic -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const qtyInput = document.getElementById('quantityField');
+                const minusBtn = document.querySelector('.stepper-btn.minus');
+                const plusBtn = document.querySelector('.stepper-btn.plus');
+                
+                const unitToggleBtn = document.getElementById('unitToggle');
+                const unitModeInput = document.getElementById('unitMode');
+
+                // Default settings
+                let step = 0.5;
+                let min = 0.1;
+
+                // Function to update input settings based on mode
+                function updateMode(mode) {
+                    if (mode === 'g') {
+                        // Grams Mode
+                        unitToggleBtn.textContent = 'g';
+                        step = 10;
+                        min = 1;
+                        qtyInput.setAttribute('step', '1');
+                        qtyInput.setAttribute('min', '1');
+                        
+                        // If value is small (like 1.0 from x mode), convert to reasonable grams (e.g. 100)
+                        let currentVal = parseFloat(qtyInput.value) || 0;
+                        if(currentVal < 5) {
+                            qtyInput.value = (currentVal * 100).toString(); 
+                        }
+                    } else {
+                        // Multiplier Mode (x / Servings)
+                        unitToggleBtn.textContent = 'Srv';
+                        step = 0.5;
+                        min = 0.1;
+                        qtyInput.setAttribute('step', '0.1'); 
+                        qtyInput.setAttribute('min', '0.1');
+
+                        // Convert big gram values back to small multipliers? 
+                        // Optional, let's just sanitize reasonable bounds
+                        let currentVal = parseFloat(qtyInput.value) || 0;
+                        if (currentVal >= 10) { 
+                             qtyInput.value = (currentVal / 100).toFixed(1);
+                        }
+                    }
+                }
+
+                if(unitToggleBtn && unitModeInput) {
+                    unitToggleBtn.addEventListener('click', () => {
+                        const currentMode = unitModeInput.value;
+                        const newMode = currentMode === 'x' ? 'g' : 'x';
+                        unitModeInput.value = newMode;
+                        updateMode(newMode);
+                    });
+                }
+
+                if(qtyInput && minusBtn && plusBtn) {
+                    minusBtn.addEventListener('click', () => {
+                        let val = parseFloat(qtyInput.value) || min;
+                        if(val > min) {
+                            val -= step;
+                            if(val < min) val = min;
+                            
+                            // Formatting
+                            if(unitModeInput.value === 'g') {
+                                qtyInput.value = Math.round(val).toString();
+                            } else {
+                                qtyInput.value = (Math.round(val * 10) / 10).toString();
+                            }
+                        }
+                    });
+
+                    plusBtn.addEventListener('click', () => {
+                        let val = parseFloat(qtyInput.value) || min;
+                        val += step;
+                        
+                        if(unitModeInput.value === 'g') {
+                             qtyInput.value = Math.round(val).toString();
+                        } else {
+                             qtyInput.value = (Math.round(val * 10) / 10).toString();
+                        }
+                    });
+                }
+            });
+        </script>
 
         <!-- Include login modal, signup modal and the chatbot -->
         {% include 'accounts/login.html' %}

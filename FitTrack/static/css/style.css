@@ -1418,7 +1418,7 @@ button#submit-button:hover {
 
 .fittrack-mycals .add-food-inputs {
     display: grid;
-    grid-template-columns: 1fr auto;
+    grid-template-columns: 1fr auto auto;
     gap: 12px;
     align-items: center;
     justify-content: center;
@@ -1477,6 +1477,82 @@ button#submit-button:hover {
 .fittrack-mycals .add-food-btn:disabled {
     opacity: 0.6;
     cursor: not-allowed;
+}
+
+/* Quantity Input Styling */
+.fittrack-mycals .quantity-input {
+    width: 60px !important; 
+    text-align: center;
+    padding: 0 !important;
+    border: none !important;
+    background: transparent !important;
+    height: 100%;
+    color: #f5f5f5;
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+.fittrack-mycals .quantity-stepper {
+    display: flex;
+    align-items: center;
+    background: #111;
+    border: 1px solid #333;
+    border-radius: 10px;
+    padding: 0 5px;
+    height: 48px; /* Match standard input height */
+    transition: all 0.3s ease;
+}
+
+.fittrack-mycals .quantity-stepper:focus-within {
+    border-color: #ff9933;
+    box-shadow: 0 0 0 3px rgba(255, 134, 108, 0.25);
+}
+
+.fittrack-mycals .stepper-btn {
+    background: transparent;
+    border: none;
+    color: #ffb266;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    width: 30px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s;
+}
+
+.fittrack-mycals .stepper-btn:hover {
+    color: #fff;
+}
+
+/* Unit Toggle Button */
+.fittrack-mycals .unit-toggle-btn {
+    background: #333;
+    border: none;
+    border-radius: 6px;
+    color: #ffd8a8;
+    font-size: 0.9rem;
+    font-weight: bold;
+    padding: 4px 8px;
+    margin-left: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    height: 32px;
+    min-width: 32px;
+}
+
+.fittrack-mycals .unit-toggle-btn:hover {
+    background: #ff8c42;
+    color: #000;
+}
+
+/* Hide Spinners */
+.fittrack-mycals .quantity-input::-webkit-outer-spin-button,
+.fittrack-mycals .quantity-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
 
 /* Today's Consumption Table */
@@ -2845,7 +2921,7 @@ hr.my-4 {
     }
 
     .fittrack-mycals .add-food-inputs {
-        grid-template-columns: 1fr auto;
+        grid-template-columns: 1fr auto auto;
         justify-content: center;
         gap: 10px;
     }

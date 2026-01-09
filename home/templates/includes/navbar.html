@@ -41,15 +41,15 @@
 
                     <!-- Search bar removed -->
 
+                    <!-- Mobile Separator Line -->
+                    <div class="mobile-menu-separator"></div>
+
                     <!-- ADMIN BUTTON ONLY FOR STAFF MEMBERS -->
                     {% if user.is_authenticated and user.is_staff %}
                         <a href="{% url 'dashboard-home' %}" class="admin-btn me-4">
                             Admin Page
                         </a>
                     {% endif %}
-
-                    <!-- Mobile Separator Line -->
-                    <div class="mobile-menu-separator"></div>
 
                     <!-- User controls, profile icon, cart icon -->
                     <div class="user-controls d-flex align-items-center">
