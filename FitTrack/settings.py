@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+from datetime import timedelta
 import ssl
 from dotenv import load_dotenv
 
@@ -97,11 +98,11 @@ AUTHENTICATION_BACKENDS = [
 
 # Axes Configuration
 AXES_FAILURE_LIMIT = 5 # Lock out after 5 failed attempts
-AXES_COOLOFF_TIME = 1 # Lock out for 1 hour (default is hours if integer, can use timedelta)
+AXES_COOLOFF_TIME = timedelta(minutes=5) # Lock out for 5 minutes
 AXES_RESET_ON_SUCCESS = True # Reset count after successful login
 AXES_LOCKOUT_TEMPLATE = 'axes/lockout.html' # We will create this customized template
 AXES_VERBOSE = True # Enable verbose logging
-AXES_SENSITIVE_PARAMETERS = [] # CRITICAL: Disable PII masking to show username/IP
+AXES_SENSITIVE_PARAMETERS = ['password'] # Mask password log to prevent credentials leak
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
@@ -231,7 +232,7 @@ LOGGING = {
     },
     'loggers': {
         'django': {
-            'handlers': ['file', 'console'],
+            'handlers': ['console'], # Removed 'file' to stop 404 logs in security.log
             'level': 'INFO',
             'propagate': True,
         },

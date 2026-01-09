@@ -40,8 +40,8 @@ def login_view(request):
             # Invalid login message
             return JsonResponse({'success': False, 'error': 'Invalid credentials'})
 
-    # Render the logi  modal template
-    return render(request, 'accounts/login.html')
+    # Render the standalone login page
+    return render(request, 'accounts/login_full.html')
 
 
 # LOGOUT FUNCTIONALITY

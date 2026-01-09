@@ -20,6 +20,97 @@
 
         {% include 'includes/navbar.html' %}
 
+        <!-- Messages Section -->
+        {% if messages %}
+            <div class="custom-alert-container" style="position: fixed; top: 100px; left: 50%; transform: translateX(-50%); z-index: 10000; width: 90%; max-width: 600px;">
+                {% for message in messages %}
+                    <div class="alert-box fade-in-down" role="alert">
+                        
+                        <div class="d-flex align-items-center">
+                            <!-- Visual tweak: push icon down 1px to align perfectly with text baseline -->
+                            <i class="fa fa-info-circle" style="color: #ff9933; font-size: 1.3rem; margin-right: 15px; position: relative; top: 2px;"></i>
+                            <span style="font-weight: 500; letter-spacing: 0.5px; line-height: 1.2;">{{ message }}</span>
+                        </div>
+
+                        <button type="button" class="btn-close-custom" onclick="dismissAlert(this)">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <style>
+                /* Animation Keyframes */
+                @keyframes slideDownFade {
+                    from { opacity: 0; transform: translateY(-20px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+
+                @keyframes fadeOutSlide {
+                    from { opacity: 1; transform: translateY(0); }
+                    to { opacity: 0; transform: translateY(-20px); }
+                }
+
+                /* Alert Box Style */
+                .alert-box {
+                    background-color: rgba(23, 23, 23, 0.95); /* Slight transparency */
+                    color: #ffffff;
+                    border-left: 5px solid #ff9933;
+                    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+                    backdrop-filter: blur(10px); /* Glassmorphism */
+                    -webkit-backdrop-filter: blur(10px);
+                    border-radius: 8px;
+                    padding: 16px 24px;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 10px;
+                    animation: slideDownFade 0.5s ease-out forwards;
+                }
+
+                /* Close Button Style */
+                .btn-close-custom {
+                    background: transparent;
+                    border: none;
+                    color: #aaa;
+                    font-size: 1.2rem;
+                    cursor: pointer;
+                    transition: color 0.2s;
+                    padding: 0 0 0 15px;
+                }
+                .btn-close-custom:hover {
+                    color: #fff;
+                }
+
+                /* Exit animation class (added by JS) */
+                .alert-box.hiding {
+                    animation: fadeOutSlide 0.5s ease-in forwards;
+                }
+            </style>
+
+            <script>
+                // Auto-dismiss functionality
+                document.addEventListener("DOMContentLoaded", function() {
+                    const alerts = document.querySelectorAll('.alert-box');
+                    alerts.forEach(alert => {
+                        // Auto-dismiss after 5 seconds
+                        setTimeout(() => {
+                            dismissAlert(alert.querySelector('.btn-close-custom'));
+                        }, 5000);
+                    });
+                });
+
+                function dismissAlert(btn) {
+                    const alertBox = btn.closest('.alert-box');
+                    if (alertBox) {
+                        alertBox.classList.add('hiding');
+                        // Usage of setTimeout to match animation duration
+                        setTimeout(() => alertBox.remove(), 500); 
+                    }
+                }
+            </script>
+        {% endif %}
+
         <!-- HERO SECTION AND FUNCTIONALITY -->
         <section class="hero d-flex flex-column justify-content-center align-items-center" id="home">
 

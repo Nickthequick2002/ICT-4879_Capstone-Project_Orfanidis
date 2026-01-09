@@ -1,12 +1,31 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from .models import Program, ProgramExercise, UserProgramActivity
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 
 def program_detail(request, program_id):
     # Get the program the user clicked
     program = get_object_or_404(Program, id=program_id)
+
+    # Security Check: Program 1 is free, others require premium
+    if program.id != 1:
+        if not request.user.is_authenticated:
+            # User dislikes forced login page, so we warn and redirect home
+            messages.warning(request, "You have to be a Premium Member to access this program.")
+            return redirect("home")
+        
+        # 2. Check if user has permission
+        # Safely check for profile existence to avoid errors
+        has_profile = hasattr(request.user, 'profile')
+        is_member = request.user.profile.is_member if has_profile else False
+
+        # Allow if member OR admin/staff
+        if not is_member and not request.user.is_superuser and not request.user.is_staff:
+             # Warn user about premium requirement instead of forcing upgrade page
+            messages.warning(request, "You have to be a Premium Member to access this program.")
+            return redirect("home")
 
     # --- TRACK VIEW/ENROLLMENT ---
     if request.user.is_authenticated:

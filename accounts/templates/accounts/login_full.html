@@ -1,0 +1,74 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - FitTrack</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!-- Core styles -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <style>
+        /* Standalone Login Page Styles */
+        body {
+            background-color: #f4f4f4;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            background-image: url("{% static 'images/hero-bg.jpg' %}");
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* Overlay to darken background */
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 0;
+        }
+
+        /* Override Modal Styles to render inline */
+        #loginModal {
+            display: flex !important; /* Force visible */
+            position: relative !important;
+            background: transparent !important;
+            width: 100%;
+            height: auto;
+            z-index: 1;
+            pointer-events: auto !important;
+        }
+
+        .modal-card {
+            position: relative !important;
+            transform: none !important;
+            top: auto !important;
+            left: auto !important;
+            margin: auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3) !important;
+            animation: none !important; /* Disable popup animation */
+        }
+
+        /* Hide close button since it's a full page */
+        #closeModal {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Include the login form fragment -->
+    {% include 'accounts/login.html' %}
+
+    <!-- Essential JS -->
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+</body>
+</html>

@@ -21,8 +21,38 @@
                 We've detected too many failed login attempts from your IP address. 
                 For security reasons, your access has been temporarily locked.
             </p>
+            
+            <p class="text-muted mb-4" id="countdown-message" style="font-size: 1.1rem;">
+                Please try again in <span id="timer" style="font-weight: bold; color: #ff8c42;">05:00</span>
+            </p>
 
-            <a href="{% url 'home' %}" class="btn btn-outline-brand-orange rounded-pill px-5 py-2 fw-bold mt-3">Return to Home</a>
+            <a href="{% url 'home' %}" class="btn btn-outline-brand-orange bordered rounded-pill px-5 py-2 fw-bold mt-3">Return to Home</a>
+        </div>
+    </div>
+
+    <script>
+        // Simple 5-minute countdown
+        let time = 5 * 60; // 5 minutes in seconds
+        const timerElement = document.getElementById('timer');
+        
+        const countdown = setInterval(() => {
+            const minutes = Math.floor(time / 60);
+            let seconds = time % 60;
+            
+            seconds = seconds < 10 ? '0' + seconds : seconds;
+            
+            timerElement.textContent = `0${minutes}:${seconds}`; // Ensure 05:00 format
+            
+            if (time <= 0) {
+                clearInterval(countdown);
+                timerElement.textContent = "00:00";
+                // Update message to indicate they can retry
+                document.getElementById('countdown-message').innerHTML = "You can try logging in again now.";
+            } else {
+                time--;
+            }
+        }, 1000);
+    </script>
         </div>
     </div>
 
