@@ -16,11 +16,13 @@ Checking out the project is just a click away:
 
 ## ✨ Key Features
 
-### 🛡️ Security (Enterprise-Grade)
-*   **Brute-Force Protection**: Intelligent rate limiting blocks suspicious IPs after 5 failed login attempts (`django-axes`).
-*   **Security Logging**: Detailed audit trails for all security-critical events.
+### 🛡️ Security & UX (Enterprise-Grade)
+*   **Premium Access Control**: Granular permission system restricts premium program URLs. Unauthorized access triggers a user-friendly, auto-dismissing warning instead of harsh redirects.
+*   **Visual Lockout System**: 
+    *   Intelligent rate limiting blocks suspicious IPs after 5 failed login attempts (`django-axes`).
+    *   **Live Countdown**: A dedicated lockout page features a 5-minute countdown timer, giving users clear feedback on when they can retry.
+    *   **Secure Logging**: Audit trails typically track only specific security failures (like wrong passwords) to prevent log noise ('security.log'), with PII masking for passwords.
 *   **Payment Verification**: Server-side validation prevents price tampering during checkout.
-*   **Data Privacy**: Automated PII masking in logs (configurable for admins).
 
 ### 🤖 AI-Powered Coach
 *   **Smart Assistant**: Integrated Chatbot (OpenAI/Gemini) provides personalized fitness and nutrition advice.
