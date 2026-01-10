@@ -119,7 +119,7 @@ def payment_success(request):
     order_id = request.GET.get('orderID')
 
     # Security Check: Verify order with PayPal
-    client_id = "AcGV6r1y2PyR1xxDV9o5gZ0xuLKBKeScocKUk5JuXGW_7ujD5BAHxh3c4QpTtbuZGL45b53Sq6gAkhUm" # Ideally this should be in .env
+    client_id = "AUgaZuXaX8cdbIC-O_ekQkRqJmMsyzvoyiLBJNYRyd4fqcM-ewki-d1CHDLIqZDcpM2Y-_wcNjhoUYl1" # Ideally this should be in .env
     client_secret = os.getenv('PAYPAL_CLIENT_SECRET') # Must be in .env
 
     # Choose environment based on DEBUG or a specific setting
