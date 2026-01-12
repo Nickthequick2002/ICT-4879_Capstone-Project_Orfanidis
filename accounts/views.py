@@ -94,6 +94,7 @@ def signup_view(request):
         )
 
         # Auto-login the user after the signup
+        user.backend = 'django.contrib.auth.backends.ModelBackend'
         login(request, user)
 
         return JsonResponse({
