@@ -430,6 +430,13 @@ strong {
     text-align: center;
 }
 
+.feature-box h2 {
+    min-height: 2.5em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 
 /*---------------------------------------
     GENERAL               
