@@ -4,7 +4,6 @@
 
 ![Status](https://img.shields.io/badge/Status-Maintained-success?style=flat-square)
 ![Stack](https://img.shields.io/badge/Stack-Django%20%7C%20Python%20%7C%20Bootstrap-blue?style=flat-square)
-![License](https://img.shields.io/badge/License-MIT-lightgrey?style=flat-square)
 
 ---
 
